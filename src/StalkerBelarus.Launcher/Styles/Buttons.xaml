@@ -12,7 +12,7 @@
     <SolidColorBrush x:Key="Button.Pressed.Border" Color="Transparent" />
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="Transparent" />
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="Transparent" />
-    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="Black" />
+    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="White" />
 
     <Style BasedOn="{StaticResource BaseStyle}" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}" />
@@ -59,6 +59,7 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Opacity" Value=".3" />
+                            <Setter Property="Effect" Value="{x:Null}" />
                             <Setter TargetName="border" Property="Background" Value="{StaticResource Button.Pressed.Background}" />
                             <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Button.Pressed.Border}" />
                             <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource Button.Disabled.Foreground}" />
