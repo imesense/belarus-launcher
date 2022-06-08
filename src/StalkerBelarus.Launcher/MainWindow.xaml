@@ -15,6 +15,14 @@
         <ImageBrush ImageSource="pack://application:,,,/Assets/Images/background.png" />
     </Window.Background>
     <Grid>
+            <Image
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="290"
+                Margin="10,15"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="pack://application:,,,/Assets/Images/logo.png" />
 
     </Grid>
 </Window>
