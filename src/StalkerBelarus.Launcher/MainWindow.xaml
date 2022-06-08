@@ -14,6 +14,11 @@
     <Window.Background>
         <ImageBrush ImageSource="pack://application:,,,/Assets/Images/background.png" />
     </Window.Background>
+
+    <Border BorderBrush="Gray" BorderThickness="1">
+        <Border.Background>
+            <ImageBrush ImageSource="pack://application:,,,/Assets/Images/vinetka.png" />
+        </Border.Background>
     <Grid>
             <Image
                 Grid.Row="0"
@@ -25,4 +30,5 @@
                 Source="pack://application:,,,/Assets/Images/logo.png" />
 
     </Grid>
+    </Border>
 </Window>
