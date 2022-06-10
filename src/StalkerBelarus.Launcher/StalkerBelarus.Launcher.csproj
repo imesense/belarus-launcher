@@ -18,6 +18,8 @@
     <Resource Include="Assets\Images\background.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\Icons\chevron-double-left.png" />
+    <Resource Include="Assets\Images\Icons\chevron-double-right.png" />
     <Resource Include="Assets\Images\logo.png" />
     <Resource Include="Assets\Images\vinetka.png" />
   </ItemGroup>
