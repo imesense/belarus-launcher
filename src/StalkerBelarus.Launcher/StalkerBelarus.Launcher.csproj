@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Assets\Images\Icons\icon_app.ico</ApplicationIcon>
     <AssemblyName>SBLauncher</AssemblyName>
+    <Company>СhoiceTeam</Company>
+    <Authors>Drombeys</Authors>
   </PropertyGroup>
 
   <ItemGroup>
