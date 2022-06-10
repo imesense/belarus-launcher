@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Assets\Images\Icons\icon_app.ico</ApplicationIcon>
+    <AssemblyName>SBLauncher</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
