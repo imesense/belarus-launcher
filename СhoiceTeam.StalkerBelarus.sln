@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerBelarus.Launcher", "src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj", "{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher", "src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj", "{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A3AF009-CDC3-4035-B1A7-554D325D5408}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
