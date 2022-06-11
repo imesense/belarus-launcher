@@ -29,10 +29,10 @@ jobs:
 
     - name: Build
       run: |
-        dotnet publish -c Release -p:PublishSingleFile=true -r win-x64 --self-contained true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:EnableCompressionInSingleFile=true
+        dotnet publish -c Release -p:PublishSingleFile=true -r ${{ matrix.platforms }} --self-contained true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:EnableCompressionInSingleFile=true
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: bin-publish
-        path: bin/${{ matrix.platforms }}/publish/
+        path: bin/Release/${{ matrix.platforms }}/publish/
