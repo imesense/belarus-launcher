@@ -30,9 +30,9 @@ jobs:
     - name: Build solution
       run: |
         msbuild $env:solution_name -p:Configuration=${{ matrix.configuration }} -r -m -nologo
-        
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: bin
-        path: bin/
+        name: bin-${{ matrix.configuration }}
+        path: bin/${{ matrix.configuration }}/
