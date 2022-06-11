@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        platforms: [win-x86, win-x64]
 
     env:
       solution_name: СhoiceTeam.StalkerBelarus.sln
@@ -24,15 +24,15 @@ jobs:
       with:
         dotnet-version: '6.0.x'
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.1
+      name: Install dependencies
+      run: dotnet restore
 
-    - name: Build solution
+    - name: Build
       run: |
-        msbuild $env:solution_name -p:Configuration=${{ matrix.configuration }} -r -m -nologo
+        dotnet publish -c Release -p:PublishSingleFile=true -r win-x64 --self-contained true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:EnableCompressionInSingleFile=true
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: bin-${{ matrix.configuration }}
-        path: bin/${{ matrix.configuration }}/
+        name: bin-publish
+        path: bin/${{ matrix.platforms }}/publish/
