@@ -1,4 +1,6 @@
-﻿namespace StalkerBelarus.Launcher;
+﻿using StalkerBelarus.Launcher.ViewModels;
+
+namespace StalkerBelarus.Launcher;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -8,5 +10,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        DataContext = new MainViewModel();
     }
 }

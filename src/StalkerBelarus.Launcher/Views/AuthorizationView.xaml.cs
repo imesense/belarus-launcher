@@ -1,14 +1,34 @@
-﻿using System.Windows.Controls;
+using StalkerBelarus.Launcher.ViewModels;
 
 namespace StalkerBelarus.Launcher.Views;
 
 /// <summary>
 /// Логика взаимодействия для AuthorizationView.xaml
 /// </summary>
-public partial class AuthorizationView : UserControl
+public partial class AuthorizationView : IViewFor<AuthorizationViewModel>
 {
     public AuthorizationView()
     {
         InitializeComponent();
+
+        this.WhenActivated(d =>
+        {
+            d(this.WhenAnyValue(x => x.ViewModel).BindTo(this, x => x.DataContext));
+            d(this.BindCommand(ViewModel, vm => vm.Next, view => view.BtnNext));
+        });
+    }
+
+    public AuthorizationViewModel ViewModel
+    {
+        get => (AuthorizationViewModel)GetValue(ViewModelProperty);
+        set => SetValue(ViewModelProperty, value);
+    }
+    public static readonly DependencyProperty ViewModelProperty =
+        DependencyProperty.Register("ViewModel", typeof(AuthorizationViewModel), typeof(AuthorizationView), new PropertyMetadata(null));
+
+    object IViewFor.ViewModel
+    {
+        get { return ViewModel; }
+        set { ViewModel = (AuthorizationViewModel)value; }
     }
 }

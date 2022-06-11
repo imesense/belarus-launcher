@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     x:Class="StalkerBelarus.Launcher.Views.AuthorizationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -35,10 +35,12 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
+                    x:Name="BtnNext"
                     Margin="10,0"
                     Content="Далее"
                     FontSize="18" />
                 <Button
+                    x:Name="BtnClose"
                     Margin="10,0"
                     Content="Закрыть"
                     FontSize="18" />

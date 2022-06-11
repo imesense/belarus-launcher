@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ReactiveUI.WPF" Version="18.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\Fonts\GRAFFITI1CTT.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
