@@ -1,3 +1,4 @@
+﻿using StalkerBelarus.Launcher.Helpers;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -7,11 +8,15 @@ namespace StalkerBelarus.Launcher.ViewModels
     {
         public ReactiveCommand<Unit, Unit> Next { get; }
 
+        public ReactiveCommand<Unit, Unit> Close { get; }
+
         public AuthorizationViewModel(IScreen screen)
         {
             HostScreen = screen;
 
             Next = ReactiveCommand.CreateFromTask(async () => await NextImpl());
+
+            Close = ReactiveCommand.Create(() => ApplicationHelper.Close());
         }
 
         private IObservable<Unit> NextImpl()

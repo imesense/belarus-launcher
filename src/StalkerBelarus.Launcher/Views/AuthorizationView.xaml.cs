@@ -1,4 +1,4 @@
-using StalkerBelarus.Launcher.ViewModels;
+﻿using StalkerBelarus.Launcher.ViewModels;
 
 namespace StalkerBelarus.Launcher.Views;
 
@@ -15,6 +15,7 @@ public partial class AuthorizationView : IViewFor<AuthorizationViewModel>
         {
             d(this.WhenAnyValue(x => x.ViewModel).BindTo(this, x => x.DataContext));
             d(this.BindCommand(ViewModel, vm => vm.Next, view => view.BtnNext));
+            d(this.BindCommand(ViewModel, vm => vm.Close, view => view.BtnClose));
         });
     }
 

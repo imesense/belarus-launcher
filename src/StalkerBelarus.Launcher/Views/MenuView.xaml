@@ -4,7 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:StalkerBelarus.Launcher.Views"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:StalkerBelarus.Launcher.ViewModels">
+    <UserControl.DataContext>
+        <vm:MenuViewModel />
+    </UserControl.DataContext>
     <Border BorderBrush="#FF808080" BorderThickness="1,0,0,0">
         <Border.Background>
             <SolidColorBrush Opacity=".75" Color="Black" />
@@ -37,6 +41,7 @@
                 <Button
                     Margin="10,55"
                     HorizontalContentAlignment="Right"
+                    Command="{Binding Close}"
                     Content="Выход"
                     FontSize="38" />
             </StackPanel>
