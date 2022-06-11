@@ -34,5 +34,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: bin-publish
+        name: publish-${{ matrix.platforms }}
         path: bin/Release/${{ matrix.platforms }}/publish/
