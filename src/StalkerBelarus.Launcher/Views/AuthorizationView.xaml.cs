@@ -19,7 +19,7 @@ public partial class AuthorizationView : IViewFor<AuthorizationViewModel>
         });
     }
 
-    public AuthorizationViewModel ViewModel
+    public AuthorizationViewModel? ViewModel
     {
         get => (AuthorizationViewModel)GetValue(ViewModelProperty);
         set => SetValue(ViewModelProperty, value);
@@ -27,9 +27,9 @@ public partial class AuthorizationView : IViewFor<AuthorizationViewModel>
     public static readonly DependencyProperty ViewModelProperty =
         DependencyProperty.Register("ViewModel", typeof(AuthorizationViewModel), typeof(AuthorizationView), new PropertyMetadata(null));
 
-    object IViewFor.ViewModel
+    object? IViewFor.ViewModel
     {
         get { return ViewModel; }
-        set { ViewModel = (AuthorizationViewModel)value; }
+        set { ViewModel = (AuthorizationViewModel?)value; }
     }
 }
