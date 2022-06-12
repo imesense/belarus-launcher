@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ReactiveUI.Fody" Version="18.1.8" />
     <PackageReference Include="ReactiveUI.WPF" Version="18.1.8" />
   </ItemGroup>
 
@@ -27,5 +28,4 @@
     <Resource Include="Assets\Images\logo.png" />
     <Resource Include="Assets\Images\vinetka.png" />
   </ItemGroup>
-
 </Project>

@@ -19,11 +19,11 @@
                     Margin="0,10"
                     FontSize="20"
                     Foreground="WhiteSmoke"
-                    Text="" />
+                    Text="{Binding Title}" />
                 <TextBlock
                     FontSize="16"
                     Foreground="WhiteSmoke"
-                    Text=""
+                    Text="{Binding Description}"
                     TextAlignment="Justify"
                     TextWrapping="Wrap" />
             </StackPanel>

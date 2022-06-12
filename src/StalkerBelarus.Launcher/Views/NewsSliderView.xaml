@@ -6,16 +6,24 @@
     xmlns:local="clr-namespace:StalkerBelarus.Launcher.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:StalkerBelarus.Launcher.Views"
+    xmlns:vm="clr-namespace:StalkerBelarus.Launcher.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.DataContext>
+        <vm:NewsSliderViewModel />
+    </UserControl.DataContext>
+
     <Border BorderBrush="Gray" BorderThickness="1">
         <Border.Background>
             <SolidColorBrush Opacity=".75" Color="Black" />
         </Border.Background>
 
         <StackPanel>
-            <view:NewsView HorizontalAlignment="Center" VerticalAlignment="Top" />
+            <view:NewsView
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                DataContext="{Binding SelectedNewsViewModel}" />
             <Grid Margin="10,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -27,10 +35,16 @@
                     <Button Content="Ap-Pro" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Height="20" Padding="0">
+                    <Button
+                        Height="20"
+                        Padding="0"
+                        Command="{Binding GoBack}">
                         <Image Opacity="0.6" Source="pack://application:,,,/Assets/Images/Icons/chevron-double-left.png" />
                     </Button>
-                    <Button Height="20" Padding="0">
+                    <Button
+                        Height="20"
+                        Padding="0"
+                        Command="{Binding GoNext}">
                         <Image Opacity="0.6" Source="pack://application:,,,/Assets/Images/Icons/chevron-double-right.png" />
                     </Button>
                 </StackPanel>
