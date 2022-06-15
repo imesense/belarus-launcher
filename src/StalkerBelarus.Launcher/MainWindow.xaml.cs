@@ -1,4 +1,4 @@
-﻿using StalkerBelarus.Launcher.ViewModels;
+﻿using Splat;
 
 namespace StalkerBelarus.Launcher;
 
@@ -11,6 +11,6 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        DataContext = new MainViewModel();
+        DataContext = Locator.Current.GetService<IScreen>();
     }
 }

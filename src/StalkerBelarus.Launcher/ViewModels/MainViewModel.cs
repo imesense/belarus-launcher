@@ -1,44 +1,26 @@
-﻿using Splat;
-using StalkerBelarus.Launcher.Views;
+﻿namespace StalkerBelarus.Launcher.ViewModels;
 
-namespace StalkerBelarus.Launcher.ViewModels
+/// <summary>
+/// Main view model
+/// </summary>
+public class MainViewModel : ReactiveObject, IScreen
 {
-    /// <summary>
-    /// Main view model
-    /// </summary>
-    public class MainViewModel : ReactiveObject, IScreen
+    public RoutingState Router { get; } = new();
+
+    #region Constructor
+    public MainViewModel()
     {
-        public RoutingState Router { get; }
+        ShowAuthorization();
+    }
+    #endregion
 
-        #region Constructor
-        public MainViewModel(IMutableDependencyResolver? dependencyResolver = null)
-        {
-            dependencyResolver ??= Locator.CurrentMutable;
+    private void ShowLauncher()
+    {
+        Router.Navigate.Execute(new LauncherViewModel(this)).Subscribe();
+    }
 
-            // Bind
-            RegisterParts(dependencyResolver);
-            Router = new RoutingState();
-
-            ShowAuthorization();
-        }
-        #endregion
-
-        private void ShowLauncher()
-        {
-            Router.Navigate.Execute(new LauncherViewModel(this)).Subscribe();
-        }
-
-        private void ShowAuthorization()
-        {
-            Router.Navigate.Execute(new AuthorizationViewModel(this)).Subscribe();
-        }
-
-        private void RegisterParts(IMutableDependencyResolver dependencyResolver)
-        {
-            dependencyResolver.RegisterConstant(this, typeof(IScreen));
-
-            dependencyResolver.Register(() => new AuthorizationView(), typeof(IViewFor<AuthorizationViewModel>));
-            dependencyResolver.Register(() => new LauncherView(), typeof(IViewFor<LauncherViewModel>));
-        }
+    private void ShowAuthorization()
+    {
+        Router.Navigate.Execute(new AuthorizationViewModel(this)).Subscribe();
     }
 }
