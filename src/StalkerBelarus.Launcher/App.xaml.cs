@@ -1,4 +1,4 @@
-﻿using Splat;
+using Splat;
 using StalkerBelarus.Launcher.ViewModels;
 using StalkerBelarus.Launcher.Views;
 
@@ -23,5 +23,17 @@ public partial class App : Application
             () => new AuthorizationView());
         Locator.CurrentMutable.Register<IViewFor<LauncherViewModel>>(
             () => new LauncherView());
+    }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        var mainView = new MainWindow()
+        {
+            DataContext = Locator.Current.GetService<IScreen>()
+        };
+
+        mainView.Show();
     }
 }
