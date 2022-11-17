@@ -6,28 +6,42 @@ namespace StalkerBelarus.Launcher.ViewModels
 {
     public class AuthorizationViewModel : ReactiveObject, IRoutableViewModel
     {
-        public ReactiveCommand<Unit, Unit> Next { get; }
+        private readonly LauncherViewModel _launcherViewModel;
 
-        public ReactiveCommand<Unit, Unit> Close { get; }
+        public ReactiveCommand<Unit, Unit> Next { get; private set; } = null!;
+        public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
+        public string? UrlPathSegment => throw new NotImplementedException();
+        public IScreen HostScreen { get; set; } = null!;
 
-        public AuthorizationViewModel(IScreen screen)
+        public AuthorizationViewModel(LauncherViewModel launcherViewModel)
         {
-            HostScreen = screen;
+            if (launcherViewModel is null)
+            {
+                throw new ArgumentNullException(nameof(launcherViewModel));
+            }
 
+            _launcherViewModel = launcherViewModel;
+            _launcherViewModel.HostScreen = HostScreen;
+
+            SetupBinding();
+        }
+
+        private void SetupBinding()
+        {
             Next = ReactiveCommand.CreateFromTask(async () => await NextImpl());
-
             Close = ReactiveCommand.Create(() => ApplicationHelper.Close());
         }
 
         private IObservable<Unit> NextImpl()
         {
-            HostScreen.Router.Navigate.Execute(new LauncherViewModel(HostScreen));
+            if (HostScreen is null)
+            {
+                throw new ArgumentNullException(nameof(HostScreen));
+            }
+
+            HostScreen.Router.Navigate.Execute(_launcherViewModel);
 
             return Observable.Return(Unit.Default);
         }
-
-        public string? UrlPathSegment => throw new NotImplementedException();
-
-        public IScreen HostScreen { get; protected set; }
     }
 }

@@ -1,6 +1,6 @@
-using Splat;
-using StalkerBelarus.Launcher.ViewModels;
-using StalkerBelarus.Launcher.Views;
+﻿using Splat;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace StalkerBelarus.Launcher;
 
@@ -9,31 +9,54 @@ namespace StalkerBelarus.Launcher;
 /// </summary>
 public partial class App : Application
 {
+    private readonly IHost _host;
+
     #region Constructor
     public App()
     {
+        _host = Host.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                services.AddTransient<AuthorizationViewModel>();
+                services.AddTransient<LauncherViewModel>();
+
+                services.AddSingleton<IScreen, MainViewModel>();
+                services.AddSingleton((services) => new MainWindow()
+                {
+                    DataContext = services.GetRequiredService<IScreen>()
+                });
+            }).Build();
+
+        Locator.CurrentMutable.InitializeReactiveUI();
+        Locator.CurrentMutable.InitializeSplat();
+
         RegisterPages();
     }
     #endregion
 
-    private void RegisterPages()
+    private static void RegisterPages()
     {
-        Locator.CurrentMutable.RegisterConstant<IScreen>(new MainViewModel());
         Locator.CurrentMutable.Register<IViewFor<AuthorizationViewModel>>(
             () => new AuthorizationView());
         Locator.CurrentMutable.Register<IViewFor<LauncherViewModel>>(
             () => new LauncherView());
     }
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        var mainView = new MainWindow()
-        {
-            DataContext = Locator.Current.GetService<IScreen>()
-        };
+        await _host.StartAsync();
 
-        mainView.Show();
+        MainWindow = _host.Services.GetRequiredService<MainWindow>();
+        MainWindow.Show();
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        await _host.StopAsync();
+        _host.Dispose();
+
+        base.OnExit(e);
     }
 }
