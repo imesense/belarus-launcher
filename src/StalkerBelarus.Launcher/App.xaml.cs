@@ -1,6 +1,7 @@
-using Splat;
+﻿using Splat;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StalkerBelarus.Launcher.Manager;
 
 namespace StalkerBelarus.Launcher;
 
@@ -17,6 +18,8 @@ public partial class App : Application
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
+                services.AddSingleton<IWindowManager, WindowManager>();
+
                 services.AddTransient<AuthorizationViewModel>();
                 services.AddTransient<LauncherViewModel>();
                 services.AddTransient<MenuViewModel>();

@@ -1,4 +1,4 @@
-﻿using StalkerBelarus.Launcher.Helpers;
+﻿using StalkerBelarus.Launcher.Manager;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -6,6 +6,7 @@ namespace StalkerBelarus.Launcher.ViewModels
 {
     public class AuthorizationViewModel : ReactiveObject, IRoutableViewModel
     {
+        private readonly IWindowManager _windowManager;
         private readonly LauncherViewModel _launcherViewModel;
 
         public ReactiveCommand<Unit, Unit> Next { get; private set; } = null!;
@@ -13,13 +14,15 @@ namespace StalkerBelarus.Launcher.ViewModels
         public string? UrlPathSegment => throw new NotImplementedException();
         public IScreen HostScreen { get; set; } = null!;
 
-        public AuthorizationViewModel(LauncherViewModel launcherViewModel)
+        public AuthorizationViewModel(IWindowManager windowManager, LauncherViewModel launcherViewModel)
         {
+            _windowManager = windowManager;
+
             if (launcherViewModel is null)
             {
                 throw new ArgumentNullException(nameof(launcherViewModel));
             }
-
+            
             _launcherViewModel = launcherViewModel;
             _launcherViewModel.HostScreen = HostScreen;
 
@@ -29,7 +32,7 @@ namespace StalkerBelarus.Launcher.ViewModels
         private void SetupBinding()
         {
             Next = ReactiveCommand.CreateFromTask(async () => await NextImpl());
-            Close = ReactiveCommand.Create(() => ApplicationHelper.Close());
+            Close = ReactiveCommand.Create(() => _windowManager.Close());
         }
 
         private IObservable<Unit> NextImpl()
