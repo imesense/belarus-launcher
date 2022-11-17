@@ -1,4 +1,4 @@
-﻿namespace StalkerBelarus.Launcher.Manager;
+﻿namespace StalkerBelarus.Launcher.ViewModels.Manager;
 
 public interface IWindowManager
 {

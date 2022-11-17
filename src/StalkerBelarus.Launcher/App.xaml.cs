@@ -1,6 +1,7 @@
 ﻿using Splat;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StalkerBelarus.Launcher.ViewModels.Manager;
 using StalkerBelarus.Launcher.Manager;
 
 namespace StalkerBelarus.Launcher;

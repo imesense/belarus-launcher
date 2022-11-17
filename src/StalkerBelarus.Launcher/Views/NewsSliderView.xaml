@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:StalkerBelarus.Launcher.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:StalkerBelarus.Launcher.Views"
-    xmlns:vm="clr-namespace:StalkerBelarus.Launcher.ViewModels"
+    xmlns:vm="clr-namespace:StalkerBelarus.Launcher.ViewModels;assembly=StalkerBelarus.Launcher.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">

@@ -1,4 +1,4 @@
-﻿using StalkerBelarus.Launcher.Manager;
+﻿using StalkerBelarus.Launcher.ViewModels.Manager;
 using System.Reactive;
 using System.Reactive.Linq;
 

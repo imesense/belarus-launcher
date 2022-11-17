@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 
