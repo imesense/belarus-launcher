@@ -20,16 +20,16 @@
         </Grid.RowDefinitions>
 
         <Grid
-            Margin="40"
             Grid.Column="0"
             Width="330"
+            Margin="40"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <view:NewsSliderView />
         </Grid>
 
         <Border Grid.Column="1">
-            <view:MenuView />
+            <view:MenuView DataContext="{Binding MenuViewModel}" />
         </Border>
     </Grid>
 </UserControl>

@@ -6,9 +6,7 @@
     xmlns:local="clr-namespace:StalkerBelarus.Launcher.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:StalkerBelarus.Launcher.ViewModels">
-    <UserControl.DataContext>
-        <vm:MenuViewModel />
-    </UserControl.DataContext>
+
     <Border BorderBrush="#FF808080" BorderThickness="1,0,0,0">
         <Border.Background>
             <SolidColorBrush Opacity=".75" Color="Black" />

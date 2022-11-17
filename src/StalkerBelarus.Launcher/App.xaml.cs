@@ -1,4 +1,4 @@
-﻿using Splat;
+using Splat;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,6 +19,7 @@ public partial class App : Application
             {
                 services.AddTransient<AuthorizationViewModel>();
                 services.AddTransient<LauncherViewModel>();
+                services.AddTransient<MenuViewModel>();
 
                 services.AddSingleton<IScreen, MainViewModel>();
                 services.AddSingleton((services) => new MainWindow()
