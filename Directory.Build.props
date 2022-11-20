@@ -1,15 +1,18 @@
 <Project>
-  <PropertyGroup>
-    <ProjectDir>$(MSBuildThisFileDirectory)</ProjectDir>
-    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(MSBuildThisFileDirectory)bin\</BaseOutputPath>
-    <Nullable>enable</Nullable>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
+    <PropertyGroup>
+        <ProjectDir>$(MSBuildThisFileDirectory)</ProjectDir>
+        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <BaseOutputPath>$(MSBuildThisFileDirectory)bin\</BaseOutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>None</DebugType>
-  </PropertyGroup>
-  
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
+    </PropertyGroup>
 </Project>

@@ -1,37 +1,35 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <UseWPF>true</UseWPF>
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>Assets\Images\Icons\icon_app.ico</ApplicationIcon>
-    <AssemblyName>SBLauncher</AssemblyName>
-    <Company>СhoiceTeam</Company>
-    <Authors>Drombeys</Authors>
-  </PropertyGroup>
+        <ApplicationIcon>Assets\Images\Icons\icon_app.ico</ApplicationIcon>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <PackageReference Include="ReactiveUI.WPF" Version="18.3.1" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.4.1" />
-  </ItemGroup>
+        <AssemblyName>SBLauncher</AssemblyName>
+        <Company>СhoiceTeam</Company>
+        <Authors>Drombeys</Authors>
 
-  <ItemGroup>
-    <ProjectReference Include="..\StalkerBelarus.Launcher.ViewModels\StalkerBelarus.Launcher.ViewModels.csproj" />
-  </ItemGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Resource Include="Assets\Fonts\GRAFFITI1CTT.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Images\background.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Images\Icons\chevron-double-left.png" />
-    <Resource Include="Assets\Images\Icons\chevron-double-right.png" />
-    <Resource Include="Assets\Images\logo.png" />
-    <Resource Include="Assets\Images\vinetka.png" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+        <PackageReference Include="ReactiveUI.WPF" Version="18.3.1" />
+        <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\StalkerBelarus.Launcher.ViewModels\StalkerBelarus.Launcher.ViewModels.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Resource Include="Assets\Fonts\GRAFFITI1CTT.ttf" />
+        <Resource Include="Assets\Images\background.png" />
+        <Resource Include="Assets\Images\Icons\chevron-double-left.png" />
+        <Resource Include="Assets\Images\Icons\chevron-double-right.png" />
+        <Resource Include="Assets\Images\logo.png" />
+        <Resource Include="Assets\Images\vinetka.png" />
+    </ItemGroup>
 </Project>

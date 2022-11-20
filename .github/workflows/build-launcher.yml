@@ -1,17 +1,38 @@
-name: Building
+name: 'Build launcher'
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - '**'
+    paths:
+    - '.github/workflows/**'
+    - 'src/**'
+    - '*.sln'
+    - '*.props'
+  pull_request:
+    branches:
+    - '**'
+    paths:
+    - '.github/workflows/**'
+    - 'src/**'
+    - '*.sln'
+    - '*.props'
 
 jobs:
   build:
-    runs-on: windows-latest
+    name: 'Building'
 
     strategy:
       matrix:
-        platforms: [win-x86, win-x64]
+        system: [ windows-2022 ]
+        config: [ Release ]
+        runtime: [ win-x86, win-x64 ]
+
+    runs-on: ${{ matrix.system }}
 
     env:
-      solution_name: СhoiceTeam.StalkerBelarus.sln
+      Solution: СhoiceTeam.StalkerBelarus.sln
+      Launcher: src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj
 
     steps:
     - name: Checkout
@@ -19,20 +40,36 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+    - name: Install .NET
+      uses: actions/setup-dotnet@v3.0.3
       with:
         dotnet-version: '7.0.x'
 
     - name: Install dependencies
-      run: dotnet restore
-
-    - name: Build
       run: |
-        dotnet publish src\StalkerBelarus.Launcher -c Release -p:PublishSingleFile=true -r ${{ matrix.platforms }} --self-contained true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:EnableCompressionInSingleFile=true
+        dotnet restore $env:Solution
 
-    - name: Upload build artifacts
+    - name: Build solution
+      run: |
+        dotnet build $env:Solution `
+          --configuration=${{ matrix.config }} `
+          --no-restore
+
+    - name: Publish launcher
+      run: |
+        dotnet publish $env:Launcher `
+          --configuration ${{ matrix.config }} `
+          --runtime ${{ matrix.runtime }} `
+          --self-contained true `
+          --no-build `
+          --no-restore `
+          -p:PublishReadyToRun=true `
+          -p:PublishSingleFile=true `
+          -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableCompressionInSingleFile=true
+
+    - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: publish-${{ matrix.platforms }}
-        path: bin/Release/${{ matrix.platforms }}/publish/
+        name: publish-${{ matrix.runtime }}-${{ github.sha }}
+        path: bin/Release/${{ matrix.runtime }}/publish/
