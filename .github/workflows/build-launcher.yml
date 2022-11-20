@@ -45,24 +45,12 @@ jobs:
       with:
         dotnet-version: '7.0.x'
 
-    - name: Install dependencies
-      run: |
-        dotnet restore $env:Solution
-
-    - name: Build solution
-      run: |
-        dotnet build $env:Solution `
-          --configuration=${{ matrix.config }} `
-          --no-restore
-
     - name: Publish launcher
       run: |
         dotnet publish $env:Launcher `
           --configuration ${{ matrix.config }} `
           --runtime ${{ matrix.runtime }} `
           --self-contained true `
-          --no-build `
-          --no-restore `
           -p:PublishReadyToRun=true `
           -p:PublishSingleFile=true `
           -p:IncludeAllContentForSelfExtract=true `
