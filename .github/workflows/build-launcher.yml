@@ -54,7 +54,9 @@ jobs:
           -p:PublishReadyToRun=true `
           -p:PublishSingleFile=true `
           -p:IncludeAllContentForSelfExtract=true `
-          -p:EnableCompressionInSingleFile=true
+          -p:EnableCompressionInSingleFile=true `
+          -p:DebugSymbols=false `
+          -p:DebugType=None
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
