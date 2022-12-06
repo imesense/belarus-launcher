@@ -19,8 +19,8 @@ on:
     - '*.props'
 
 jobs:
-  build:
-    name: 'Building'
+  publish:
+    name: 'Publishing'
 
     strategy:
       matrix:
@@ -31,8 +31,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      Solution: СhoiceTeam.StalkerBelarus.sln
-      Launcher: src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj
+      Project: src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj
 
     steps:
     - name: Checkout
@@ -47,11 +46,10 @@ jobs:
 
     - name: Publish launcher
       run: |
-        dotnet publish $env:Launcher `
+        dotnet publish $env:Project `
           --configuration ${{ matrix.config }} `
           --runtime ${{ matrix.runtime }} `
           --self-contained true `
-          -p:PublishReadyToRun=true `
           -p:PublishSingleFile=true `
           -p:IncludeAllContentForSelfExtract=true `
           -p:EnableCompressionInSingleFile=true `
