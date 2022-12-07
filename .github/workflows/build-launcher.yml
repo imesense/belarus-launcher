@@ -18,6 +18,10 @@ on:
     - '*.sln'
     - '*.props'
 
+defaults:
+  run:
+    shell: pwsh
+
 jobs:
   publish:
     name: 'Publishing'
@@ -59,5 +63,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: publish-${{ matrix.runtime }}-${{ github.sha }}
+        name: sblauncher-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/Release/${{ matrix.runtime }}/publish/
