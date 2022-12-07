@@ -1,0 +1,33 @@
+# Global attributes for forcing line endings normalization of specific files
+
+* text=auto
+
+# Configs
+.gitattributes text eol=crlf encoding=utf-8
+.gitignore     text eol=crlf encoding=utf-8
+.editorconfig  text eof=crlf encoding=utf-8
+*.json         text eol=crlf encoding=utf-8
+*.yml          text eol=lf   encoding=utf-8
+*.yaml         text eol=lf   encoding=utf-8
+*.props        text eol=crlf encoding=utf-8
+*.targets      text eol=crlf encoding=utf-8
+
+# Projects and solutions
+*.sln            text eol=crlf encoding=utf-8-bom
+*.csproj         text eol=crlf encoding=utf-8
+*.code-workspace text eol=crlf encoding=utf-8
+
+# Source codes
+*.cs    text eol=crlf encoding=utf-8
+*.ps1   text eol=crlf encoding=utf-8
+*.xaml  text eol=crlf encoding=utf-8
+*.axaml text eol=crlf encoding=utf-8
+
+# Documents
+*.md text eol=crlf encoding=utf-8
+
+# Assets
+*.ico binary
+*.png binary
+*.jpg binary
+*.ttf binary
