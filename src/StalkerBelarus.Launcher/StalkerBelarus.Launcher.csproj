@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <UseWPF>true</UseWPF>
 
-        <ApplicationIcon>Assets\Images\Icons\icon_app.ico</ApplicationIcon>
+        <ApplicationIcon>Assets\Icons\icon_app.ico</ApplicationIcon>
 
         <AssemblyName>SBLauncher</AssemblyName>
         <Company>СhoiceTeam</Company>
@@ -26,9 +26,9 @@
 
     <ItemGroup>
         <Resource Include="Assets\Fonts\GRAFFITI1CTT.ttf" />
+        <Resource Include="Assets\Icons\chevron-double-left.png" />
+        <Resource Include="Assets\Icons\chevron-double-right.png" />
         <Resource Include="Assets\Images\background.png" />
-        <Resource Include="Assets\Images\Icons\chevron-double-left.png" />
-        <Resource Include="Assets\Images\Icons\chevron-double-right.png" />
         <Resource Include="Assets\Images\logo.png" />
         <Resource Include="Assets\Images\vinetka.png" />
     </ItemGroup>
