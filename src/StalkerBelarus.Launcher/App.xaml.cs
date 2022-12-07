@@ -1,24 +1,22 @@
-﻿using Splat;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using StalkerBelarus.Launcher.ViewModels.Manager;
+
+using Splat;
+
 using StalkerBelarus.Launcher.Manager;
+using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher;
 
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
-{
+public partial class App : Application {
     private readonly IHost _host;
 
-    #region Constructor
-    public App()
-    {
+    public App() {
         _host = Host.CreateDefaultBuilder()
-            .ConfigureServices((context, services) =>
-            {
+            .ConfigureServices((context, services) => {
                 services.AddSingleton<IWindowManager, WindowManager>();
 
                 services.AddTransient<AuthorizationViewModel>();
@@ -26,8 +24,7 @@ public partial class App : Application
                 services.AddTransient<MenuViewModel>();
 
                 services.AddSingleton<IScreen, MainViewModel>();
-                services.AddSingleton((services) => new MainWindow()
-                {
+                services.AddSingleton((services) => new MainWindow() {
                     DataContext = services.GetRequiredService<IScreen>()
                 });
             }).Build();
@@ -37,18 +34,15 @@ public partial class App : Application
 
         RegisterPages();
     }
-    #endregion
 
-    private static void RegisterPages()
-    {
+    private static void RegisterPages() {
         Locator.CurrentMutable.Register<IViewFor<AuthorizationViewModel>>(
             () => new AuthorizationView());
         Locator.CurrentMutable.Register<IViewFor<LauncherViewModel>>(
             () => new LauncherView());
     }
 
-    protected override async void OnStartup(StartupEventArgs e)
-    {
+    protected override async void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
 
         await _host.StartAsync();
@@ -57,8 +51,7 @@ public partial class App : Application
         MainWindow.Show();
     }
 
-    protected override async void OnExit(ExitEventArgs e)
-    {
+    protected override async void OnExit(ExitEventArgs e) {
         await _host.StopAsync();
         _host.Dispose();
 

@@ -1,14 +1,10 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 
 namespace StalkerBelarus.Launcher.Views;
 
 /// <summary>
-/// Логика взаимодействия для MenuView.xaml
+/// Interaction logic for MenuView.xaml
 /// </summary>
-public partial class MenuView : UserControl
-{
-    public MenuView()
-    {
-        InitializeComponent();
-    }
+public partial class MenuView : UserControl {
+    public MenuView() => InitializeComponent();
 }

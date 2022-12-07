@@ -1,15 +1,13 @@
-﻿namespace StalkerBelarus.Launcher.ViewModels;
+namespace StalkerBelarus.Launcher.ViewModels;
 
-public class LauncherViewModel : ReactiveObject, IRoutableViewModel
-{
+public class LauncherViewModel : ReactiveObject, IRoutableViewModel {
     public string? UrlPathSegment => throw new NotImplementedException();
 
     public IScreen HostScreen { get; set; } = null!;
 
     public MenuViewModel MenuViewModel { get; set; }
 
-    public LauncherViewModel(MenuViewModel menuViewModel)
-    {
+    public LauncherViewModel(MenuViewModel menuViewModel) {
         MenuViewModel = menuViewModel;
     }
 }

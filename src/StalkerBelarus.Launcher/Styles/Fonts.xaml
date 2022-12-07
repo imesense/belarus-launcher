@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <FontFamily x:Key="StalkerFont">pack://application;,,,/Assets/Fonts/#GRAFFITI1CTT</FontFamily>
 
     <Style x:Key="BaseStyle" TargetType="{x:Type Control}">

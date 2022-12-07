@@ -1,14 +1,10 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 
 namespace StalkerBelarus.Launcher.Views;
 
 /// <summary>
-/// Логика взаимодействия для NewsView.xaml
+/// Interaction logic for NewsView.xaml
 /// </summary>
-public partial class NewsView : UserControl
-{
-    public NewsView()
-    {
-        InitializeComponent();
-    }
+public partial class NewsView : UserControl {
+    public NewsView() => InitializeComponent();
 }

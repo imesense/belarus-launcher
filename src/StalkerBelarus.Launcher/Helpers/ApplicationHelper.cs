@@ -1,9 +1,5 @@
-﻿namespace StalkerBelarus.Launcher.Helpers;
+namespace StalkerBelarus.Launcher.Helpers;
 
-public static class ApplicationHelper
-{
-    public static void Close()
-    {
-        Application.Current.Shutdown();
-    }
+public static class ApplicationHelper {
+    public static void Close() => Application.Current.Shutdown();
 }
