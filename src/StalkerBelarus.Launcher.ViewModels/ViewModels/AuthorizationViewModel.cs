@@ -1,21 +1,24 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
+using ReactiveUI.Fody.Helpers;
+
 using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels {
     public class AuthorizationViewModel : ReactiveObject, IRoutableViewModel {
         private readonly IWindowManager _windowManager;
         private readonly LauncherViewModel _launcherViewModel;
+        [Reactive] public IUserSettings UserSettings { get; set; }
 
         public ReactiveCommand<Unit, Unit> Next { get; private set; } = null!;
         public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
-        public string? UrlPathSegment => throw new NotImplementedException();
+        public string? UrlPathSegment { get; set; } = "";
 
         public IScreen HostScreen { get; set; } = null!;
 
-        public AuthorizationViewModel(IWindowManager windowManager, LauncherViewModel launcherViewModel) {
+        public AuthorizationViewModel(IWindowManager windowManager, LauncherViewModel launcherViewModel, IUserSettings userSettings) {
             _windowManager = windowManager;
 
             if (launcherViewModel is null) {
@@ -23,9 +26,12 @@ namespace StalkerBelarus.Launcher.ViewModels {
             }
 
             _launcherViewModel = launcherViewModel;
+            UserSettings = userSettings;
             _launcherViewModel.HostScreen = HostScreen;
 
             SetupBinding();
+
+            UserSettings = ConfigManager.LoadSettings();
         }
 
         private void SetupBinding() {
@@ -37,6 +43,8 @@ namespace StalkerBelarus.Launcher.ViewModels {
             if (HostScreen is null) {
                 throw new ArgumentNullException(nameof(HostScreen));
             }
+
+            ConfigManager.SaveSettings((UserSettings) UserSettings);
 
             HostScreen.Router.Navigate.Execute(_launcherViewModel);
 

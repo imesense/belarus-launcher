@@ -24,11 +24,13 @@
                 <Button
                     Margin="5,15"
                     HorizontalContentAlignment="Right"
+                    Command="{Binding PlayGame}"
                     Content="Играть"
                     FontSize="38" />
                 <Button
                     Margin="5,15"
                     HorizontalContentAlignment="Right"
+                    Command="{Binding StartServer}"
                     Content="Запустить сервер"
                     FontSize="38" />
             </StackPanel>

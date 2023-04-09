@@ -28,7 +28,19 @@
                 <TextBox
                     Width="200"
                     VerticalContentAlignment="Center"
-                    Text="" />
+                    Text="{Binding UserSettings.UserName}"
+                    FontSize="16" />
+            </StackPanel>
+            <StackPanel Visibility="Collapsed" Orientation="Horizontal">
+                <TextBlock
+                    Margin="10,5"
+                    FontSize="16"
+                    Foreground="White"
+                    Text="Введите IP-адрес:" />
+                <TextBox
+                    Width="200"
+                    VerticalContentAlignment="Center"
+                    Text="{Binding UserSettings.IpAdress}" />
             </StackPanel>
             <StackPanel
                 Margin="20"
