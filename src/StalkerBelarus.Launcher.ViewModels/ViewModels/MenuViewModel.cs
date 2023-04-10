@@ -6,15 +6,18 @@ namespace StalkerBelarus.Launcher.ViewModels;
 
 public class MenuViewModel : ReactiveObject {
     private readonly IWindowManager _windowManager;
-    private readonly IUserSettings _userSettings;
+    private readonly UserSettings _userSettings;
 
     public IReactiveCommand? Close { get; private set; }
     public IReactiveCommand? PlayGame { get; private set; }
     public IReactiveCommand? StartServer { get; private set; }
 
-    public MenuViewModel(IWindowManager windowManager, IUserSettings userSettings) {
+    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings) {
         _windowManager = windowManager;
         _userSettings = userSettings;
+
+        _userSettings = ConfigManager.LoadSettings();
+
         SetupCommands();
     }
 

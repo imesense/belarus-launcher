@@ -17,7 +17,7 @@ public partial class App : Application {
     public App() {
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) => {
-                services.AddSingleton<IUserSettings, UserSettings>();
+                services.AddSingleton<UserSettings>();
                 services.AddSingleton<IWindowManager, WindowManager>();
 
                 services.AddTransient<AuthorizationViewModel>();
