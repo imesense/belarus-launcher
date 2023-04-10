@@ -23,12 +23,7 @@
     "Microsoft.NetCore.Component.DevelopmentTools",
     "Microsoft.VisualStudio.Component.DiagnosticTools",
     "Microsoft.VisualStudio.Component.Debugger.JustInTime",
-    "Microsoft.VisualStudio.Component.IntelliCode",
-    "microsoft.net.runtime.mono.tooling.net6",
-    "microsoft.net.sdk.emscripten.net6",
-    "Microsoft.VisualStudio.Component.Windows10SDK",
     "Microsoft.VisualStudio.Component.ManagedDesktop.Prerequisites",
-    "Microsoft.VisualStudio.Workload.ManagedDesktop",
-    "Microsoft.VisualStudio.Component.VC.CoreBuildTools"
+    "Microsoft.VisualStudio.Workload.ManagedDesktop"
   ]
 }
