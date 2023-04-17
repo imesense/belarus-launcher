@@ -25,6 +25,7 @@ public partial class App : Application {
                 services.AddTransient<AuthorizationViewModel>();
                 services.AddTransient<LauncherViewModel>();
                 services.AddTransient<MenuViewModel>();
+                services.AddTransient<StartGameViewModel>();
 
                 services.AddSingleton<IScreen, MainViewModel>();
                 services.AddSingleton((services) => new MainWindow() {
@@ -43,6 +44,8 @@ public partial class App : Application {
             () => new AuthorizationView());
         Locator.CurrentMutable.Register<IViewFor<LauncherViewModel>>(
             () => new LauncherView());
+        Locator.CurrentMutable.Register<IViewFor<StartGameViewModel>>(
+            () => new StartGameView());
     }
 
     protected override async void OnStartup(StartupEventArgs e) {

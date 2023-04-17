@@ -11,8 +11,7 @@ public class MainViewModel : ReactiveObject, IScreen {
 
     public RoutingState Router { get; } = new();
 
-    public MainViewModel(AuthorizationViewModel authorizationViewModel,
-        LauncherViewModel launcherViewModel, UserSettings userSettings) {
+    public MainViewModel(AuthorizationViewModel authorizationViewModel, LauncherViewModel launcherViewModel) {
         _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel)); ;
 

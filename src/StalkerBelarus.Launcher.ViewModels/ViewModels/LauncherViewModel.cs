@@ -1,13 +1,26 @@
 namespace StalkerBelarus.Launcher.ViewModels;
 
 public class LauncherViewModel : ReactiveObject, IRoutableViewModel {
-    public string? UrlPathSegment => throw new NotImplementedException();
+    private readonly StartGameViewModel _startGameViewModel;
+
+    public string? UrlPathSegment => "LauncherViewModel";
 
     public IScreen HostScreen { get; set; } = null!;
 
     public MenuViewModel MenuViewModel { get; set; }
 
-    public LauncherViewModel(MenuViewModel menuViewModel) {
+    public LauncherViewModel(MenuViewModel menuViewModel, StartGameViewModel startGameViewModel) {
+        if (menuViewModel is null) {
+            throw new ArgumentNullException(nameof(menuViewModel));
+        }
+
         MenuViewModel = menuViewModel;
+        MenuViewModel.LauncherViewModel = this;
+        _startGameViewModel = startGameViewModel;
+        _startGameViewModel.HostScreen = HostScreen;
+    }
+
+    public void StartGame() {
+        HostScreen.Router.Navigate.Execute(_startGameViewModel);
     }
 }
