@@ -22,10 +22,10 @@ public partial class App : Application {
                 services.AddSingleton(userSettings);
                 services.AddSingleton<IWindowManager, WindowManager>();
 
-                services.AddTransient<AuthorizationViewModel>();
-                services.AddTransient<LauncherViewModel>();
-                services.AddTransient<MenuViewModel>();
-                services.AddTransient<StartGameViewModel>();
+                services.AddSingleton<AuthorizationViewModel>();
+                services.AddSingleton<LauncherViewModel>();
+                services.AddSingleton<MenuViewModel>();
+                services.AddSingleton<StartGameViewModel>();
 
                 services.AddSingleton<IScreen, MainViewModel>();
                 services.AddSingleton((services) => new MainWindow() {
