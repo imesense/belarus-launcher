@@ -1,4 +1,6 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 
 namespace StalkerBelarus.Launcher.ViewModels.Manager;
 
@@ -9,7 +11,9 @@ public static class ConfigManager {
 
     public static void SaveSettings(UserSettings settings) {
         var options = new JsonSerializerOptions {
-            WriteIndented = true,
+            AllowTrailingCommas = true,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true
         };
         var json = JsonSerializer.Serialize(settings, options);
         if (!File.Exists(Path)) {
