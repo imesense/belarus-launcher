@@ -44,6 +44,7 @@ public class MenuViewModel : ReactiveObject {
                 arguments: new List<string> {
                 @$"-start client(localhost/name={_userSettings.UserName})"
             });
+            _windowManager.Close();
             return;
         }
 

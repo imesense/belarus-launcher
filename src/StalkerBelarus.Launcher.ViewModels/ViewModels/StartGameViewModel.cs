@@ -49,6 +49,7 @@ public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
         arguments: new List<string> {
             @$"-start client({UserSettings.IpAdress}/name={UserSettings.UserName})"
         });
+        BackImpl();
 
         return;
     }
