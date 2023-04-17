@@ -15,9 +15,11 @@ public partial class App : Application {
     private readonly IHost _host;
 
     public App() {
+        var userSettings = ConfigManager.LoadSettings();
+
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) => {
-                services.AddSingleton<UserSettings>();
+                services.AddSingleton(userSettings);
                 services.AddSingleton<IWindowManager, WindowManager>();
 
                 services.AddTransient<AuthorizationViewModel>();

@@ -8,7 +8,6 @@ namespace StalkerBelarus.Launcher.ViewModels;
 public class MainViewModel : ReactiveObject, IScreen {
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly LauncherViewModel _launcherViewModel;
-    private readonly UserSettings _userSettings;
 
     public RoutingState Router { get; } = new();
 
@@ -20,15 +19,11 @@ public class MainViewModel : ReactiveObject, IScreen {
         _authorizationViewModel.HostScreen = this;
         _launcherViewModel.HostScreen = this;
 
-        _userSettings = userSettings;
-
         if (!File.Exists(ConfigManager.Path)) {
             ShowAuthorization();
+        } else {
+            ShowLauncher();
         }
-
-        ShowLauncher();
-
-        _userSettings = ConfigManager.LoadSettings();
     }
 
     private void ShowLauncher() {

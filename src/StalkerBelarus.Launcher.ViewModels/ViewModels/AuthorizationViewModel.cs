@@ -9,7 +9,9 @@ namespace StalkerBelarus.Launcher.ViewModels {
     public class AuthorizationViewModel : ReactiveObject, IRoutableViewModel {
         private readonly IWindowManager _windowManager;
         private readonly LauncherViewModel _launcherViewModel;
-        [Reactive] public UserSettings UserSettings { get; set; }
+        private UserSettings UserSettings { get; set; }
+        
+        [Reactive] public string UserName { get; set; } = string.Empty;
 
         public ReactiveCommand<Unit, Unit> Next { get; private set; } = null!;
         public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
@@ -25,15 +27,21 @@ namespace StalkerBelarus.Launcher.ViewModels {
                 throw new ArgumentNullException(nameof(launcherViewModel));
             }
 
-            _launcherViewModel = launcherViewModel;
             UserSettings = userSettings;
+
+            _launcherViewModel = launcherViewModel;
             _launcherViewModel.HostScreen = HostScreen;
 
             SetupBinding();
         }
 
         private void SetupBinding() {
-            Next = ReactiveCommand.CreateFromTask(async () => await NextImpl());
+            var canCreateUser = this.WhenAnyValue(x => x.UserName,
+                (nickname) => !string.IsNullOrWhiteSpace(nickname) && nickname.Length <= 22)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .DistinctUntilChanged();
+
+            Next = ReactiveCommand.CreateFromTask(async () => await NextImpl(), canCreateUser);
             Close = ReactiveCommand.Create(_windowManager.Close);
         }
 
@@ -41,7 +49,11 @@ namespace StalkerBelarus.Launcher.ViewModels {
             if (HostScreen is null) {
                 throw new ArgumentNullException(nameof(HostScreen));
             }
+            if (string.IsNullOrWhiteSpace(UserName)) {
+                throw new Exception("Имя пользователя не введено!");
+            }
 
+            UserSettings.UserName = UserName;
             ConfigManager.SaveSettings(UserSettings);
 
             HostScreen.Router.Navigate.Execute(_launcherViewModel);
