@@ -47,7 +47,7 @@ public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
 
         Launcher.Launch(path: @"binaries\xrEngine.exe",
         arguments: new List<string> {
-            @$"-start client({UserSettings.IpAdress}/name={UserSettings.UserName})"
+            @$"-start -center_screen -silent_error_mode client({UserSettings.IpAdress}/name={UserSettings.UserName})"
         });
         BackImpl();
 

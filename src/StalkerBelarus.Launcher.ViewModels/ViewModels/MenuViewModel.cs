@@ -28,7 +28,7 @@ public class MenuViewModel : ReactiveObject {
     }
 
     private IObservable<Unit> StartServerImpl() {
-        Launcher.Launch(path: @"binaries\dedicated\xrEngine.exe", workingDirectory: @"binaries\",
+        Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
                 "-dedicated",
                 "-i",
