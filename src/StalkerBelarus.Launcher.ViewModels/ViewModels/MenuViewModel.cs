@@ -1,5 +1,7 @@
 using System.Reactive.Linq;
 
+using ReactiveUI.Fody.Helpers;
+
 using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels;
@@ -10,10 +12,14 @@ public class MenuViewModel : ReactiveObject {
     public LauncherViewModel LauncherViewModel { get; set; }
     private bool _isStartServer = false;
 
+    [Reactive] public bool IsVisibleDownload { get; set; } = true;
+    [Reactive] public bool IsVisiblePlayGame { get; set; } = false ;
+
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> CheckUpdates { get; private set; } = null!;
+    public ReactiveCommand<Unit, Unit> StartDownload { get; private set; } = null!;
 
     public MenuViewModel(IWindowManager windowManager, UserSettings userSettings) {
         _windowManager = windowManager;
@@ -26,7 +32,12 @@ public class MenuViewModel : ReactiveObject {
         Close = ReactiveCommand.Create(_windowManager.Close);
         PlayGame = ReactiveCommand.Create(() => PlayGameImpl());
         StartServer = ReactiveCommand.CreateFromObservable(StartServerImpl);
-        CheckUpdates = ReactiveCommand.CreateFromTask(async () => await CheckUpdatesImpl());
+        CheckUpdates = ReactiveCommand.CreateFromTask(CheckUpdatesImpl);
+        StartDownload = ReactiveCommand.CreateFromTask(DownloadsImpl);
+    }
+
+    private async Task<Unit> DownloadsImpl() {
+        return Unit.Default;
     }
 
     private async Task<Unit> CheckUpdatesImpl() {
