@@ -13,6 +13,7 @@ public class MenuViewModel : ReactiveObject {
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
+    public ReactiveCommand<Unit, Unit> CheckUpdates { get; private set; } = null!;
 
     public MenuViewModel(IWindowManager windowManager, UserSettings userSettings) {
         _windowManager = windowManager;
@@ -24,7 +25,13 @@ public class MenuViewModel : ReactiveObject {
     private void SetupCommands() {
         Close = ReactiveCommand.Create(_windowManager.Close);
         PlayGame = ReactiveCommand.Create(() => PlayGameImpl());
-        StartServer = ReactiveCommand.CreateFromTask(async () => await StartServerImpl());
+        StartServer = ReactiveCommand.CreateFromObservable(StartServerImpl);
+        CheckUpdates = ReactiveCommand.CreateFromTask(async () => await CheckUpdatesImpl());
+    }
+
+    private async Task<Unit> CheckUpdatesImpl() {
+
+        return Unit.Default;
     }
 
     private IObservable<Unit> StartServerImpl() {

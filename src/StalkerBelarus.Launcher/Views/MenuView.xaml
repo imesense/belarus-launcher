@@ -44,6 +44,12 @@
                     Command="{Binding Close}"
                     Content="Выход"
                     FontSize="38" />
+                <Button
+                    Margin="10"
+                    HorizontalContentAlignment="Right"
+                    Command="{Binding CheckUpdates}"
+                    Content="Проверить обновления"
+                    FontSize="24" />
             </StackPanel>
             <StackPanel Grid.Row="2">
                 <Label
