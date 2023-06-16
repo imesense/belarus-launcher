@@ -49,6 +49,28 @@
             <StackPanel
                 Margin="45,0,15,0"
                 VerticalAlignment="Center"
+                Visibility="{Binding IsDownloadCheak, Converter={StaticResource VisibilityConverter}}">
+                <Label
+                    Margin="5,15"
+                    Foreground="White"
+                    HorizontalAlignment="Right"
+                    Content="Проверка обновлений..."
+                    FontSize="38" />
+            </StackPanel>
+            <StackPanel
+                Margin="45,0,15,0"
+                VerticalAlignment="Center"
+                Visibility="{Binding IsDownloadStart, Converter={StaticResource VisibilityConverter}}">
+                <Label
+                    Margin="5,15"
+                    Foreground="White"
+                    HorizontalAlignment="Right"
+                    Content="Загрузка..."
+                    FontSize="38" />
+            </StackPanel>
+            <StackPanel
+                Margin="45,0,15,0"
+                VerticalAlignment="Center"
                 Visibility="{Binding IsVisiblePlayGame, Converter={StaticResource VisibilityConverter}}">
                 <Button
                     Margin="5,15"

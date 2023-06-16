@@ -10,10 +10,10 @@
     mc:Ignorable="d">
     <Border Padding="10">
         <StackPanel>
-            <Image
+            <!--Image
                 Height="100"
                 Margin="15"
-                Source="" />
+                Source="" /-->
             <StackPanel>
                 <TextBlock
                     Margin="0,10"

@@ -10,10 +10,6 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:NewsSliderViewModel />
-    </UserControl.DataContext>
-
     <Border BorderBrush="Gray" BorderThickness="1">
         <Border.Background>
             <SolidColorBrush Opacity=".75" Color="Black" />
@@ -30,9 +26,10 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Button Content="VK" />
-                    <Button Content="Tg" />
-                    <Button Content="Ap-Pro" />
+                    
+                    <Button Content="VK" Command="{Binding GoVk}" />
+                    <Button Content="Tg" Command="{Binding GoTg}" />
+                    <Button Content="Ap-Pro" Command="{Binding GoApPro}" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button

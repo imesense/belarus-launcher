@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reactive.Linq;
 
 namespace StalkerBelarus.Launcher.ViewModels;
@@ -5,6 +6,9 @@ namespace StalkerBelarus.Launcher.ViewModels;
 public partial class NewsSliderViewModel {
     public IReactiveCommand? GoNext { get; private set; }
     public IReactiveCommand? GoBack { get; private set; }
+    public IReactiveCommand? GoVk { get; private set; }
+    public IReactiveCommand? GoApPro { get; private set; }
+    public IReactiveCommand? GoTg { get; private set; }
 
     private void SetupCommands() {
         var canExecuteBack = this.WhenAnyValue(x => x.NumPage, (numPage) => numPage != 0);
@@ -12,6 +16,10 @@ public partial class NewsSliderViewModel {
 
         GoNext = ReactiveCommand.Create(GoNextImpl, canExecuteNext);
         GoBack = ReactiveCommand.Create(GoBackImpl, canExecuteBack);
+        
+        GoVk = ReactiveCommand.Create(GoVkImpl);
+        GoTg = ReactiveCommand.Create(GoTgImpl);
+        GoApPro = ReactiveCommand.Create(GoApProImpl);
     }
 
     private void SetupBinding() {
@@ -30,5 +38,17 @@ public partial class NewsSliderViewModel {
         if (NumPage > 0) {
             NumPage--;
         }
+    }
+
+    private void GoVkImpl() {
+        Process.Start(new ProcessStartInfo("https://vk.com/stalker_belarus") { UseShellExecute = true });
+    }
+
+    private void GoTgImpl() {
+        Process.Start(new ProcessStartInfo("https://t.me/stalkerbelarus") { UseShellExecute = true });
+    }
+
+    private void GoApProImpl() {
+        Process.Start(new ProcessStartInfo("https://ap-pro.ru/forums/topic/3923-stalker-belarus/") { UseShellExecute = true });
     }
 }

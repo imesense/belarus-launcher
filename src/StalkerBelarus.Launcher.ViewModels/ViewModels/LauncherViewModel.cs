@@ -8,14 +8,16 @@ public class LauncherViewModel : ReactiveObject, IRoutableViewModel {
     public IScreen HostScreen { get; set; } = null!;
 
     public MenuViewModel MenuViewModel { get; set; }
+    public NewsSliderViewModel NewsSliderViewModel { get; set; }
 
-    public LauncherViewModel(MenuViewModel menuViewModel, StartGameViewModel startGameViewModel) {
+    public LauncherViewModel(MenuViewModel menuViewModel, StartGameViewModel startGameViewModel, NewsSliderViewModel newsSliderViewModel) {
         if (menuViewModel is null) {
             throw new ArgumentNullException(nameof(menuViewModel));
         }
 
         MenuViewModel = menuViewModel;
         MenuViewModel.LauncherViewModel = this;
+        NewsSliderViewModel = newsSliderViewModel;
         _startGameViewModel = startGameViewModel;
         _startGameViewModel.HostScreen = HostScreen;
     }

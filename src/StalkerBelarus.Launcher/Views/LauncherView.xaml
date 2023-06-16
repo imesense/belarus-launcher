@@ -25,7 +25,7 @@
             Margin="40"
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
-            <view:NewsSliderView />
+            <view:NewsSliderView DataContext="{Binding NewsSliderViewModel}" />
         </Grid>
 
         <Border Grid.Column="1">

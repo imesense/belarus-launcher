@@ -20,11 +20,11 @@
 
         <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBlock
+                <Label
                     Margin="10,5"
                     FontSize="16"
                     Foreground="White"
-                    Text="Введите логин:" />
+                    Content="Введите логин:" />
                 <TextBox
                     x:Name="Username"
                     Width="200"
