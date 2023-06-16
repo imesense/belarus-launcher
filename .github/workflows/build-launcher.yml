@@ -60,8 +60,20 @@ jobs:
           -p:DebugSymbols=false `
           -p:DebugType=None
 
-    - name: Upload artifacts
+    - name: Publish installer
+      if: matrix.runtime == 'win-x86'
+      run: |
+        "%programfiles(x86)%\Inno Setup 6\iscc.exe" "src\StalkerBelarus.Launcher.Setup\Setup.iss"
+
+    - name: Upload launcher
       uses: actions/upload-artifact@v3
       with:
         name: sblauncher-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/Release/${{ matrix.runtime }}/publish/
+
+    - name: Upload installer
+      uses: actions/upload-artifact@v3
+      if: matrix.runtime == 'win-x86'
+      with:
+        name: sbinstaller-${{ github.sha }}
+        path: src/StalkerBelarus.Launcher.Setup/Output/

@@ -19,6 +19,7 @@
 # Build results
 bin/
 obj/
+Output/
 
 # MSTest Results
 [Tt]est[Rr]esult*/
