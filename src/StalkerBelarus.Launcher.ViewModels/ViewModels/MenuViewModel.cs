@@ -53,9 +53,9 @@ public class MenuViewModel : ReactiveObject {
             IsVisiblePlayGame = false;
             IsDownloadStart = false;
             IsDownloadCheak = true;
-            Task.Run(
+            await Task.Run(
             () => {
-                if(_downloadService.CheckFiles()) {
+                if (_downloadService.CheckFiles()) {
                     IsDownloadStart = true;
                     IsDownloadCheak = false;
                     _downloadService.CheckFiles(true);
