@@ -4,11 +4,11 @@ using System.Reactive.Linq;
 namespace StalkerBelarus.Launcher.ViewModels;
 
 public partial class NewsSliderViewModel {
-    public IReactiveCommand? GoNext { get; private set; }
-    public IReactiveCommand? GoBack { get; private set; }
-    public IReactiveCommand? GoVk { get; private set; }
-    public IReactiveCommand? GoApPro { get; private set; }
-    public IReactiveCommand? GoTg { get; private set; }
+    public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
+    public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
+    public ReactiveCommand<Unit, Unit> GoVk { get; set; } = null!;
+    public ReactiveCommand<Unit, Unit> GoApPro { get; set; } = null!;
+    public ReactiveCommand<Unit, Unit> GoTg { get; set; } = null!;
 
     private void SetupCommands() {
         var canExecuteBack = this.WhenAnyValue(x => x.NumPage, (numPage) => numPage != 0);
