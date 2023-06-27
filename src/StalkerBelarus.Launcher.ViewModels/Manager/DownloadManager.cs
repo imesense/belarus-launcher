@@ -10,11 +10,11 @@ using System.IO;
 
 namespace StalkerBelarus.Launcher.ViewModels.Manager;
     //Беларусь никогда не выйдет
-    public class MyDownloadManager : IDisposable
+    public class DownloadManager : IDisposable
     {
         private string[] Folders = { "binaries", "resources", "patches" };
         private JsonDocument? jsonDocument;
-        public MyDownloadManager()
+        public DownloadManager()
         {
             string response = "{}";
             try

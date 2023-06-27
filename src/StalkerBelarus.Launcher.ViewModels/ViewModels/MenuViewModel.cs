@@ -9,7 +9,7 @@ namespace StalkerBelarus.Launcher.ViewModels;
 public class MenuViewModel : ReactiveObject {
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
-    private readonly MyDownloadManager _downloadService;
+    private readonly DownloadManager _downloadService;
     public LauncherViewModel LauncherViewModel { get; set; }
     private bool _isStartServer = false;
 
@@ -24,7 +24,7 @@ public class MenuViewModel : ReactiveObject {
     public ReactiveCommand<Unit, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartDownload { get; private set; } = null!;
 
-    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings, MyDownloadManager downloadService) {
+    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings, DownloadManager downloadService) {
         _downloadService = downloadService;
         _windowManager = windowManager;
         _userSettings = userSettings;

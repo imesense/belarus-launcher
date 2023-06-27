@@ -19,7 +19,7 @@ public partial class App : Application {
 
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) => {
-                services.AddScoped<MyDownloadManager>();
+                services.AddSingleton<DownloadManager>();
                 services.AddSingleton(userSettings);
                 services.AddSingleton<IWindowManager, WindowManager>();
 
