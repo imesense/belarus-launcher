@@ -4,5 +4,8 @@
             "name": "SBLauncher",
             "path": "."
         }
-    ]
+    ],
+    "settings": {
+        "dotnet.defaultSolution": "SBLauncher.sln"
+    }
 }

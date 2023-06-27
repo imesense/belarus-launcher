@@ -12,9 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.vsconfig = .vsconfig
 		Directory.Build.props = Directory.Build.props
-		global.json = global.json
-		publish-launcher.ps1 = publish-launcher.ps1
 		README.md = README.md
+		publish-launcher.bat = publish-launcher.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher.ViewModels", "src\StalkerBelarus.Launcher.ViewModels\StalkerBelarus.Launcher.ViewModels.csproj", "{4695C27C-9494-4F88-B302-A06B71A331A4}"
