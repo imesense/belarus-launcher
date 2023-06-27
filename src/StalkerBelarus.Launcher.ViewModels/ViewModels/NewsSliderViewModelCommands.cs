@@ -17,9 +17,9 @@ public partial class NewsSliderViewModel {
         GoNext = ReactiveCommand.Create(GoNextImpl, canExecuteNext);
         GoBack = ReactiveCommand.Create(GoBackImpl, canExecuteBack);
         
-        GoVk = ReactiveCommand.Create(GoVkImpl);
-        GoTg = ReactiveCommand.Create(GoTgImpl);
-        GoApPro = ReactiveCommand.Create(GoApProImpl);
+        GoVk = ReactiveCommand.Create(() => GoWebSite("https://vk.com/stalker_belarus"));
+        GoTg = ReactiveCommand.Create(() => GoWebSite("https://t.me/stalkerbelarus"));
+        GoApPro = ReactiveCommand.Create(() => GoWebSite("https://ap-pro.ru/forums/topic/3923-stalker-belarus/"));
     }
 
     private void SetupBinding() {
@@ -40,15 +40,7 @@ public partial class NewsSliderViewModel {
         }
     }
 
-    private void GoVkImpl() {
-        Process.Start(new ProcessStartInfo("https://vk.com/stalker_belarus") { UseShellExecute = true });
-    }
-
-    private void GoTgImpl() {
-        Process.Start(new ProcessStartInfo("https://t.me/stalkerbelarus") { UseShellExecute = true });
-    }
-
-    private void GoApProImpl() {
-        Process.Start(new ProcessStartInfo("https://ap-pro.ru/forums/topic/3923-stalker-belarus/") { UseShellExecute = true });
+    private static void GoWebSite(string url) {
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 }
