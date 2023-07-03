@@ -62,8 +62,9 @@ jobs:
 
     - name: Publish installer
       if: matrix.runtime == 'win-x86'
+      shell: cmd
       run: |
-        "%programfiles(x86)%\Inno Setup 6\iscc.exe" "src\StalkerBelarus.Launcher.Setup\Setup.iss"
+        "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\StalkerBelarus.Launcher.Setup\Setup.iss
 
     - name: Upload launcher
       uses: actions/upload-artifact@v3
