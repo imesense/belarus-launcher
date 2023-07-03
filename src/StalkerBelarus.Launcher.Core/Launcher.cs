@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace StalkerBelarus.Launcher.ViewModels;
+namespace StalkerBelarus.Launcher.Core;
 
 public static class Launcher {
     public static void Launch(string? path, string? workingDirectory = null,

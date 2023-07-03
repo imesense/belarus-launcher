@@ -70,7 +70,7 @@ public class MenuViewModel : ReactiveObject {
     }
 
     private IObservable<Unit> StartServerImpl() {
-        Launcher.Launch(path: @"binaries\xrEngine.exe",
+        Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
                 "-dedicated",
                 "-i",
@@ -82,7 +82,7 @@ public class MenuViewModel : ReactiveObject {
 
     private void PlayGameImpl() {
         if (_isStartServer) {
-            Launcher.Launch(path: @"binaries\xrEngine.exe",
+            Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
                 @$"-start client(localhost/name={_userSettings.UserName})"
             });
