@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using StalkerBelarus.Launcher.Core.Models;
 
-namespace StalkerBelarus.Launcher.ViewModels.Manager;
+namespace StalkerBelarus.Launcher.Core.Manager;
 
 public class DownloadManager : IDisposable {
     private string[] Folders = {

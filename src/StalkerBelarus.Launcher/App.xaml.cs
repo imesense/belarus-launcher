@@ -3,8 +3,8 @@ using Microsoft.Extensions.Hosting;
 
 using Splat;
 
+using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Manager;
-using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher;
 

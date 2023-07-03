@@ -4,7 +4,7 @@ using System.Text.Unicode;
 
 using StalkerBelarus.Launcher.Core.Models;
 
-namespace StalkerBelarus.Launcher.ViewModels.Manager;
+namespace StalkerBelarus.Launcher.Core.Manager;
 
 public static class ConfigManager {
     public static readonly string Path =

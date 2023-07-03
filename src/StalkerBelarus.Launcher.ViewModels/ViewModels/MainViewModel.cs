@@ -1,4 +1,4 @@
-using StalkerBelarus.Launcher.ViewModels.Manager;
+using StalkerBelarus.Launcher.Core.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 

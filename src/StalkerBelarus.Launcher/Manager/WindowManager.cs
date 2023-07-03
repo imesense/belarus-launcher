@@ -1,5 +1,5 @@
+using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Helpers;
-using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher.Manager;
 

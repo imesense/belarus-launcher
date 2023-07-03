@@ -2,8 +2,8 @@ using System.Reactive.Linq;
 
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
-using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 
