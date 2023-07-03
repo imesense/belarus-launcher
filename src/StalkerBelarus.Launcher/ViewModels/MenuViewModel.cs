@@ -1,5 +1,3 @@
-using System.Reactive.Linq;
-
 using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Core.Manager;

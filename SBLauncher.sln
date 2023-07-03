@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher.ViewModels", "src\StalkerBelarus.Launcher.ViewModels\StalkerBelarus.Launcher.ViewModels.csproj", "{4695C27C-9494-4F88-B302-A06B71A331A4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerBelarus.Launcher.Core", "src\StalkerBelarus.Launcher.Core\StalkerBelarus.Launcher.Core.csproj", "{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}"
 EndProject
 Global
@@ -30,10 +28,6 @@ Global
 		{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4695C27C-9494-4F88-B302-A06B71A331A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4695C27C-9494-4F88-B302-A06B71A331A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4695C27C-9494-4F88-B302-A06B71A331A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4695C27C-9494-4F88-B302-A06B71A331A4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
