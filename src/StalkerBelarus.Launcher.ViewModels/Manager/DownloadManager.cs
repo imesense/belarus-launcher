@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.ViewModels.Manager;
 
@@ -45,18 +46,18 @@ public class DownloadManager : IDisposable {
         return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
             .Result;
     }
-    public IList<NewsViewModel> GetNewsList() {
-        var newsList = new List<NewsViewModel>();
+    public IList<NewsContent> GetNewsList() {
+        var newsList = new List<NewsContent>();
 
         try {
             var newsFile = GetNewsFile();
             var news = JsonDocument.Parse(newsFile).RootElement;
 
             foreach (var _news in news.EnumerateObject()) {
-                newsList.Add(new NewsViewModel(_news.Name, _news.Value.ToString()));
+                newsList.Add(new NewsContent(_news.Name, _news.Value.ToString()));
             }
         } catch {
-            newsList.Add(new NewsViewModel("Ошибка!",
+            newsList.Add(new NewsContent("Ошибка!",
                 "Ошибка загрузки новостей. Возможно интернет-соединение отсутствует."));
         }
 

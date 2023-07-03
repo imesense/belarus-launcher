@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
 
-using DynamicData;
-
 using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.ViewModels.Manager;
@@ -17,9 +15,15 @@ public partial class NewsSliderViewModel : ReactiveObject {
 
     public NewsSliderViewModel(DownloadManager downloadService) {
         _downloadService = downloadService;
-        News.AddRange(_downloadService.GetNewsList());
+        LoadNews();
         
         SetupBinding();
         SetupCommands();
+    }
+
+    private void LoadNews() {
+        foreach (var content in _downloadService.GetNewsList()) {
+            News.Add(new NewsViewModel(content.Title, content.Description));
+        }
     }
 }
