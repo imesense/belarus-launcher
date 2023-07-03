@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\StalkerBelarus.Launcher.Core\StalkerBelarus.Launcher.Core.csproj" />
         <ProjectReference Include="..\StalkerBelarus.Launcher.ViewModels\StalkerBelarus.Launcher.ViewModels.csproj" />
     </ItemGroup>
 

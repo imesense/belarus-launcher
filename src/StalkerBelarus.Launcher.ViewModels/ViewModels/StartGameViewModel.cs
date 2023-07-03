@@ -1,15 +1,16 @@
-using System.Net;
 using System.Reactive.Linq;
+
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Core.Models;
 using StalkerBelarus.Launcher.ViewModels.Manager;
 
-namespace StalkerBelarus.Launcher.ViewModels; 
+namespace StalkerBelarus.Launcher.ViewModels;
 
 public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
     private readonly IWindowManager _windowManager;
 
-    private UserSettings UserSettings { get; set; }
+    private UserSettings _userSettings;
     [Reactive] public string IpAddress { get; set; } = string.Empty;
 
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
@@ -21,8 +22,8 @@ public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
 
     public StartGameViewModel(IWindowManager windowManager, UserSettings userSettings) {
         _windowManager = windowManager;
-        UserSettings = userSettings;
-        IpAddress = UserSettings.IpAdress;
+        _userSettings = userSettings;
+        IpAddress = _userSettings.IpAdress ?? "";
 
         SetupBinding();
     }
@@ -42,12 +43,12 @@ public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
             throw new Exception("Ip-адрес не введен!");
         }
 
-        UserSettings.IpAdress = IpAddress;
-        ConfigManager.SaveSettings(UserSettings);
+        _userSettings.IpAdress = IpAddress;
+        ConfigManager.SaveSettings(_userSettings);
 
         Launcher.Launch(path: @"binaries\xrEngine.exe",
         arguments: new List<string> {
-            @$"-start -center_screen -silent_error_mode client({UserSettings.IpAdress}/name={UserSettings.UserName})"
+            @$"-start -center_screen -silent_error_mode client({_userSettings.IpAdress}/name={_userSettings.UserName})"
         });
         BackImpl();
 

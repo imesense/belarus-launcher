@@ -2,6 +2,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 
+using StalkerBelarus.Launcher.Core.Models;
+
 namespace StalkerBelarus.Launcher.ViewModels.Manager;
 
 public static class ConfigManager {

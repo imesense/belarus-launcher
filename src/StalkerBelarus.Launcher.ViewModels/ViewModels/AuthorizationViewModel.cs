@@ -3,13 +3,14 @@ using System.Reactive.Linq;
 
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Core.Models;
 using StalkerBelarus.Launcher.ViewModels.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels {
     public class AuthorizationViewModel : ReactiveObject, IRoutableViewModel {
         private readonly IWindowManager _windowManager;
         private readonly LauncherViewModel _launcherViewModel;
-        private UserSettings UserSettings { get; set; }
+        private UserSettings _userSettings;
         
         [Reactive] public string UserName { get; set; } = string.Empty;
 
@@ -27,7 +28,7 @@ namespace StalkerBelarus.Launcher.ViewModels {
                 throw new ArgumentNullException(nameof(launcherViewModel));
             }
 
-            UserSettings = userSettings;
+            _userSettings = userSettings;
 
             _launcherViewModel = launcherViewModel;
             _launcherViewModel.HostScreen = HostScreen;
@@ -53,8 +54,8 @@ namespace StalkerBelarus.Launcher.ViewModels {
                 throw new Exception("Имя пользователя не введено!");
             }
 
-            UserSettings.UserName = UserName;
-            ConfigManager.SaveSettings(UserSettings);
+            _userSettings.UserName = UserName;
+            ConfigManager.SaveSettings(_userSettings);
 
             HostScreen.Router.Navigate.Execute(_launcherViewModel);
 
