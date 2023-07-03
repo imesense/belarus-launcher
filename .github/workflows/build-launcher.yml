@@ -35,7 +35,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      Project: src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj
+      Project: src\StalkerBelarus.Launcher.Legacy\StalkerBelarus.Launcher.Legacy.csproj
 
     steps:
     - name: Checkout

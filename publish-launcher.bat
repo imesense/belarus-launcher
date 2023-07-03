@@ -1,6 +1,6 @@
-dotnet publish src\StalkerBelarus.Launcher\StalkerBelarus.Launcher.csproj ^
+dotnet publish src\StalkerBelarus.Launcher.Legacy\StalkerBelarus.Launcher.Legacy.csproj ^
     --configuration Release ^
-    --runtime win-x64 ^
+    --runtime win-x86 ^
     --self-contained true ^
     -p:PublishSingleFile=true ^
     -p:IncludeAllContentForSelfExtract=true ^
