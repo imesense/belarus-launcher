@@ -5,7 +5,7 @@ namespace StalkerBelarus.Launcher.ViewModels;
 /// <summary>
 /// Main view model
 /// </summary>
-public class MainViewModel : ReactiveObject, IScreen {
+public class MainViewModel : ViewModelBase, IScreen {
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly LauncherViewModel _launcherViewModel;
 

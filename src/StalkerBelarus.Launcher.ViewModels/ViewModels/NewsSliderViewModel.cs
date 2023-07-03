@@ -6,7 +6,7 @@ using StalkerBelarus.Launcher.Core.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 
-public partial class NewsSliderViewModel : ReactiveObject {
+public partial class NewsSliderViewModel : ViewModelBase {
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
     [Reactive] public int NumPage { get; private set; } = 0;
     private readonly DownloadManager _downloadService;

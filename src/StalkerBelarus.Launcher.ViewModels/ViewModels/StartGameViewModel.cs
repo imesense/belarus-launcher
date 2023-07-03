@@ -7,10 +7,10 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 
-public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
+public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
     private readonly IWindowManager _windowManager;
 
-    private UserSettings _userSettings;
+    private readonly UserSettings _userSettings;
     [Reactive] public string IpAddress { get; set; } = string.Empty;
 
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
@@ -34,8 +34,8 @@ public class StartGameViewModel : ReactiveObject, IRoutableViewModel {
             .ObserveOn(RxApp.MainThreadScheduler)
             .DistinctUntilChanged();
 
-        StartGame = ReactiveCommand.Create(() => StartGameImpl(), canStartGame);
-        Back = ReactiveCommand.Create(() => BackImpl());
+        StartGame = ReactiveCommand.Create(StartGameImpl, canStartGame);
+        Back = ReactiveCommand.Create(BackImpl);
     }
 
     private void StartGameImpl() {

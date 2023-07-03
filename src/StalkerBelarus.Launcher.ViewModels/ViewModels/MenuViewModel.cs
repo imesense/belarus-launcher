@@ -7,7 +7,7 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 
-public class MenuViewModel : ReactiveObject {
+public class MenuViewModel : ViewModelBase {
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
     private readonly DownloadManager _downloadService;
@@ -43,13 +43,13 @@ public class MenuViewModel : ReactiveObject {
             IsVisiblePlayGame = true;
         }
         Close = ReactiveCommand.Create(_windowManager.Close);
-        PlayGame = ReactiveCommand.Create(() => PlayGameImpl());
-        StartServer = ReactiveCommand.CreateFromObservable(StartServerImpl);
+        PlayGame = ReactiveCommand.Create(PlayGameImpl);
+        StartServer = ReactiveCommand.Create(StartServerImpl);
         CheckUpdates = ReactiveCommand.CreateFromTask(DownloadsImpl);
         StartDownload = ReactiveCommand.CreateFromTask(DownloadsImpl);
     }
 
-    private async Task<Unit> DownloadsImpl() {
+    private async Task DownloadsImpl() {
             IsVisibleDownload = false;
             IsVisiblePlayGame = false;
             IsDownloadStart = false;
@@ -66,10 +66,9 @@ public class MenuViewModel : ReactiveObject {
                 IsVisibleDownload = false;
                 IsDownloadCheak = false;
             });
-        return Unit.Default;
     }
 
-    private IObservable<Unit> StartServerImpl() {
+    private void StartServerImpl() {
         Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
                 "-dedicated",
@@ -77,7 +76,6 @@ public class MenuViewModel : ReactiveObject {
                 @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
             });
         _isStartServer = true;
-        return Observable.Return(Unit.Default);
     }
 
     private void PlayGameImpl() {

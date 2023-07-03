@@ -1,6 +1,6 @@
 namespace StalkerBelarus.Launcher.ViewModels;
 
-public class LauncherViewModel : ReactiveObject, IRoutableViewModel {
+public class LauncherViewModel : ViewModelBase, IRoutableViewModel {
     private readonly StartGameViewModel _startGameViewModel;
 
     public string? UrlPathSegment => "LauncherViewModel";
