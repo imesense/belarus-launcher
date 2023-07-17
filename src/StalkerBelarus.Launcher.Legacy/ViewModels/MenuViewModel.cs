@@ -80,7 +80,7 @@ public class MenuViewModel : ViewModelBase {
         if (_isStartServer) {
             Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
-                @$"-start client(localhost/name={_userSettings.UserName})"
+                @$"-start client(localhost/name={_userSettings.Username})"
             });
             _windowManager.Close();
             return;

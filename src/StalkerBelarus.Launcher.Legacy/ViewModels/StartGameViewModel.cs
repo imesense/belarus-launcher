@@ -23,7 +23,7 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
     public StartGameViewModel(IWindowManager windowManager, UserSettings userSettings) {
         _windowManager = windowManager;
         _userSettings = userSettings;
-        IpAddress = _userSettings.IpAdress ?? "";
+        IpAddress = _userSettings.IpAddress ?? "";
 
         SetupBinding();
     }
@@ -43,12 +43,12 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
             throw new Exception("Ip-адрес не введен!");
         }
 
-        _userSettings.IpAdress = IpAddress;
+        _userSettings.IpAddress = IpAddress;
         ConfigManager.SaveSettings(_userSettings);
 
         Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
         arguments: new List<string> {
-            @$"-start -center_screen -silent_error_mode client({_userSettings.IpAdress}/name={_userSettings.UserName})"
+            @$"-start -center_screen -silent_error_mode client({_userSettings.IpAddress}/name={_userSettings.Username})"
         });
         BackImpl();
 

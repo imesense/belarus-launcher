@@ -26,10 +26,10 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                    
-                    <Button Content="VK" Command="{Binding GoVk}" />
-                    <Button Content="Tg" Command="{Binding GoTg}" />
-                    <Button Content="Ap-Pro" Command="{Binding GoApPro}" />
+
+                    <Button Command="{Binding GoVk}" Content="VK" />
+                    <Button Command="{Binding GoTg}" Content="Tg" />
+                    <Button Command="{Binding GoApPro}" Content="Ap-Pro" />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button

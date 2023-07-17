@@ -54,7 +54,7 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel {
             throw new Exception("Имя пользователя не введено!");
         }
 
-        _userSettings.UserName = UserName;
+        _userSettings.Username = UserName;
         ConfigManager.SaveSettings(_userSettings);
 
         HostScreen.Router.Navigate.Execute(_launcherViewModel);
