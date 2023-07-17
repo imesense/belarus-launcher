@@ -7,26 +7,32 @@ using StalkerBelarus.Launcher.Core.Models;
 namespace StalkerBelarus.Launcher.Core.Manager;
 
 public static class ConfigManager {
-    public static readonly string Path =
-        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) +
-        @"\sblauncher.json";
-
     public static void SaveSettings(UserSettings settings) {
+        if (settings is null) {
+            throw new ArgumentNullException(nameof(settings));
+        }
+        if (string.IsNullOrEmpty(settings.Username)) {
+            throw new Exception("Username not specified");
+        }
+        if (!Directory.Exists(FileLocations.UserDirectory)) {
+            Directory.CreateDirectory(FileLocations.UserDirectory);
+        }
+        using var fileStream = new FileStream(FileLocations.UserSettingPath,
+            FileMode.Create);
+        using var writer = new StreamWriter(fileStream);
+
         var options = new JsonSerializerOptions {
             AllowTrailingCommas = true,
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             WriteIndented = true
         };
         var json = JsonSerializer.Serialize(settings, options);
-        if (!File.Exists(Path)) {
-            File.Create(Path).Close();
-        }
-        File.WriteAllText(Path, json);
+        writer.Write(json);
     }
 
     public static UserSettings LoadSettings() {
-        if (File.Exists(Path)) {
-            var json = File.ReadAllText(Path);
+        if (File.Exists(FileLocations.UserSettingPath)) {
+            var json = File.ReadAllText(FileLocations.UserSettingPath);
             return JsonSerializer.Deserialize<UserSettings>(json)!;
         }
         return new UserSettings();

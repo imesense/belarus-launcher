@@ -1,4 +1,4 @@
-using StalkerBelarus.Launcher.Core.Manager;
+using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.ViewModels;
@@ -19,7 +19,7 @@ public class MainViewModel : ViewModelBase, IScreen {
         _authorizationViewModel.HostScreen = this;
         _launcherViewModel.HostScreen = this;
 
-        if (!File.Exists(ConfigManager.Path) ||
+        if (!File.Exists(FileLocations.UserSettingPath) ||
             string.IsNullOrEmpty(userSettings.Username)) {
             ShowAuthorization();
         } else {
