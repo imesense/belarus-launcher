@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 using Splat;
 
@@ -12,28 +11,28 @@ namespace StalkerBelarus.Launcher;
 /// Interaction logic for App.xaml
 /// </summary>
 public partial class App : Application {
-    private readonly IHost _host;
+    private readonly IServiceProvider _serviceProvider;
 
     public App() {
         var userSettings = ConfigManager.LoadSettings();
 
-        _host = Host.CreateDefaultBuilder()
-            .ConfigureServices((context, services) => {
-                services.AddSingleton<DownloadManager>();
-                services.AddSingleton(userSettings);
-                services.AddSingleton<IWindowManager, WindowManager>();
+        var services = new ServiceCollection();
+        services.AddSingleton<DownloadManager>();
+        services.AddSingleton(userSettings);
+        services.AddSingleton<IWindowManager, WindowManager>();
 
-                services.AddSingleton<AuthorizationViewModel>();
-                services.AddSingleton<LauncherViewModel>();
-                services.AddSingleton<MenuViewModel>();
-                services.AddSingleton<StartGameViewModel>();
-                services.AddSingleton<NewsSliderViewModel>();
-                
-                services.AddSingleton<IScreen, MainViewModel>();
-                services.AddSingleton((services) => new MainWindow() {
-                    DataContext = services.GetRequiredService<IScreen>()
-                });
-            }).Build();
+        services.AddSingleton<AuthorizationViewModel>();
+        services.AddSingleton<LauncherViewModel>();
+        services.AddSingleton<MenuViewModel>();
+        services.AddSingleton<StartGameViewModel>();
+        services.AddSingleton<NewsSliderViewModel>();
+
+        services.AddSingleton<IScreen, MainViewModel>();
+        services.AddSingleton((services) => new MainWindow() {
+            DataContext = services.GetRequiredService<IScreen>()
+        });
+
+        _serviceProvider = services.BuildServiceProvider();
 
         Locator.CurrentMutable.InitializeReactiveUI();
         Locator.CurrentMutable.InitializeSplat();
@@ -50,19 +49,10 @@ public partial class App : Application {
             () => new StartGameView());
     }
 
-    protected override async void OnStartup(StartupEventArgs e) {
+    protected override void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
 
-        await _host.StartAsync();
-
-        MainWindow = _host.Services.GetRequiredService<MainWindow>();
+        MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         MainWindow.Show();
-    }
-
-    protected override async void OnExit(ExitEventArgs e) {
-        await _host.StopAsync();
-        _host.Dispose();
-
-        base.OnExit(e);
     }
 }
