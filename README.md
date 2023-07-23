@@ -2,20 +2,20 @@
 
 [![Build launcher](https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus/actions/workflows/build-launcher.yml/badge.svg)](https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus/actions/workflows/build-launcher.yml)
 
-S.T.A.A.L.K.E.R Belarus Launcher is a handy modification launcher program that provides a simple and intuitive interface for downloading modifications and updates, viewing current news, and launching the game and server.
+Handy modification launcher that provides a simple and intuitive interface for downloading and updating the modification, viewing current news, and launching the game with server
 
-Main features:
+## Features
 
-- downloading modification and updates: the launcher allows you to download modification easily and quickly and automatically check for updates;
-- viewing up-to-date news: the player will always be aware of the latest events, updates and announcements thanks to easy access to current news;
-- user-friendly interface for starting the server and the game.
+- **Downloading** modification with updates: the launcher allows to download modification easily, quickly and automatically check for updates
+- **Viewing** up-to-date news: the player will always be aware of the latest events, updates and announcements thanks to easy access to current news
+- **Starting** the game with server in user-friendly interface
 
-S.T.A.A.L.K.E.R Belarus Launcher provides ease of use and easy access to the necessary functions so that the player can fully enjoy the gameplay.
+Launcher provides ease of use and easy access to the necessary functions so that the player can fully enjoy the gameplay
 
-## Components
+## Requirements
 
 - Visual Studio 2022 or Rider
-  - Avalonia Plugin
+  - Avalonia plugin
 - .NET 7 SDK
 - Git
 
@@ -23,11 +23,15 @@ S.T.A.A.L.K.E.R Belarus Launcher provides ease of use and easy access to the nec
 
 - Download the repository:
 
-```console
-git clone https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus.git
-```
+  ```console
+  git clone https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus.git
+  ```
 
-- Build `SBLauncher.sln`
+- Build `SBLauncher.sln` using IDE or command:
+
+  ```console
+  dotnet build SBLauncher.sln
+  ```
 
 ## Contributors
 
