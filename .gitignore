@@ -24,3 +24,6 @@ Output/
 # MSTest Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+
+# MacOS Cache
+.DS_Store
