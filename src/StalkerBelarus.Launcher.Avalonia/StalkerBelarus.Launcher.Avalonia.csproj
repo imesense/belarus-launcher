@@ -6,11 +6,16 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <AssemblyName>SBLauncher</AssemblyName>
+        <Company>ImeSense</Company>
+        <Authors>Drombeys</Authors>
+    </PropertyGroup>
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
-
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.0" />
