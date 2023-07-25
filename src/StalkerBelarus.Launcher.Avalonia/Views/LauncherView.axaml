@@ -1,0 +1,35 @@
+<UserControl
+    x:Class="StalkerBelarus.Launcher.Avalonia.Views.LauncherView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Grid ColumnDefinitions="*,auto" RowDefinitions="*">
+        <Grid
+            Grid.Column="0"
+            Width="330"
+            Margin="40"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
+            <!--  NewsSliderView  -->
+            <ContentControl />
+        </Grid>
+
+        <Border Grid.Column="1">
+            <DockPanel LastChildFill="True">
+                <TextBlock
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    DockPanel.Dock="Bottom"
+                    FontSize="16" />
+                <!--  PageMenuView  -->
+                <ContentControl HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>
