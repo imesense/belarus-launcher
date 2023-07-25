@@ -4,9 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:StalkerBelarus.Launcher.Avalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    x:DataType="viewModels:AuthorizationViewModel"
     mc:Ignorable="d">
+
+    <Design.DataContext>
+        <viewModels:AuthorizationViewModel />
+    </Design.DataContext>
 
     <Border
         Padding="10,30,20,0"
@@ -22,6 +28,7 @@
                     Width="200"
                     VerticalContentAlignment="Center"
                     FontSize="16"
+                    Text="{Binding Username}"
                     Watermark="Vasyan" />
             </StackPanel>
             <StackPanel
@@ -30,10 +37,13 @@
                 Orientation="Horizontal">
                 <Button
                     Margin="10,0"
+                    Command="{Binding ShowLauncher}"
+                    CommandParameter="{Binding $parent[Window].DataContext}"
                     Content="Далее"
                     FontSize="18" />
                 <Button
                     Margin="10,0"
+                    Command="{Binding Close}"
                     Content="Закрыть"
                     FontSize="18" />
             </StackPanel>

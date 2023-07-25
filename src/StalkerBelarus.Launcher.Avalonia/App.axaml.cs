@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 
 using StalkerBelarus.Launcher.Avalonia.Manager;
+using StalkerBelarus.Launcher.Avalonia.ViewModels;
 using StalkerBelarus.Launcher.Avalonia.Views;
 using StalkerBelarus.Launcher.Core.Manager;
 
@@ -30,6 +31,11 @@ public partial class App : Application {
         services.AddLogging(loggingBuilder =>
             loggingBuilder.AddSerilog(dispose: true));
         services.AddSingleton<IWindowManager, WindowManager>();
+        services.AddSingleton(ConfigManager.LoadSettings());
+        services.AddTransient<AuthorizationViewModel>();
+        services.AddTransient<LauncherViewModel>();
+        
+        services.AddSingleton<MainWindowViewModel>();
 
         return services;
     }
@@ -46,7 +52,9 @@ public partial class App : Application {
 
     public override void OnFrameworkInitializationCompleted() {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            desktop.MainWindow = new MainWindow();
+            desktop.MainWindow = new MainWindow() {
+                DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()
+            };
         }
 
         base.OnFrameworkInitializationCompleted();

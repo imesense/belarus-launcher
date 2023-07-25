@@ -27,3 +27,6 @@ Output/
 
 # MacOS Cache
 .DS_Store
+
+# Fody
+FodyWeavers.xsd
