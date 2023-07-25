@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
+using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Avalonia.Views;
+using StalkerBelarus.Launcher.Core.Manager;
 
 namespace StalkerBelarus.Launcher.Avalonia;
 
@@ -27,6 +29,8 @@ public partial class App : Application {
         var services = new ServiceCollection();
         services.AddLogging(loggingBuilder =>
             loggingBuilder.AddSerilog(dispose: true));
+        services.AddSingleton<IWindowManager, WindowManager>();
+
         return services;
     }
     

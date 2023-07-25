@@ -29,4 +29,8 @@
         <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\StalkerBelarus.Launcher.Core\StalkerBelarus.Launcher.Core.csproj" />
+    </ItemGroup>
 </Project>
