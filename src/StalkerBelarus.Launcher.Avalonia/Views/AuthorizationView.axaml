@@ -1,0 +1,42 @@
+<UserControl
+    x:Class="StalkerBelarus.Launcher.Avalonia.Views.AuthorizationView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Border
+        Padding="10,30,20,0"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Margin="10,5"
+                    FontSize="16"
+                    Text="Введите никнейм:" />
+                <TextBox
+                    Width="200"
+                    VerticalContentAlignment="Center"
+                    FontSize="16"
+                    Watermark="Vasyan" />
+            </StackPanel>
+            <StackPanel
+                Margin="20"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Margin="10,0"
+                    Content="Далее"
+                    FontSize="18" />
+                <Button
+                    Margin="10,0"
+                    Content="Закрыть"
+                    FontSize="18" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>
