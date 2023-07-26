@@ -11,6 +11,7 @@
         <AssemblyName>SBLauncher</AssemblyName>
         <Company>ImeSense</Company>
         <Authors>Drombeys</Authors>
+        <AssemblyVersion>2.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>

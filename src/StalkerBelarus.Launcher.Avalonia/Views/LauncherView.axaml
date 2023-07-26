@@ -27,12 +27,15 @@
 
         <Border Grid.Column="1">
             <DockPanel LastChildFill="True">
-                <TextBlock
+                <StackPanel
                     Margin="10"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     DockPanel.Dock="Bottom"
-                    FontSize="16" />
+                    Orientation="Horizontal">
+                    <TextBlock FontSize="16" Text="{Binding AppVersion}" />
+                    <TextBlock FontSize="16" Text="{Binding CompanyName}" />
+                </StackPanel>
                 <!--  PageMenuView  -->
                 <ContentControl HorizontalAlignment="Center" VerticalAlignment="Stretch" />
             </DockPanel>
