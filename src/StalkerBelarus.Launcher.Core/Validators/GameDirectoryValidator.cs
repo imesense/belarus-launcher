@@ -16,12 +16,20 @@ public class GameDirectoryValidator
     /// <summary>
     /// Check if the directory contains all the required files
     /// </summary>
-    public bool IsDirectoryValid()
-    {
+    public bool IsDirectoryValid() {
+        // Check if the Binaries directory exists
+        if (!Directory.Exists(FileLocations.BinariesDirectory)) {
+            return false;
+        }
+        
         // Check if the "xrEngine.exe" file exists in the "BinariesDirectory" path
         // If it exists, the directory is not valid
-        if (File.Exists(Path.Combine(FileLocations.BinariesDirectory, "xrEngine.exe")))
-        {
+        if (File.Exists(Path.Combine(FileLocations.BinariesDirectory, "xrEngine.exe"))) {
+            return false;
+        }
+        
+        // Check if the Resources directory exists
+        if (!Directory.Exists(FileLocations.ResourcesDirectory)) {
             return false;
         }
 
@@ -36,18 +44,14 @@ public class GameDirectoryValidator
     /// </summary>
     /// <param name="path">Directory path</param>
     /// <returns>Count files</returns>
-    private int CountFilesInDirectory(string path)
-    {
-        try
-        {
+    private int CountFilesInDirectory(string path) {
+        try {
             // Get the list of files in the directory
             var files = Directory.GetFiles(path);
 
             // Return the count of files in the directory
             return files.Length;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             // If an error occurs while accessing the directory, output the error message
             _logger.LogError("{Message}", ex.Message);
             return 0;
