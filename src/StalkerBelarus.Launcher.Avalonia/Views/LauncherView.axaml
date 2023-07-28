@@ -37,7 +37,10 @@
                     <TextBlock FontSize="16" Text="{Binding CompanyName}" />
                 </StackPanel>
                 <!--  PageMenuView  -->
-                <ContentControl HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+                <ContentControl
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Content="{Binding PageMenuViewModel}" />
             </DockPanel>
         </Border>
     </Grid>

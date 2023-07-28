@@ -4,9 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:StalkerBelarus.Launcher.Avalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    x:DataType="viewModels:DownloadMenuViewModel"
     mc:Ignorable="d">
+
+    <Design.DataContext>
+        <viewModels:DownloadMenuViewModel />
+    </Design.DataContext>
 
     <DockPanel Margin="45,0,15,0" VerticalAlignment="Stretch">
         <Button
@@ -14,6 +20,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             HorizontalContentAlignment="Right"
+            Command="{Binding Close}"
             Content="Выход"
             DockPanel.Dock="Bottom"
             FontSize="38" />
@@ -22,6 +29,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             HorizontalContentAlignment="Right"
+            Command="{Binding StartDownload}"
             Content="Начать загрузку"
             FontSize="38" />
     </DockPanel>

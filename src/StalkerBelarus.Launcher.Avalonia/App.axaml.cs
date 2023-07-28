@@ -10,7 +10,9 @@ using Serilog;
 using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Avalonia.ViewModels;
 using StalkerBelarus.Launcher.Avalonia.Views;
+using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.Manager;
+using StalkerBelarus.Launcher.Core.Validators;
 
 namespace StalkerBelarus.Launcher.Avalonia;
 
@@ -32,9 +34,12 @@ public partial class App : Application {
             loggingBuilder.AddSerilog(dispose: true));
         services.AddSingleton<IWindowManager, WindowManager>();
         services.AddSingleton(ConfigManager.LoadSettings());
+        services.AddTransient<GameDirectoryValidator>();
+
         services.AddTransient<AuthorizationViewModel>();
         services.AddTransient<LauncherViewModel>();
-        
+        services.AddTransient<DownloadMenuViewModel>();
+        services.AddTransient<GameMenuViewModel>();
         services.AddSingleton<MainWindowViewModel>();
 
         return services;
