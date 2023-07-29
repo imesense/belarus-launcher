@@ -11,6 +11,7 @@ using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Avalonia.ViewModels;
 using StalkerBelarus.Launcher.Avalonia.Views;
 using StalkerBelarus.Launcher.Core;
+using StalkerBelarus.Launcher.Core.FileHashVerification;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Validators;
 
@@ -36,7 +37,8 @@ public partial class App : Application {
         services.AddSingleton<IWindowManager, WindowManager>();
         services.AddSingleton(ConfigManager.LoadSettings());
         services.AddTransient<GameDirectoryValidator>();
-
+        services.AddTransient<IHashProvider, Md5HashProvider>();
+        services.AddTransient<HashChecker>();
         services.AddTransient<AuthorizationViewModel>();
         services.AddTransient<LauncherViewModel>();
         services.AddTransient<DownloadMenuViewModel>();
