@@ -24,6 +24,7 @@
                 Margin="10,55"
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
+                Command="{Binding Close}"
                 Content="Выход"
                 FontSize="38" />
             <Button
@@ -39,12 +40,15 @@
                 Margin="5,15"
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
+                Command="{Binding PlayGame}"
+                CommandParameter="{Binding $parent[Window].DataContext}"
                 Content="Играть"
                 FontSize="38" />
             <Button
                 Margin="5,15"
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
+                Command="{Binding StartServer}"
                 Content="Запустить сервер"
                 FontSize="38" />
         </StackPanel>

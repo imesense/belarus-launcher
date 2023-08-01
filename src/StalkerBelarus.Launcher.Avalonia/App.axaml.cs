@@ -49,9 +49,10 @@ public partial class App : Application {
         services.AddTransient<HashChecker>();
         services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
         services.AddTransient<AuthorizationViewModel>();
-        services.AddTransient<LauncherViewModel>();
+        services.AddSingleton<LauncherViewModel>();
         services.AddTransient<DownloadMenuViewModel>();
         services.AddTransient<GameMenuViewModel>();
+        services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
 
         return services;

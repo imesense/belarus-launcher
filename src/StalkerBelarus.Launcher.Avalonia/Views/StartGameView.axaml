@@ -4,9 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:StalkerBelarus.Launcher.Avalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    x:DataType="viewModels:StartGameViewModel"
     mc:Ignorable="d">
+
+    <Design.DataContext>
+        <viewModels:StartGameViewModel />
+    </Design.DataContext>
+
     <Border
         Padding="10,30,20,0"
         HorizontalAlignment="Center"
@@ -20,7 +27,8 @@
                 <TextBox
                     Width="200"
                     VerticalContentAlignment="Center"
-                    FontSize="16" />
+                    FontSize="16"
+                    Text="{Binding IpAddress}" />
             </StackPanel>
             <StackPanel
                 Margin="20"
@@ -28,10 +36,13 @@
                 Orientation="Horizontal">
                 <Button
                     Margin="10,0"
+                    Command="{Binding StartGame}"
                     Content="Начать игру"
                     FontSize="18" />
                 <Button
                     Margin="10,0"
+                    Command="{Binding Back}"
+                    CommandParameter="{Binding $parent[Window].DataContext}"
                     Content="Назад"
                     FontSize="18" />
             </StackPanel>

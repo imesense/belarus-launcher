@@ -10,14 +10,16 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 public class MainWindowViewModel : ViewModelBase {
     private readonly ILogger<MainWindowViewModel> _logger;
     private readonly AuthorizationViewModel _authorizationViewModel;
+    private readonly StartGameViewModel _startGameViewModel;
     private readonly LauncherViewModel _launcherViewModel;
     
     [Reactive] public ViewModelBase PageViewModel { get; set; } = null!;
 
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, LauncherViewModel launcherViewModel, 
-        AuthorizationViewModel authorizationViewModel, UserSettings userSettings) {
+        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel, UserSettings userSettings) {
         _logger = logger;
         _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
+        _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
 
         if (File.Exists(FileLocations.UserSettingPath) 
@@ -35,5 +37,9 @@ public class MainWindowViewModel : ViewModelBase {
 
     public void ShowAuthorizationImpl() {
         PageViewModel = _authorizationViewModel;
+    }
+    
+    public void ShowStartGameImpl() {
+        PageViewModel = _startGameViewModel;
     }
 }
