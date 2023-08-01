@@ -41,16 +41,12 @@ public partial class App : Application {
         services.AddSingleton(ConfigManager.LoadSettings());
         services.AddTransient<GameDirectoryValidator>();
         services.AddHttpClient<IGitHubApiService, GitHubApiService>()
-            .ConfigureHttpClient(httpClient =>
-            {
-                httpClient.BaseAddress = new Uri("https://api.github.com/repos/Belarus-Mod/Mod-Data/releases/latest");
-                httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-                httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-            });
+            .ConfigureHttpClient(ConfigureClient);
+        services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
+            .ConfigureHttpClient(ConfigureClient);
         services.AddTransient<IHashProvider, Md5HashProvider>();
         services.AddTransient<HashChecker>();
+        services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
         services.AddTransient<AuthorizationViewModel>();
         services.AddTransient<LauncherViewModel>();
         services.AddTransient<DownloadMenuViewModel>();
@@ -59,7 +55,15 @@ public partial class App : Application {
 
         return services;
     }
-    
+
+    private static void ConfigureClient(HttpClient httpClient)
+    {
+        httpClient.BaseAddress = new Uri("https://api.github.com/repos/Belarus-Mod/Mod-Data/releases/latest");
+        httpClient.DefaultRequestHeaders.Accept.Clear();
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+        httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+    }
+
     public override void Initialize() {
         var logger = _serviceProvider.GetRequiredService<ILogger<App>>();
         try {
