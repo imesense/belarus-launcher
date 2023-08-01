@@ -24,7 +24,7 @@ public class GameDirectoryValidator
         
         // Check if the "xrEngine.exe" file exists in the "BinariesDirectory" path
         // If it exists, the directory is not valid
-        if (File.Exists(Path.Combine(FileLocations.BinariesDirectory, "xrEngine.exe"))) {
+        if (!File.Exists(Path.Combine(FileLocations.BinariesDirectory, "xrEngine.exe"))) {
             return false;
         }
         
