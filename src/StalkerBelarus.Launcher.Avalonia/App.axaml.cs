@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -13,6 +15,7 @@ using StalkerBelarus.Launcher.Avalonia.Views;
 using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.FileHashVerification;
 using StalkerBelarus.Launcher.Core.Manager;
+using StalkerBelarus.Launcher.Core.Services;
 using StalkerBelarus.Launcher.Core.Validators;
 
 namespace StalkerBelarus.Launcher.Avalonia;
@@ -37,6 +40,15 @@ public partial class App : Application {
         services.AddSingleton<IWindowManager, WindowManager>();
         services.AddSingleton(ConfigManager.LoadSettings());
         services.AddTransient<GameDirectoryValidator>();
+        services.AddHttpClient<IGitHubApiService, GitHubApiService>()
+            .ConfigureHttpClient(httpClient =>
+            {
+                httpClient.BaseAddress = new Uri("https://api.github.com/repos/Belarus-Mod/Mod-Data/releases/latest");
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+                httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+            });
         services.AddTransient<IHashProvider, Md5HashProvider>();
         services.AddTransient<HashChecker>();
         services.AddTransient<AuthorizationViewModel>();
