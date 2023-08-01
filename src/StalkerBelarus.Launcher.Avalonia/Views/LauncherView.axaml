@@ -22,7 +22,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top">
             <!--  NewsSliderView  -->
-            <ContentControl />
+            <ContentControl Content="{Binding NewsSliderViewModel}" />
         </Grid>
 
         <Border Grid.Column="1">

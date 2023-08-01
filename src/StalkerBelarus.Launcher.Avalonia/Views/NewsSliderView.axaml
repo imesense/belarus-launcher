@@ -4,13 +4,23 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:StalkerBelarus.Launcher.Avalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    x:DataType="viewModels:NewsSliderViewModel"
     mc:Ignorable="d">
+
+    <Design.DataContext>
+        <viewModels:NewsSliderViewModel />
+    </Design.DataContext>
+
     <Border>
         <DockPanel>
             <!--  SelectedNewsView  -->
-            <ContentControl HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
+            <ContentControl
+                HorizontalAlignment="Stretch"
+                Content="{Binding SelectedNewsViewModel}"
+                DockPanel.Dock="Top" />
             <!--  LinkView  -->
             <ContentControl HorizontalAlignment="Left" DockPanel.Dock="Left" />
             <StackPanel
@@ -18,11 +28,17 @@
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
                 <!--  Back  -->
-                <Button Height="20" Padding="0">
+                <Button
+                    Height="20"
+                    Padding="0"
+                    Command="{Binding GoBack}">
                     <Image Opacity="0.6" Source="/Assets/Icons/chevron-double-left.png" />
                 </Button>
                 <!--  Next  -->
-                <Button Height="20" Padding="0">
+                <Button
+                    Height="20"
+                    Padding="0"
+                    Command="{Binding GoNext}">
                     <Image Opacity="0.6" Source="/Assets/Icons/chevron-double-right.png" />
                 </Button>
             </StackPanel>

@@ -1,9 +1,8 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 using Microsoft.Extensions.Logging;
 
 using StalkerBelarus.Launcher.Core.Models;
-using System.Net.Http.Headers;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 
@@ -16,6 +15,17 @@ public class GitHubApiService : IGitHubApiService {
         _httpClient = httpClient;
     }
 
+    public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class {
+        var release = await GetGitHubReleaseAsync();
+        var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
+        await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
+        var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
+        
+        await foreach (var content in contents) {
+            yield return content;
+        }
+    }
+    
     /// <summary>
     /// Downloads a JSON file from a GitHub release and deserializes it into the specified object type
     /// </summary>
@@ -39,5 +49,4 @@ public class GitHubApiService : IGitHubApiService {
         // Deserialize the JSON content into the specified object type
         return await JsonSerializer.DeserializeAsync<GitHubRelease>(response);
     }
-
 }

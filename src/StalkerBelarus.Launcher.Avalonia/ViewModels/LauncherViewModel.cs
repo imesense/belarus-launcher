@@ -17,14 +17,18 @@ public class LauncherViewModel : ViewModelBase {
     public string CompanyName { get; set; }
 
     [Reactive] public ViewModelBase PageMenuViewModel { get; set; } = null!;
+    [Reactive] public NewsSliderViewModel NewsSliderViewModel { get; set; }
+
 
     public LauncherViewModel(ILogger<LauncherViewModel> logger, DownloadMenuViewModel downloadMenuViewModel, 
-        GameMenuViewModel gameMenuViewModel, GameDirectoryValidator directoryValidator){
+        GameMenuViewModel gameMenuViewModel, NewsSliderViewModel newsSliderViewModel,
+        GameDirectoryValidator directoryValidator){
         _logger = logger;
         _downloadMenuViewModel = downloadMenuViewModel;
         _gameMenuViewModel = gameMenuViewModel;
         _directoryValidator = directoryValidator;
-
+        NewsSliderViewModel = newsSliderViewModel;
+        
         AppVersion = ApplicationHelper.GetAppVersion();
         CompanyName = (char) 0169 + ApplicationHelper.GetCompanyName();
     }
