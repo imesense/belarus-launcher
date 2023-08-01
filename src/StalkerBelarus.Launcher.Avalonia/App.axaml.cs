@@ -27,6 +27,7 @@ public partial class App : Application {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File(Path.Combine(FileLocations.LogsDirectory, "sblauncher_report.txt"), 
                 rollingInterval: RollingInterval.Infinite)
+            .WriteTo.Debug()
             .CreateLogger();
         
         _serviceProvider = ConfigureServices()
