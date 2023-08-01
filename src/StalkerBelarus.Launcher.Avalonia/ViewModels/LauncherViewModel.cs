@@ -27,11 +27,9 @@ public class LauncherViewModel : ViewModelBase {
 
         AppVersion = ApplicationHelper.GetAppVersion();
         CompanyName = (char) 0169 + ApplicationHelper.GetCompanyName();
-
-        SelectMenu();
     }
 
-    private void SelectMenu() {
+    public void SelectMenu() {
         if (_directoryValidator.IsDirectoryValid()) {
             PageMenuViewModel = _gameMenuViewModel;
         } else {

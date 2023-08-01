@@ -29,6 +29,7 @@ public class MainWindowViewModel : ViewModelBase {
     }
 
     public void ShowLauncherImpl() {
+        _launcherViewModel.SelectMenu();
         PageViewModel = _launcherViewModel;
     }
 
