@@ -48,7 +48,9 @@ public partial class App : Application {
         services.AddTransient<IHashProvider, Md5HashProvider>();
         services.AddTransient<HashChecker>();
         services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
+        services.AddTransient<IWebsiteLauncher, WebsiteLauncher>();
         services.AddTransient<AuthorizationViewModel>();
+        services.AddTransient<LinkViewModel>();
         services.AddTransient<NewsSliderViewModel>();
         services.AddSingleton<LauncherViewModel>();
         services.AddTransient<DownloadMenuViewModel>();

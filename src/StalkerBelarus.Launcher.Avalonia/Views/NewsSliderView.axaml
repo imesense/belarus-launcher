@@ -22,7 +22,10 @@
                 Content="{Binding SelectedNewsViewModel}"
                 DockPanel.Dock="Top" />
             <!--  LinkView  -->
-            <ContentControl HorizontalAlignment="Left" DockPanel.Dock="Left" />
+            <ContentControl
+                HorizontalAlignment="Left"
+                Content="{Binding LinkViewModel}"
+                DockPanel.Dock="Left" />
             <StackPanel
                 HorizontalAlignment="Right"
                 DockPanel.Dock="Right"

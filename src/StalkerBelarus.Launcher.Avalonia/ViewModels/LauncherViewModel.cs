@@ -22,7 +22,7 @@ public class LauncherViewModel : ViewModelBase {
 
     public LauncherViewModel(ILogger<LauncherViewModel> logger, DownloadMenuViewModel downloadMenuViewModel, 
         GameMenuViewModel gameMenuViewModel, NewsSliderViewModel newsSliderViewModel,
-        GameDirectoryValidator directoryValidator){
+        GameDirectoryValidator directoryValidator) {
         _logger = logger;
         _downloadMenuViewModel = downloadMenuViewModel;
         _gameMenuViewModel = gameMenuViewModel;

@@ -19,14 +19,16 @@ public class NewsSliderViewModel : ViewModelBase, IAsyncInitialization {
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
+    [Reactive] public LinkViewModel LinkViewModel { get; set; }
     [Reactive] public ObservableCollection<NewsViewModel> News { get; set; } = new();
     public Task Initialization { get; }
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
     
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, IGitHubApiService newsService) {
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, IGitHubApiService newsService, LinkViewModel linkViewModel) {
         _logger = logger;
         _newsService = newsService;
+        LinkViewModel = linkViewModel;
         
         SetupBinding();
         SetupCommands();
@@ -76,8 +78,7 @@ public class NewsSliderViewModel : ViewModelBase, IAsyncInitialization {
         }
     }
 
-    private async Task InitializeAsync()
-    {
+    private async Task InitializeAsync() {
         // Asynchronously initialize this instance.
         await LoadNews();
     }
