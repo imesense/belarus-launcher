@@ -7,8 +7,9 @@ public class HashChecker {
         _hashProvider = hashProvider;
     }
 
-    public async Task<bool> VerifyFileHashAsync(string filePath, string expectedHash) {
-        var actualHash = await _hashProvider.CalculateHashAsync(filePath);
+    public async Task<bool> VerifyFileHashAsync(string filePath, string expectedHash, 
+        CancellationToken cancellationToken = default) {
+        var actualHash = await _hashProvider.CalculateHashAsync(filePath, cancellationToken);
         return actualHash == expectedHash;
     }
 }
