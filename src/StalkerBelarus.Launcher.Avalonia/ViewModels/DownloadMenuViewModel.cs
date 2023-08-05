@@ -51,7 +51,13 @@ public class DownloadMenuViewModel : ViewModelBase {
             Progress = percentage;
         });
 
-        await _downloadResourcesService.DownloadsAsync(progress, _tokenSource);
+        var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
+        if (filesDownload != null && filesDownload.Any()) {
+            foreach (var file in filesDownload) {
+                await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
+            }
+        }
+        
         launcherViewModel.SelectMenu();
     }
 

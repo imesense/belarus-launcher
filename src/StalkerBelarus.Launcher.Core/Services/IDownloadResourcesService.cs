@@ -1,5 +1,6 @@
 namespace StalkerBelarus.Launcher.Core.Services;
 
 public interface IDownloadResourcesService {
-    Task DownloadsAsync(Progress<int> progress, CancellationTokenSource? tokenSource);
+    Task<IDictionary<string, string>?> GetFilesForDownloadAsync(IProgress<int> progress);
+    Task DownloadAsync(string path, string url, IProgress<int> progress, CancellationTokenSource? tokenSource);
 }
