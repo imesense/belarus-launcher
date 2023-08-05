@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +21,6 @@ public class GitHubApiService : IGitHubApiService {
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
         var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
-        
         await foreach (var content in contents) {
             yield return content;
         }
@@ -37,16 +37,10 @@ public class GitHubApiService : IGitHubApiService {
         var release = await GetGitHubReleaseAsync();
         // Find the asset with the specified filename
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
-        // Download the asset as a stream
-        await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
-        // Deserialize the JSON content into the specified object type
-        return await JsonSerializer.DeserializeAsync<T>(assetStream);
+        // Download the asset
+        return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
     }
 
-    public async Task<GitHubRelease?> GetGitHubReleaseAsync() {
-        // Download the asset as a stream.
-        await using var response = await _httpClient.GetStreamAsync(_httpClient.BaseAddress);
-        // Deserialize the JSON content into the specified object type
-        return await JsonSerializer.DeserializeAsync<GitHubRelease>(response);
-    }
+    public async Task<GitHubRelease?> GetGitHubReleaseAsync() => 
+        await _httpClient.GetFromJsonAsync<GitHubRelease>(_httpClient.BaseAddress);
 }
