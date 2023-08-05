@@ -40,4 +40,9 @@ public class LauncherViewModel : ViewModelBase {
             PageMenuViewModel = _downloadMenuViewModel;
         }
     }
+
+    public void SelectUpdateMenu() {
+        PageMenuViewModel = _downloadMenuViewModel;
+        _downloadMenuViewModel.Update(this);
+    }
 }

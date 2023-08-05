@@ -21,7 +21,10 @@ public class DownloadMenuViewModel : ViewModelBase {
     public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
-    [Reactive] public int Progress { get; set; } = 0;
+    [Reactive] public int DownloadProgress { get; set; } = 0;
+    [Reactive] public string StatusProgress { get; set; } = string.Empty;
+    [Reactive] public string DownloadFileName { get; set; } = string.Empty;
+    [Reactive] public bool IsProgress { get; set; }
 
     public DownloadMenuViewModel(ILogger<DownloadMenuViewModel> logger, IWindowManager windowManager,
         IDownloadResourcesService downloadResourcesService) {
@@ -31,7 +34,11 @@ public class DownloadMenuViewModel : ViewModelBase {
 
         SetupCommands();
     }
-    
+
+    public void Update(LauncherViewModel launcherViewModel) {
+        StartDownload.Execute(launcherViewModel);
+    }
+
     private void SetupCommands() {
         StartDownload = ReactiveCommand.CreateFromTask<LauncherViewModel>(DownloadsImplAsync);
         Close = ReactiveCommand.Create(CloseImpl);
@@ -48,12 +55,20 @@ public class DownloadMenuViewModel : ViewModelBase {
 
     private async Task DownloadsImplAsync(LauncherViewModel launcherViewModel) {
         var progress = new Progress<int>(percentage => {
-            Progress = percentage;
+            DownloadProgress = percentage;
         });
 
+        IsProgress = true;
+        StatusProgress = "Проверка целостности...";
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
         if (filesDownload != null && filesDownload.Any()) {
+            var countFiles = filesDownload.Count;
+            var numberFile = 0;
+            
             foreach (var file in filesDownload) {
+                numberFile++;
+                StatusProgress = $"Files {numberFile} / {countFiles}";
+                DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }
         }

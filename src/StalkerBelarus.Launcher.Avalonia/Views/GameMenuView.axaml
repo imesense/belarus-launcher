@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:StalkerBelarus.Launcher.Avalonia.ViewModels"
+    xmlns:views="clr-namespace:StalkerBelarus.Launcher.Avalonia.Views"
     d:DesignHeight="650"
     d:DesignWidth="800"
     x:DataType="viewModels:GameMenuViewModel"
@@ -31,6 +32,8 @@
                 Margin="10"
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
+                Command="{Binding CheckUpdates}"
+                CommandParameter="{Binding $parent[views:LauncherView].DataContext}"
                 Content="Проверить обновления"
                 DockPanel.Dock="Bottom"
                 FontSize="24" />

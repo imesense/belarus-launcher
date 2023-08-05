@@ -33,9 +33,20 @@
                 HorizontalContentAlignment="Right"
                 Command="{Binding StartDownload}"
                 CommandParameter="{Binding $parent[views:LauncherView].DataContext}"
+                IsVisible="{Binding !IsProgress}"
                 Content="Начать загрузку"
                 FontSize="38" />
-            <ProgressBar Value="{Binding Progress}" />
+            <StackPanel
+                IsVisible="{Binding IsProgress}"
+                Margin="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center">
+                <TextBlock FontSize="24" HorizontalAlignment="Left" 
+                           TextWrapping="Wrap" 
+                           Margin="0 10" 
+                           Text="{Binding StatusProgress}" />
+                <ProgressBar Margin="10 5" Height="10" Value="{Binding DownloadProgress}" />
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </UserControl>

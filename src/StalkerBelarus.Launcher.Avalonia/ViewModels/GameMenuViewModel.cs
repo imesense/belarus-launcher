@@ -17,6 +17,7 @@ public class GameMenuViewModel : ViewModelBase {
     private bool _isStartServer = false;
     public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
+    public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
     
     public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, 
@@ -30,13 +31,18 @@ public class GameMenuViewModel : ViewModelBase {
     private void SetupCommands() {
         PlayGame = ReactiveCommand.Create<MainWindowViewModel>(PlayGameImpl);
         StartServer = ReactiveCommand.Create(StartServerImpl);
+        CheckUpdates = ReactiveCommand.Create<LauncherViewModel>(CheckUpdatesImpl);
         Close = ReactiveCommand.Create(_windowManager.Close);
         
         Observable.Merge(PlayGame.ThrownExceptions, StartServer.ThrownExceptions, Close.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
     }
-    
+
+    private void CheckUpdatesImpl(LauncherViewModel launcherViewModel) {
+        launcherViewModel.SelectUpdateMenu();
+    }
+
     private void PlayGameImpl(MainWindowViewModel mainWindowViewModel) {
         if (_isStartServer) {
             Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
