@@ -8,13 +8,14 @@ using StalkerBelarus.Launcher.Core.Models;
 namespace StalkerBelarus.Launcher.Core.Manager;
 
 public class DownloadManager : IDisposable {
-    private string[] Folders = {
+    private readonly string[] Folders = {
         "binaries", "resources", "patches"
     };
 
-    private JsonDocument? jsonDocument;
+    private readonly JsonDocument? jsonDocument;
+
     public DownloadManager() {
-        string response = "{}";
+        var response = "{}";
 
         try {
             using var client = new HttpClient();
@@ -35,17 +36,20 @@ public class DownloadManager : IDisposable {
 
         jsonDocument = JsonDocument.Parse(response);
     }
-    public void DebugOutput(string log) {
+
+    public static void DebugOutput(string log) {
         Console.WriteLine(log);
     }
+
     private string GetNewsFile() {
         using var client = new HttpClient();
-        var root = jsonDocument.RootElement;
+        var root = jsonDocument?.RootElement;
         var element = FindFileByName("news.json");
 
         return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
             .Result;
     }
+
     public IList<NewsContent> GetNewsList() {
         var newsList = new List<NewsContent>();
 
@@ -65,8 +69,9 @@ public class DownloadManager : IDisposable {
 
         return newsList;
     }
+
     private JsonElement FindFileByName(string name) {
-        JsonElement root = jsonDocument.RootElement;
+        var root = jsonDocument!.RootElement;
         var Assets = root.GetProperty("assets");
 
         foreach (var Item in Assets.EnumerateArray()) {
@@ -77,15 +82,16 @@ public class DownloadManager : IDisposable {
 
         return root;
     }
-    private void CalculateMD5(string[] filepath, Utf8JsonWriter writer) {
+
+    private static void CalculateMD5(string[] filepath, Utf8JsonWriter writer) {
         foreach (var folder in filepath) {
             writer.WriteStartObject(folder);
 
             try {
                 var Dir = Directory.GetCurrentDirectory() + "\\" + folder;
 
-                foreach (string file in Directory.EnumerateFiles(Dir, "*.*",
-                             SearchOption.TopDirectoryOnly)) {
+                foreach (var file in Directory.EnumerateFiles(Dir, "*.*",
+                    SearchOption.TopDirectoryOnly)) {
                     using var Compute = MD5.Create();
                     using var Stream = File.OpenRead(file);
                     var Hash = Compute.ComputeHash(Stream);
@@ -99,11 +105,14 @@ public class DownloadManager : IDisposable {
             writer.WriteEndObject();
         }
     }
+
     private void LoadFile(string FilePath, string FileName) {
         try {
             DebugOutput("Load " + FilePath + FileName);
             var Adress = FindFileByName(FileName).GetProperty("browser_download_url").ToString();
+#pragma warning disable SYSLIB0014
             using var Client = new WebClient();
+#pragma warning restore
             var dirInfo = new DirectoryInfo(FilePath);
 
             if (!dirInfo.Exists) {
@@ -115,6 +124,7 @@ public class DownloadManager : IDisposable {
         } catch {
         }
     }
+
     private void LoadMissedFiles(JsonElement local, JsonElement server) {
         foreach (var folder in server.EnumerateObject()) {
             foreach (var file in folder.Value.EnumerateObject()) {
@@ -131,12 +141,12 @@ public class DownloadManager : IDisposable {
             }
         }
     }
-    private void DeleteExtraFiles(JsonElement local, JsonElement server) {
+
+    private static void DeleteExtraFiles(JsonElement local, JsonElement server) {
         foreach (var folder in local.EnumerateObject()) {
             foreach (var file in folder.Value.EnumerateObject()) {
                 var Path = Directory.GetCurrentDirectory() + "\\" + folder.Name + "\\" +
-                           file.Name;
-
+                    file.Name;
                 try {
                     server.GetProperty(folder.Name).GetProperty(file.Name);
                 } catch {
@@ -150,41 +160,37 @@ public class DownloadManager : IDisposable {
             }
         }
     }
+
     public string GetLocalHash() {
         try {
-            JsonWriterOptions Options = new JsonWriterOptions {
+            var Options = new JsonWriterOptions {
                 Indented = true
             };
-
-            using (var Stream = new MemoryStream()) {
-                using (var Writer = new Utf8JsonWriter(Stream, Options)) {
-                    Writer.WriteStartObject();
-                    CalculateMD5(Folders, Writer);
-                    Writer.WriteEndObject();
-                }
-
-                string Json = Encoding.UTF8.GetString(Stream.ToArray());
-
-                return Json;
+            using var Stream = new MemoryStream();
+            using (var Writer = new Utf8JsonWriter(Stream, Options)) {
+                Writer.WriteStartObject();
+                CalculateMD5(Folders, Writer);
+                Writer.WriteEndObject();
             }
+            return Encoding.UTF8.GetString(Stream.ToArray());
         } catch {
         }
 
         return "{}";
     }
+
     private string GetServerHash() {
         try {
             using var client = new HttpClient();
-            var root = jsonDocument.RootElement;
+            var root = jsonDocument?.RootElement;
             var element = FindFileByName("hash.json");
-
             return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
                 .Result;
         } catch {
         }
-
         return "{}";
     }
+
     public bool CheckFiles(bool update = false) {
         try {
             var ServerHash = GetServerHash();
@@ -216,6 +222,6 @@ public class DownloadManager : IDisposable {
     }
 
     public void Dispose() {
-        jsonDocument.Dispose();
+        jsonDocument!.Dispose();
     }
 }

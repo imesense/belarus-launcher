@@ -9,7 +9,7 @@ public class MenuViewModel : ViewModelBase {
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
     private readonly DownloadManager _downloadService;
-    public LauncherViewModel LauncherViewModel { get; set; }
+    public LauncherViewModel? LauncherViewModel { get; set; }
     private bool _isStartServer = false;
 
     [Reactive] public bool IsVisibleDownload { get; set; } = true;
@@ -86,6 +86,6 @@ public class MenuViewModel : ViewModelBase {
             return;
         }
 
-        LauncherViewModel.StartGame();
+        LauncherViewModel?.StartGame();
     }
 }
