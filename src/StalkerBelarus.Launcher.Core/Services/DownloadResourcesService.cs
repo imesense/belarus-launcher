@@ -66,8 +66,10 @@ public class DownloadResourcesService : IDownloadResourcesService {
             progress.Report(progressPercentage);
             _logger.LogInformation("Progress: {Num}%", progressPercentage);
         });
+        
         stopwatch.Stop();
         _logger.LogInformation("Hash calculation time: {Time}", stopwatch.ElapsedMilliseconds);
+        progress.Report(0);
 
         return filesRes;
     }
@@ -82,6 +84,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 }
 
                 await _fileDownloadManager.DownloadAsync(url, path, progress, tokenSource.Token);
+                progress.Report(0);
             } catch (OperationCanceledException) {
             } catch (HttpRequestException ex) {
                 // 416 (Requested Range Not Satisfiable)
