@@ -7,9 +7,9 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/StalkerBelarus.Launcher/StalkerBelarus.Launcher.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "${workspaceFolder}/SBLauncher.sln",
+                "-p:GenerateFullPaths=true",
+                "--consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -19,9 +19,9 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/StalkerBelarus.Launcher/StalkerBelarus.Launcher.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "${workspaceFolder}/src/StalkerBelarus.Launcher.Avalonia/StalkerBelarus.Launcher.Avalonia.csproj",
+                "-p:GenerateFullPaths=true",
+                "--consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/src/StalkerBelarus.Launcher/StalkerBelarus.Launcher.csproj"
+                "${workspaceFolder}/SBLauncher.sln"
             ],
             "problemMatcher": "$msCompile"
         }
