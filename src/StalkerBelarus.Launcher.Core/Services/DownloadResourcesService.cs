@@ -1,3 +1,6 @@
+using System.Collections.Concurrent;
+using System.Diagnostics;
+
 using Microsoft.Extensions.Logging;
 
 using StalkerBelarus.Launcher.Core.FileHashVerification;
@@ -12,80 +15,80 @@ public class DownloadResourcesService : IDownloadResourcesService {
     private readonly IFileDownloadManager _fileDownloadManager;
     private readonly HashChecker _hashChecker;
 
-    public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitHubApiService gitHubApiService, 
+    public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitHubApiService gitHubApiService,
         IFileDownloadManager fileDownloadManager, HashChecker hashChecker) {
         _logger = logger;
         _gitHubApiService = gitHubApiService;
         _fileDownloadManager = fileDownloadManager;
         _hashChecker = hashChecker;
     }
-    
+
     public async Task DownloadsAsync(Progress<int> progress, CancellationTokenSource? tokenSource) {
         if (tokenSource != null) {
             return;
         }
 
-        var hashResources = await _gitHubApiService.DownloadJsonAsync<GameResources>(FileNamesStorage.HashResources);
+        var hashResources = await _gitHubApiService
+            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
         if (hashResources == null) {
             return;
         }
-        
+
         var release = await _gitHubApiService.GetGitHubReleaseAsync();
         if (release == null) {
             return;
         }
-        
-        foreach (var asset in release.Assets!) {
-            var fileName = asset.Name.ToLower();
-            var filePath = FileLocations.BaseDirectory;
-            var hashFile = "";
-            
-            var assetBinFile = hashResources.Binaries?.FirstOrDefault(x=> x.Title.Equals(fileName.ToLower()));
-            var assetResFile = hashResources.Resources?.FirstOrDefault(x=> x.Title.Equals(fileName.ToLower()));
-            var assetPatchFile = hashResources.Patches?.FirstOrDefault(x=> x.Title.Equals(fileName.ToLower()));
-            if (assetBinFile != null) {
-                filePath = Path.Combine(FileLocations.BinariesDirectory, fileName);
-                hashFile = assetBinFile.Hash;
-            } else if (assetResFile != null) {
-                filePath = Path.Combine(FileLocations.ResourcesDirectory, fileName);
-                hashFile = assetResFile.Hash;
-            } else if (assetPatchFile != null) {
-                filePath = Path.Combine(FileLocations.PatchesDirectory, fileName);
-                hashFile = assetPatchFile.Hash;
-            }
-            
-            if (File.Exists(filePath)) {
-                var verifyFile = await _hashChecker.VerifyFileHashAsync(filePath, hashFile);
-                if (verifyFile) {
-                    continue;
-                }
 
-                _logger.LogWarning("The {FileName} is corrupted", fileName);
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        
+        var filesRes = new ConcurrentDictionary<string, string>();
+        var parallelOptions = new ParallelOptions() {
+            MaxDegreeOfParallelism = Environment.ProcessorCount
+        };
+
+        await Parallel.ForEachAsync(release.Assets!, parallelOptions, async (asset, cancellationToken) => {
+            var assetFile = hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name.ToLower()));
+            if (assetFile == null) {
+                return;
             }
-            
+
+            var path = Path.Combine(FileLocations.BaseDirectory, assetFile.Directory, assetFile.Title);
+            if (!File.Exists(path)) {
+                filesRes.TryAdd(path, asset.BrowserDownloadUrl);
+                return;
+            }
+
+            var verifyFile = await _hashChecker.VerifyFileHashAsync(path, assetFile.Hash, cancellationToken);
+            if (!verifyFile) {
+                filesRes.TryAdd(path, asset.BrowserDownloadUrl);
+                _logger.LogWarning("The {FileName} is corrupted", assetFile.Title);
+            }
+        });
+        stopwatch.Stop();
+        _logger.LogInformation("Hash calculation time: {Time}", stopwatch.ElapsedMilliseconds);
+
+        foreach (var file in filesRes) {
             using (tokenSource = new CancellationTokenSource()) {
                 try {
-                    var dirInfo = new DirectoryInfo(Path.GetDirectoryName(filePath)!);
+                    var dirInfo = new DirectoryInfo(Path.GetDirectoryName(file.Key)!);
                     if (!dirInfo.Exists) {
                         dirInfo.Create();
                     }
                     
-                    await _fileDownloadManager.DownloadAsync(asset.BrowserDownloadUrl, filePath, progress,
-                        tokenSource.Token);
+                    await _fileDownloadManager.DownloadAsync(file.Value, file.Key, progress, tokenSource.Token);
                 } catch (OperationCanceledException) {
-                }
-                catch (HttpRequestException ex) {
+                } catch (HttpRequestException ex) {
                     // 416 (Requested Range Not Satisfiable)
                     if (ex.Message.Contains("416")) {
                         _logger.LogInformation("The file has already been uploaded");
                     } else {
                         _logger.LogError("HttpRequestException - {Message}", ex.Message);
                     }
-                }
-                catch (Exception exception) {
+                } catch (Exception exception) {
                     _logger.LogError("{Message}", exception.Message);
                 }
-            } 
+            }
         }
     }
 }
