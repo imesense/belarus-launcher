@@ -15,7 +15,11 @@
     SystemDecorations="None"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-
+    
+    <Window.Background>
+        <ImageBrush Source="../Assets/Images/background.png" />
+    </Window.Background>
+    
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
