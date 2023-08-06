@@ -28,6 +28,14 @@ public class GameMenuViewModel : ViewModelBase {
         SetupCommands();
     }
 
+#if DEBUG
+    public GameMenuViewModel() {
+        _logger = null!;
+        _windowManager = null!;
+        _userSettings = null!;
+    }
+#endif
+
     private void SetupCommands() {
         PlayGame = ReactiveCommand.Create<MainWindowViewModel>(PlayGameImpl);
         StartServer = ReactiveCommand.Create(StartServerImpl);

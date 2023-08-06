@@ -30,6 +30,15 @@ public class MainWindowViewModel : ViewModelBase {
         }
     }
 
+#if DEBUG
+    public MainWindowViewModel() {
+        _logger = null!;
+        _authorizationViewModel = null!;
+        _startGameViewModel = null!;
+        _launcherViewModel = null!;
+    }
+#endif
+
     public void ShowLauncherImpl() {
         _launcherViewModel.SelectMenu();
         PageViewModel = _launcherViewModel;

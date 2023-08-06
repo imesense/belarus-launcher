@@ -33,6 +33,20 @@ public class LauncherViewModel : ViewModelBase {
         CompanyName = (char) 0169 + ApplicationHelper.GetCompanyName();
     }
 
+#if DEBUG
+    public LauncherViewModel() {
+        _logger = null!;
+        _downloadMenuViewModel = null!;
+        _gameMenuViewModel = null!;
+        _directoryValidator = null!;
+
+        AppVersion = null!;
+        CompanyName = null!;
+
+        NewsSliderViewModel = null!;
+    }
+#endif
+
     public void SelectMenu() {
         if (_directoryValidator.IsDirectoryValid()) {
             PageMenuViewModel = _gameMenuViewModel;

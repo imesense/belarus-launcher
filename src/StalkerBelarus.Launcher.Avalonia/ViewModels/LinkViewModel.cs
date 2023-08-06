@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Reactive;
 
 using ReactiveUI;
@@ -22,7 +22,17 @@ public class LinkViewModel : ViewModelBase, IAsyncInitialization {
         Initialization = InitializeAsync();
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
     }
-    
+
+#if DEBUG
+    public LinkViewModel() {
+        _websiteLauncher = null!;
+        _gitHubApiService = null!;
+
+        OpenUrlCommand = null!;
+        Initialization = null!;
+    }
+#endif
+
     private async Task InitializeAsync() {
         // Asynchronously initialize this instance.
         await LoadWebResources();

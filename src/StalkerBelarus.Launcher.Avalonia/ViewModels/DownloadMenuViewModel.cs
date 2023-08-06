@@ -35,6 +35,14 @@ public class DownloadMenuViewModel : ViewModelBase {
         SetupCommands();
     }
 
+#if DEBUG
+    public DownloadMenuViewModel() {
+        _logger = null!;
+        _windowManager = null!;
+        _downloadResourcesService = null!;
+    }
+#endif
+
     public void Update(LauncherViewModel launcherViewModel) {
         StartDownload.Execute(launcherViewModel);
     }

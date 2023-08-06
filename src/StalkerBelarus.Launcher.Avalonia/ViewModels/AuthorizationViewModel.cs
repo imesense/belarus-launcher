@@ -28,7 +28,15 @@ public class AuthorizationViewModel : ViewModelBase {
 
         SetupBinding();
     }
-    
+
+#if DEBUG
+    public AuthorizationViewModel() {
+        _logger = null!;
+        _windowManager = null!;
+        _userSettings = null!;
+    }
+#endif
+
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel) {
         if (string.IsNullOrWhiteSpace(Username)) {
             throw new Exception("Имя пользователя не введено!");

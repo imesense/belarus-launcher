@@ -28,7 +28,17 @@ public class StartGameViewModel : ViewModelBase {
         _windowManager = windowManager;
         SetupCommands();
     }
-    
+
+#if DEBUG
+    public StartGameViewModel() {
+        _logger = null!;
+        _userSettings = null!;
+        _windowManager = null!;
+
+        IpAddress = null!;
+    }
+#endif
+
     private void SetupCommands() {
         var canStartGame = this.WhenAnyValue(x => x.IpAddress,
                 (ip) => !string.IsNullOrWhiteSpace(ip))

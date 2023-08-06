@@ -10,4 +10,11 @@ public class NewsViewModel : ViewModelBase {
         Title = title;
         Description = description;
     }
+
+#if DEBUG
+    public NewsViewModel() {
+        Title = null!;
+        Description = null!;
+    }
+#endif
 }

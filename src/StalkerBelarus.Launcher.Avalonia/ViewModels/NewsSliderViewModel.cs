@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Net.Sockets;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -34,6 +35,16 @@ public class NewsSliderViewModel : ViewModelBase, IAsyncInitialization {
         SetupCommands();
         Initialization = InitializeAsync();
     }
+
+#if DEBUG
+    public NewsSliderViewModel() {
+        _logger = null!;
+        _newsService = null!;
+
+        LinkViewModel = null!;
+        Initialization = null!;
+    }
+#endif
 
     private async Task LoadNews() {
         await foreach (var content in _newsService.DownloadJsonArrayAsync<NewsContent>("news_content.json")) {
