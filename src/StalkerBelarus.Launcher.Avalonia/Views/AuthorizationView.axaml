@@ -45,6 +45,7 @@
                     Margin="10,0"
                     Command="{Binding Close}"
                     Content="Закрыть"
+                    FontFamily="{DynamicResource StalkerFont}"
                     FontSize="18" />
             </StackPanel>
         </StackPanel>

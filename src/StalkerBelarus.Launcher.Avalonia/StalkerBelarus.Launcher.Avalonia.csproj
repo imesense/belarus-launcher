@@ -36,5 +36,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\StalkerBelarus.Launcher.Core\StalkerBelarus.Launcher.Core.csproj" />
+        <ProjectReference Include="..\StalkerBelarus.Launcher.Themes.Avalonia\StalkerBelarus.Launcher.Themes.Avalonia.csproj" />
     </ItemGroup>
 </Project>
