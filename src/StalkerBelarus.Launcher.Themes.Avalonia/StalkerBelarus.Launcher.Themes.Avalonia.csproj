@@ -6,6 +6,7 @@
     <ItemGroup>
         <AvaloniaResource Include="Fonts\*.ttf" />
         <AvaloniaResource Include="Fonts\*.axaml" />
+        <AvaloniaResource Include="Styles\*.axaml" />
         <AvaloniaResource Include="Index.axaml" />
     </ItemGroup>
 

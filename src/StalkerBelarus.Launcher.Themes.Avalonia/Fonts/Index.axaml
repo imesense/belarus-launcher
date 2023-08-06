@@ -9,5 +9,5 @@
         </Border>
     </Design.PreviewWith>
 
-    <FontFamily x:Key="StalkerFont">avares://StalkerBelarus.Launcher.Themes.Avalonia/Fonts/GRAFFITI1CTT.ttf#Graffiti1CTT</FontFamily>
+    <FontFamily x:Key="StyledFont">avares://StalkerBelarus.Launcher.Themes.Avalonia/Fonts/GRAFFITI1CTT.ttf#Graffiti1CTT</FontFamily>
 </ResourceDictionary>

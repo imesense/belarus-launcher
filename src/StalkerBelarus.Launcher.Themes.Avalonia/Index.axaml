@@ -4,6 +4,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://StalkerBelarus.Launcher.Themes.Avalonia/Fonts/Index.axaml" />
+                <ResourceInclude Source="avares://StalkerBelarus.Launcher.Themes.Avalonia/Styles/Index.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
