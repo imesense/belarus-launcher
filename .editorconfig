@@ -13,7 +13,7 @@ insert_final_newline = true
 tab_width = 4
 
 # XML-based files
-[*.{csproj,props,targets,resx,xaml}]
+[*.{csproj,props,targets,resx,xaml,axaml}]
 
 # Common settings
 charset = utf-8
