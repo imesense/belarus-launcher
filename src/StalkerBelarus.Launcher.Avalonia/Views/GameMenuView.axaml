@@ -27,6 +27,7 @@
                 HorizontalContentAlignment="Right"
                 Command="{Binding Close}"
                 Content="Выход"
+                Classes="styled"
                 FontSize="38" />
             <Button
                 Margin="10"
@@ -35,6 +36,7 @@
                 Command="{Binding CheckUpdates}"
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
                 Content="Проверить обновления"
+                Classes="styled"
                 DockPanel.Dock="Bottom"
                 FontSize="24" />
         </StackPanel>
@@ -47,6 +49,7 @@
                 Command="{Binding PlayGame}"
                 CommandParameter="{Binding $parent[Window].DataContext}"
                 Content="Играть"
+                Classes="styled"
                 FontSize="38" />
             <Button
                 Margin="5,15"
@@ -54,6 +57,7 @@
                 HorizontalContentAlignment="Right"
                 Command="{Binding StartServer}"
                 Content="Запустить сервер"
+                Classes="styled"
                 FontSize="38" />
         </StackPanel>
     </DockPanel>

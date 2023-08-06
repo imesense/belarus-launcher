@@ -17,7 +17,8 @@
     <Border
         Padding="10,30,20,0"
         HorizontalAlignment="Center"
-        VerticalAlignment="Center">
+        VerticalAlignment="Center"
+        Classes="styled">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock
@@ -41,13 +42,14 @@
                     Command="{Binding ShowLauncher}"
                     CommandParameter="{Binding $parent[Window].DataContext}"
                     Content="Далее"
-                    FontSize="18" />
+                    Classes="styled"
+                    FontSize="20" />
                 <Button
                     Margin="10,0"
                     Command="{Binding Close}"
                     Content="Закрыть"
-                    FontFamily="{DynamicResource StalkerFont}"
-                    FontSize="18" />
+                    Classes="styled"
+                    FontSize="20" />
             </StackPanel>
         </StackPanel>
     </Border>

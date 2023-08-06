@@ -23,6 +23,7 @@
             HorizontalContentAlignment="Right"
             Command="{Binding Close}"
             Content="Выход"
+            Classes="styled"
             DockPanel.Dock="Bottom"
             FontSize="38" />
         <StackPanel
@@ -35,6 +36,7 @@
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
                 IsVisible="{Binding !IsProgress}"
                 Content="Начать загрузку"
+                Classes="styled"
                 FontSize="38" />
             <StackPanel
                 IsVisible="{Binding IsProgress}"

@@ -24,5 +24,7 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <ContentControl Content="{Binding PageViewModel}" />
+    <ContentControl Content="{Binding PageViewModel}"
+                    BorderBrush="Gray"
+                    BorderThickness="1" />
 </Window>

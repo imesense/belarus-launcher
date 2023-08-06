@@ -24,8 +24,8 @@
                 <Button
                     Command="{Binding #ItemsControl.((vm:LinkViewModel)DataContext).OpenUrlCommand}"
                     CommandParameter="{Binding Url}"
-                    Content="{Binding Title}">
-                </Button>
+                    Content="{Binding Title}"
+                    Classes="styled" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

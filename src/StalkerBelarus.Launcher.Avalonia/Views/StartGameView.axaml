@@ -38,12 +38,14 @@
                     Margin="10,0"
                     Command="{Binding StartGame}"
                     Content="Начать игру"
+                    Classes="styled"
                     FontSize="18" />
                 <Button
                     Margin="10,0"
                     Command="{Binding Back}"
                     CommandParameter="{Binding $parent[Window].DataContext}"
                     Content="Назад"
+                    Classes="styled"
                     FontSize="18" />
             </StackPanel>
         </StackPanel>

@@ -14,7 +14,7 @@
         <vm:NewsSliderViewModel />
     </Design.DataContext>
 
-    <Border>
+    <Border Classes="styled">
         <DockPanel>
             <!--  SelectedNewsView  -->
             <ContentControl
