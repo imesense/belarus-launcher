@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Http.Headers;
 
 using Avalonia;
@@ -24,14 +25,22 @@ public partial class App : Application {
     private readonly IServiceProvider _serviceProvider;
 
     public App() {
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(Path.Combine(FileLocations.LogsDirectory, "sblauncher_report.txt"), 
-                rollingInterval: RollingInterval.Infinite)
-            .WriteTo.Debug()
-            .CreateLogger();
+        var pathLog = Path.Combine(FileLocations.LogsDirectory, FileNamesStorage.Log);
+        try {
+            if (!File.Exists(pathLog)) {
+                File.Delete(pathLog);
+            }
+        } catch (Exception exception) {
+            Debug.WriteLine(exception.Message);
+        } finally {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File(pathLog, rollingInterval: RollingInterval.Infinite)
+                .WriteTo.Debug()
+                .CreateLogger();
         
-        _serviceProvider = ConfigureServices()
-            .BuildServiceProvider();
+            _serviceProvider = ConfigureServices()
+                .BuildServiceProvider();
+        }
     }
     
     private IServiceCollection ConfigureServices() {
