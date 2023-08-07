@@ -20,18 +20,44 @@
         VerticalAlignment="Center"
         Classes="styled">
         <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                <TextBlock 
+                    Grid.Row="0" 
+                    Grid.Column="0"
+                    Margin="10,5" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="Язык:" />
+                <ComboBox
+                    Grid.Row="0" 
+                    Grid.Column="1"
+                    Width="200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    FontSize="16"
+                    Margin="0 5" />
+                <TextBlock 
+                    Grid.Row="1" 
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     Margin="10,5"
                     FontSize="16"
-                    Text="Введите никнейм:" />
+                    Text="Никнейм:" />
                 <TextBox
+                    Grid.Row="1" 
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     Width="200"
                     VerticalContentAlignment="Center"
                     FontSize="16"
+                    Margin="0 5"
                     Text="{Binding Username}"
                     Watermark="Vasyan" />
-            </StackPanel>
+            </Grid>
 
             <StackPanel
                 Margin="20"
