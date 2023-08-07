@@ -31,10 +31,15 @@ public static class ConfigManager {
     }
 
     public static UserSettings LoadSettings() {
-        if (File.Exists(FileLocations.UserSettingPath)) {
+        if (!File.Exists(FileLocations.UserSettingPath)) {
+            return new UserSettings();
+        }
+
+        try {
             var json = File.ReadAllText(FileLocations.UserSettingPath);
             return JsonSerializer.Deserialize<UserSettings>(json)!;
+        } catch {
+            return new UserSettings();
         }
-        return new UserSettings();
     }
 }
