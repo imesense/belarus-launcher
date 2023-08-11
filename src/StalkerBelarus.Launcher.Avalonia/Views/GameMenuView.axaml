@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:a="using:StalkerBelarus.Launcher.Avalonia.Assets"
     xmlns:vm="using:StalkerBelarus.Launcher.Avalonia.ViewModels"
     xmlns:v="using:StalkerBelarus.Launcher.Avalonia.Views"
     d:DesignHeight="650"
@@ -26,7 +27,7 @@
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
                 Command="{Binding Close}"
-                Content="Выход"
+                Content="{x:Static a:Resources.Exit}"
                 Classes="styled"
                 FontSize="38" />
             <Button
@@ -35,7 +36,7 @@
                 HorizontalContentAlignment="Right"
                 Command="{Binding CheckUpdates}"
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
-                Content="Проверить обновления"
+                Content="{x:Static a:Resources.CheckUpdates}"
                 Classes="styled"
                 DockPanel.Dock="Bottom"
                 FontSize="24" />
@@ -48,7 +49,7 @@
                 HorizontalContentAlignment="Right"
                 Command="{Binding PlayGame}"
                 CommandParameter="{Binding $parent[Window].DataContext}"
-                Content="Играть"
+                Content="{x:Static a:Resources.PlayGame}"
                 Classes="styled"
                 FontSize="38" />
             <Button
@@ -56,7 +57,7 @@
                 HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
                 Command="{Binding StartServer}"
-                Content="Запустить сервер"
+                Content="{x:Static a:Resources.LaunchServer}"
                 Classes="styled"
                 FontSize="38" />
         </StackPanel>

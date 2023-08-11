@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Assets;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
@@ -55,7 +56,7 @@ public class StartGameViewModel : ViewModelBase {
     
     private void StartGameImpl() {
         if (string.IsNullOrWhiteSpace(IpAddress)) {
-            throw new Exception("Ip-адрес не введен!");
+            throw new Exception(Resources.NoIpAddressEntered);
         }
 
         _userSettings.IpAddress = IpAddress;

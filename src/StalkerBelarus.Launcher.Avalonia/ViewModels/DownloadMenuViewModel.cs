@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Assets;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Services;
 
@@ -67,7 +68,7 @@ public class DownloadMenuViewModel : ViewModelBase {
         });
 
         IsProgress = true;
-        StatusProgress = "Проверка целостности...";
+        StatusProgress = Resources.IntegrityChecking;
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
         if (filesDownload != null && filesDownload.Any()) {
             var countFiles = filesDownload.Count;
@@ -75,7 +76,7 @@ public class DownloadMenuViewModel : ViewModelBase {
             
             foreach (var file in filesDownload) {
                 numberFile++;
-                StatusProgress = $"Files {numberFile} / {countFiles}";
+                StatusProgress = Resources.Files + $": {numberFile} / {countFiles}";
                 DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }

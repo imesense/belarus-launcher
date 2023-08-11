@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Assets;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
@@ -39,7 +40,7 @@ public class AuthorizationViewModel : ViewModelBase {
 
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel) {
         if (string.IsNullOrWhiteSpace(Username)) {
-            throw new Exception("Имя пользователя не введено!");
+            throw new Exception(Resources.UsernameNotEntered);
         }
         _userSettings.Username = Username;
         ConfigManager.SaveSettings(_userSettings);

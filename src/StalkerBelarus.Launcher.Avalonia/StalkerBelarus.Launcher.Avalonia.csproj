@@ -6,7 +6,7 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <AssemblyName>SBLauncher</AssemblyName>
         <Company>ImeSense</Company>
@@ -16,6 +16,24 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Assets\Resources.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+
+        <EmbeddedResource Update="Assets\Resources.be.resx" />
+        <EmbeddedResource Update="Assets\Resources.en.resx" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Assets\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
