@@ -66,6 +66,7 @@ public partial class App : Application {
         services.AddTransient<GameMenuViewModel>();
         services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<ILocaleManager, LocaleManager>();
 
         return services;
     }

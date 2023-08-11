@@ -1,16 +1,17 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
+using Avalonia;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using StalkerBelarus.Launcher.Avalonia.Assets;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
-namespace StalkerBelarus.Launcher.Avalonia.ViewModels; 
+namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class StartGameViewModel : ViewModelBase {
     private readonly ILogger<StartGameViewModel> _logger;
@@ -56,7 +57,7 @@ public class StartGameViewModel : ViewModelBase {
     
     private void StartGameImpl() {
         if (string.IsNullOrWhiteSpace(IpAddress)) {
-            throw new Exception(Resources.NoIpAddressEntered);
+            throw new Exception((string?) Application.Current?.Resources["LocalizedStrings.NoIpAddressEntered"]);
         }
 
         _userSettings.IpAddress = IpAddress;

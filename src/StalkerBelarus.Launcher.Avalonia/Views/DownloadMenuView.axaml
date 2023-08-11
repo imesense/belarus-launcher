@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:a="using:StalkerBelarus.Launcher.Avalonia.Assets"
     xmlns:vm="using:StalkerBelarus.Launcher.Avalonia.ViewModels"
     xmlns:v="using:StalkerBelarus.Launcher.Avalonia.Views"
     d:DesignHeight="450"
@@ -23,7 +22,7 @@
             VerticalAlignment="Bottom"
             HorizontalContentAlignment="Right"
             Command="{Binding Close}"
-            Content="{x:Static a:Resources.Exit}"
+            Content="{DynamicResource LocalizedStrings.Exit}"
             Classes="styled"
             DockPanel.Dock="Bottom"
             FontSize="38" />
@@ -36,7 +35,7 @@
                 Command="{Binding StartDownload}"
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
                 IsVisible="{Binding !IsProgress}"
-                Content="{x:Static a:Resources.StartDownloading}"
+                Content="{DynamicResource LocalizedStrings.StartDownloading}"
                 Classes="styled"
                 FontSize="38" />
             <StackPanel

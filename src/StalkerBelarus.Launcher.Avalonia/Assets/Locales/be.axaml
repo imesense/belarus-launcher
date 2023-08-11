@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="using:System">
+    <s:String x:Key="LocalizedStrings.Back">Назад</s:String>
+    <s:String x:Key="LocalizedStrings.CheckUpdates">Праверыць абнаўлення</s:String>
+    <s:String x:Key="LocalizedStrings.Close">Зачыніць</s:String>
+    <s:String x:Key="LocalizedStrings.Exit">Выхад</s:String>
+    <s:String x:Key="LocalizedStrings.Files">Файлы</s:String>
+    <s:String x:Key="LocalizedStrings.IntegrityChecking">Праверка цэласнасці...</s:String>
+    <s:String x:Key="LocalizedStrings.Language">Мова:</s:String>
+    <s:String x:Key="LocalizedStrings.LaunchServer">Запусціць сервер</s:String>
+    <s:String x:Key="LocalizedStrings.Next">Далей</s:String>
+    <s:String x:Key="LocalizedStrings.Nickname">Нікнэйм:</s:String>
+    <s:String x:Key="LocalizedStrings.NoIpAddressEntered">Не ўведзены IP-адрас!</s:String>
+    <s:String x:Key="LocalizedStrings.PlayGame">Граць</s:String>
+    <s:String x:Key="LocalizedStrings.StartDownloading">Пачаць загрузку</s:String>
+    <s:String x:Key="LocalizedStrings.StartGame">Пачаць гульню</s:String>
+    <s:String x:Key="LocalizedStrings.UsernameNotEntered">Імя карыстальніка не ўведзена!</s:String>
+</ResourceDictionary>

@@ -1,15 +1,17 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
+using Avalonia;
+
 using Microsoft.Extensions.Logging;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using StalkerBelarus.Launcher.Avalonia.Assets;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Services;
 
-namespace StalkerBelarus.Launcher.Avalonia.ViewModels; 
+namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class DownloadMenuViewModel : ViewModelBase {
     private readonly ILogger<DownloadMenuViewModel> _logger;
@@ -68,7 +70,7 @@ public class DownloadMenuViewModel : ViewModelBase {
         });
 
         IsProgress = true;
-        StatusProgress = Resources.IntegrityChecking;
+        StatusProgress = (string) Application.Current?.Resources["LocalizedStrings.IntegrityChecking"]!;
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
         if (filesDownload != null && filesDownload.Any()) {
             var countFiles = filesDownload.Count;
@@ -76,7 +78,7 @@ public class DownloadMenuViewModel : ViewModelBase {
             
             foreach (var file in filesDownload) {
                 numberFile++;
-                StatusProgress = Resources.Files + $": {numberFile} / {countFiles}";
+                StatusProgress = (string) Application.Current?.Resources["LocalizedStrings.Files"]! + $": {numberFile} / {countFiles}";
                 DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }

@@ -55,12 +55,13 @@ public class GameMenuViewModel : ViewModelBase {
         if (_isStartServer) {
             Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
-                    @$"-start client(localhost/name={_userSettings.Username})"
+                    @$"-start client(localhost/name={_userSettings.Username})",
+                    $"{_userSettings.Locale}",
                 });
             _windowManager.Close();
             return;
         }
-        
+
         mainWindowViewModel.ShowStartGameImpl();
     }
 

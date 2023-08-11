@@ -1,7 +1,10 @@
+using Avalonia.Markup.Xaml.Styling;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.Models;
 
@@ -9,15 +12,20 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase {
     private readonly ILogger<MainWindowViewModel> _logger;
+    private readonly ILocaleManager _localeManager;
+
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly StartGameViewModel _startGameViewModel;
     private readonly LauncherViewModel _launcherViewModel;
     
     [Reactive] public ViewModelBase PageViewModel { get; set; } = null!;
 
-    public MainWindowViewModel(ILogger<MainWindowViewModel> logger, LauncherViewModel launcherViewModel, 
+    public MainWindowViewModel(ILogger<MainWindowViewModel> logger, ILocaleManager localeManager,
+        LauncherViewModel launcherViewModel,
         AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel, UserSettings userSettings) {
         _logger = logger;
+        _localeManager = localeManager;
+
         _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
@@ -25,6 +33,8 @@ public class MainWindowViewModel : ViewModelBase {
         if (File.Exists(FileLocations.UserSettingPath) 
             && !string.IsNullOrEmpty(userSettings.Username)) {
             ShowLauncherImpl();
+
+            _localeManager.SetLocale(userSettings.Locale);
         } else {
             ShowAuthorizationImpl();
         }
@@ -33,6 +43,8 @@ public class MainWindowViewModel : ViewModelBase {
 #if DEBUG
     public MainWindowViewModel() {
         _logger = null!;
+        _localeManager = null!;
+
         _authorizationViewModel = null!;
         _startGameViewModel = null!;
         _launcherViewModel = null!;

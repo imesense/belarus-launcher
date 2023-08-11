@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="using:System">
+    <s:String x:Key="LocalizedStrings.LocaliBack">Back</s:String>
+    <s:String x:Key="LocalizedStrings.CheckUpdates">Check updates</s:String>
+    <s:String x:Key="LocalizedStrings.Close">Close</s:String>
+    <s:String x:Key="LocalizedStrings.Exit">Exit</s:String>
+    <s:String x:Key="LocalizedStrings.Files">Files</s:String>
+    <s:String x:Key="LocalizedStrings.IntegrityChecking">Integrity checking...</s:String>
+    <s:String x:Key="LocalizedStrings.Language">Language:</s:String>
+    <s:String x:Key="LocalizedStrings.LaunchServer">Launch server</s:String>
+    <s:String x:Key="LocalizedStrings.Next">Next</s:String>
+    <s:String x:Key="LocalizedStrings.Nickname">Nickname:</s:String>
+    <s:String x:Key="LocalizedStrings.NoIpAddressEntered">No IP-address entered!</s:String>
+    <s:String x:Key="LocalizedStrings.PlayGame">Play</s:String>
+    <s:String x:Key="LocalizedStrings.StartDownloading">Start downloading</s:String>
+    <s:String x:Key="LocalizedStrings.StartGame">Launch game</s:String>
+    <s:String x:Key="LocalizedStrings.UsernameNotEntered">Username not entered!</s:String>
+</ResourceDictionary>
