@@ -95,7 +95,8 @@ public class DownloadMenuViewModel : ViewModelBase {
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }
         }
-        
+
+        DownloadFileName = string.Empty;
         launcherViewModel.SelectMenu();
     }
 
