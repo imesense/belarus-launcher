@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="TextBlock" />
+                <TextBlock Text="Styled TextBlock"
+                           Classes="styled" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="{x:Type TextBlock}"
+                  TargetType="TextBlock">
+        <Style Selector="^.styled">
+            <Setter Property="FontFamily" Value="{DynamicResource StyledFont}" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

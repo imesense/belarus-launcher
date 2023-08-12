@@ -27,8 +27,9 @@
                     Margin="10,5" 
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    FontSize="16"
-                    Text="{DynamicResource LocalizedStrings.Language}" />
+                    FontSize="20"
+                    Text="{DynamicResource LocalizedStrings.Language}"
+                    Classes="styled" />
                 <ComboBox
                     Grid.Row="0" 
                     Grid.Column="1"
@@ -48,8 +49,9 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Margin="10,5"
-                    FontSize="16"
-                    Text="{DynamicResource LocalizedStrings.Nickname}" />
+                    FontSize="20"
+                    Text="{DynamicResource LocalizedStrings.Nickname}"
+                    Classes="styled" />
                 <TextBox
                     Grid.Row="1" 
                     Grid.Column="1"

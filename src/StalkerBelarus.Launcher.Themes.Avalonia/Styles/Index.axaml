@@ -3,5 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://StalkerBelarus.Launcher.Themes.Avalonia/Styles/Border.axaml" />
         <ResourceInclude Source="avares://StalkerBelarus.Launcher.Themes.Avalonia/Styles/Button.axaml" />
+        <ResourceInclude Source="avares://StalkerBelarus.Launcher.Themes.Avalonia/Styles/TextBlock.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

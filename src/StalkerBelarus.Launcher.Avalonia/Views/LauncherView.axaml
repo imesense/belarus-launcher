@@ -27,7 +27,8 @@
 
         <Border Grid.Column="1"
                 Classes="styled"
-                BorderThickness="1,0,0,0">
+                BorderThickness="1,0,0,0"
+                Width="320">
             <DockPanel LastChildFill="True">
                 <StackPanel
                     Margin="10"
@@ -38,6 +39,7 @@
                     <TextBlock FontSize="16" Text="{Binding AppVersion}" />
                     <TextBlock FontSize="16" Text="{Binding CompanyName}" />
                 </StackPanel>
+
                 <!--  PageMenuView  -->
                 <ContentControl
                     HorizontalAlignment="Center"

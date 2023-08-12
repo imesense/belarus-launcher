@@ -43,15 +43,18 @@
                 Margin="10"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center">
-                <TextBlock FontSize="24" HorizontalAlignment="Left" 
+                <TextBlock FontSize="24"
+                           HorizontalAlignment="Left" 
                            TextWrapping="Wrap" 
                            Margin="0 10" 
-                           Text="{Binding StatusProgress}" />
+                           Text="{Binding StatusProgress}"
+                           Classes="styled" />
                 <TextBlock FontSize="24" 
                            HorizontalAlignment="Left"
                            TextWrapping="Wrap"
                            Margin="0 5"
-                           Text="{Binding DownloadFileName}" />
+                           Text="{Binding DownloadFileName}"
+                           Classes="styled" />
                 <ProgressBar Margin="0 5" 
                              Height="10"
                              Foreground="LightGray"
