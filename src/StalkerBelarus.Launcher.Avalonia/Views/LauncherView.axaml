@@ -28,7 +28,7 @@
         <Border Grid.Column="1"
                 Classes="styled"
                 BorderThickness="1,0,0,0"
-                Width="320">
+                Width="350">
             <DockPanel LastChildFill="True">
                 <StackPanel
                     Margin="10"
