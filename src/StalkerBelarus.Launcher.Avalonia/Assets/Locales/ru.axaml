@@ -16,4 +16,5 @@
     <s:String x:Key="LocalizedStrings.StartDownloading">Начать загрузку</s:String>
     <s:String x:Key="LocalizedStrings.StartGame">Начать игру</s:String>
     <s:String x:Key="LocalizedStrings.UsernameNotEntered">Имя пользователя не введено!</s:String>
+    <s:String x:Key="LocalizedStrings.EnterIpAddress">Введите IP-адрес:</s:String>
 </ResourceDictionary>

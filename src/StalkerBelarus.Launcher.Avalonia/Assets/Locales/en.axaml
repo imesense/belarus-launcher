@@ -16,4 +16,5 @@
     <s:String x:Key="LocalizedStrings.StartDownloading">Start downloading</s:String>
     <s:String x:Key="LocalizedStrings.StartGame">Launch game</s:String>
     <s:String x:Key="LocalizedStrings.UsernameNotEntered">Username not entered!</s:String>
+    <s:String x:Key="LocalizedStrings.EnterIpAddress">Enter IP address:</s:String>
 </ResourceDictionary>

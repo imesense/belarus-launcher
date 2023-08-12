@@ -16,7 +16,6 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
-        <AvaloniaResource Include="Assets\Locales\*.axaml" />
     </ItemGroup>
 
     <ItemGroup>

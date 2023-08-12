@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
@@ -15,6 +16,7 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class StartGameViewModel : ViewModelBase {
     private readonly ILogger<StartGameViewModel> _logger;
+    private readonly ILocaleManager _localeManager;
     private readonly UserSettings _userSettings;
     private readonly IWindowManager _windowManager;
     [Reactive] public string IpAddress { get; set; }
@@ -23,11 +25,13 @@ public class StartGameViewModel : ViewModelBase {
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
     
     public StartGameViewModel(ILogger<StartGameViewModel> logger, UserSettings userSettings, 
-        IWindowManager windowManager) {
+        IWindowManager windowManager, ILocaleManager localeManager) {
         _logger = logger;
         _userSettings = userSettings;
         IpAddress = _userSettings.IpAddress;
         _windowManager = windowManager;
+        _localeManager = localeManager;
+
         SetupCommands();
     }
 
@@ -36,6 +40,7 @@ public class StartGameViewModel : ViewModelBase {
         _logger = null!;
         _userSettings = null!;
         _windowManager = null!;
+        _localeManager = null!;
 
         IpAddress = null!;
     }
@@ -57,7 +62,8 @@ public class StartGameViewModel : ViewModelBase {
     
     private void StartGameImpl() {
         if (string.IsNullOrWhiteSpace(IpAddress)) {
-            throw new Exception((string?) Application.Current?.Resources["LocalizedStrings.NoIpAddressEntered"]);
+            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered",
+                _userSettings.Locale));
         }
 
         _userSettings.IpAddress = IpAddress;

@@ -24,7 +24,7 @@
                 <TextBlock
                     Margin="10,5"
                     FontSize="16"
-                    Text="Введите IP-адрес:" />
+                    Text="{DynamicResource LocalizedStrings.EnterIpAddress}" />
                 <TextBox
                     Width="200"
                     VerticalContentAlignment="Center"

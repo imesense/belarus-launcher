@@ -2,8 +2,6 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using Avalonia;
-
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -58,7 +56,8 @@ public class AuthorizationViewModel : ViewModelBase {
 
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel) {
         if (string.IsNullOrWhiteSpace(Username)) {
-            throw new Exception((string?) Application.Current?.Resources["LocalizedStrings.UsernameNotEntered"]);
+            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered",
+                _userSettings.Locale));
         }
         _userSettings.Username = Username;
         _userSettings.Locale = SelectedLanguageKey;
