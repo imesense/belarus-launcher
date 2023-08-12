@@ -46,7 +46,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
         var totalTasks = hashResources.Count;
         var completedTasks = 0;
         await Parallel.ForEachAsync(release.Assets!, parallelOptions, async (asset, cancellationToken) => {
-            var assetFile = hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name.ToLower()));
+            var assetFile = hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name, StringComparison.OrdinalIgnoreCase));
             if (assetFile == null) {
                 return;
             }
