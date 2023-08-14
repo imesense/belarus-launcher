@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
         <AssemblyName>SBLauncher</AssemblyName>
         <Company>ImeSense</Company>
         <Authors>Drombeys</Authors>
