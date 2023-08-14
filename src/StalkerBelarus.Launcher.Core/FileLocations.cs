@@ -1,7 +1,7 @@
 namespace StalkerBelarus.Launcher.Core;
 
 public static class FileLocations {
-    public static string BaseDirectory => AppDomain.CurrentDomain.BaseDirectory;
+    public static string BaseDirectory => Path.GetDirectoryName(Environment.ProcessPath)!;
     public static string BinariesDirectory => Path.Combine(BaseDirectory, "binaries");
     public static string ResourcesDirectory => Path.Combine(BaseDirectory, "resources");
     public static string PatchesDirectory => Path.Combine(BaseDirectory, "patches");
