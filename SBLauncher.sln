@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher.Leg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerBelarus.Launcher.Themes.Avalonia", "src\StalkerBelarus.Launcher.Themes.Avalonia\StalkerBelarus.Launcher.Themes.Avalonia.csproj", "{09B9A304-1D08-493F-9B51-573B9301FF7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerBelarus.Launcher.CryptoHasher", "src\StalkerBelarus.Launcher.CryptoHasher\StalkerBelarus.Launcher.CryptoHasher.csproj", "{C74DB453-DB02-4324-BAD0-1E24290E3B98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{09B9A304-1D08-493F-9B51-573B9301FF7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09B9A304-1D08-493F-9B51-573B9301FF7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09B9A304-1D08-493F-9B51-573B9301FF7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
