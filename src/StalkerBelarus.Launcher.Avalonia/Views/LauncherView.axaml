@@ -1,14 +1,14 @@
 <UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
     x:Class="StalkerBelarus.Launcher.Avalonia.Views.LauncherView"
+    x:DataType="vm:LauncherViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:StalkerBelarus.Launcher.Avalonia.ViewModels"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    x:DataType="vm:LauncherViewModel"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Design.DataContext>
         <vm:LauncherViewModel />
@@ -17,34 +17,35 @@
     <Grid ColumnDefinitions="*,auto" RowDefinitions="*">
         <Grid
             Grid.Column="0"
-            Width="330"
-            Margin="40"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top">
+            Margin="40"
+            VerticalAlignment="Top"
+            Width="330">
             <!--  NewsSliderView  -->
             <ContentControl Content="{Binding NewsSliderViewModel}" />
         </Grid>
 
-        <Border Grid.Column="1"
-                Classes="styled"
-                BorderThickness="1,0,0,0"
-                Width="350">
+        <Border
+            BorderThickness="1,0,0,0"
+            Classes="styled"
+            Grid.Column="1"
+            Width="350">
             <DockPanel LastChildFill="True">
                 <StackPanel
-                    Margin="10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
                     DockPanel.Dock="Bottom"
-                    Orientation="Horizontal">
+                    HorizontalAlignment="Right"
+                    Margin="10"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Bottom">
                     <TextBlock FontSize="16" Text="{Binding AppVersion}" />
                     <TextBlock FontSize="16" Text="{Binding CompanyName}" />
                 </StackPanel>
 
                 <!--  PageMenuView  -->
                 <ContentControl
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Stretch"
-                    Content="{Binding PageMenuViewModel}" />
+                    Content="{Binding PageMenuViewModel}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
             </DockPanel>
         </Border>
     </Grid>

@@ -1,6 +1,6 @@
 <UserControl
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="360"
     mc:Ignorable="d"
     x:Class="StalkerBelarus.Launcher.Avalonia.Views.DownloadMenuView"
     x:DataType="vm:DownloadMenuViewModel"
@@ -15,19 +15,22 @@
         <vm:DownloadMenuViewModel />
     </Design.DataContext>
 
-    <DockPanel Margin="45,0,15,0" VerticalAlignment="Stretch">
+    <DockPanel
+        HorizontalAlignment="Stretch"
+        Margin="30,30,30,0"
+        VerticalAlignment="Stretch">
         <Button
             Classes="styled"
             Command="{Binding Close}"
             Content="{DynamicResource LocalizedStrings.Exit}"
             DockPanel.Dock="Bottom"
             FontSize="38"
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Right"
-            Margin="10,55"
+            Margin="10,45"
             VerticalAlignment="Bottom" />
         <StackPanel
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Stretch"
             Margin="5,15"
             VerticalAlignment="Center">
             <Button
@@ -35,34 +38,38 @@
                 Command="{Binding StartDownload}"
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
                 Content="{DynamicResource LocalizedStrings.StartDownloading}"
-                FontSize="38"
+                FontSize="36"
+                HorizontalAlignment="Right"
                 HorizontalContentAlignment="Right"
                 IsVisible="{Binding !IsProgress}" />
             <StackPanel
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Stretch"
                 IsVisible="{Binding IsProgress}"
-                Margin="10"
+                Margin="0,10"
                 VerticalAlignment="Center">
                 <TextBlock
                     Classes="styled"
-                    FontSize="24"
-                    HorizontalAlignment="Left"
+                    FontSize="26"
+                    HorizontalAlignment="Stretch"
                     Margin="0,10"
                     Text="{Binding StatusProgress}"
                     TextWrapping="Wrap" />
                 <TextBlock
                     Classes="styled"
-                    FontSize="24"
-                    HorizontalAlignment="Left"
+                    FontSize="26"
+                    HorizontalAlignment="Stretch"
                     IsVisible="{Binding IsDownload}"
                     Margin="0,5"
                     Text="{Binding DownloadFileName}"
-                    TextWrapping="Wrap" />
+                    TextWrapping="Wrap"
+                    VerticalAlignment="Center" />
                 <ProgressBar
                     Foreground="LightGray"
                     Height="10"
-                    Margin="0,5"
-                    Value="{Binding DownloadProgress}" />
+                    HorizontalAlignment="Stretch"
+                    Margin="0,5,0,0"
+                    Value="{Binding DownloadProgress}"
+                    VerticalAlignment="Center" />
             </StackPanel>
         </StackPanel>
     </DockPanel>
