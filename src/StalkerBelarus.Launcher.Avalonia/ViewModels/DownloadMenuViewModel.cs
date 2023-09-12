@@ -31,7 +31,10 @@ public class DownloadMenuViewModel : ViewModelBase {
     [Reactive] public int DownloadProgress { get; set; } = 0;
     [Reactive] public string StatusProgress { get; set; } = string.Empty;
     [Reactive] public string DownloadFileName { get; set; } = string.Empty;
+    // Overall progress status
     [Reactive] public bool IsProgress { get; set; }
+    //Download status
+    [Reactive] public bool IsDownload { get; set; }
 
     public DownloadMenuViewModel(ILogger<DownloadMenuViewModel> logger,
         ILocaleManager localeManager,
@@ -43,6 +46,7 @@ public class DownloadMenuViewModel : ViewModelBase {
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _downloadResourcesService = downloadResourcesService ?? throw new ArgumentNullException(nameof(downloadResourcesService));
         _userSettings = userSettings;
+        IsDownload = false;
 
         SetupCommands();
     }
@@ -87,7 +91,7 @@ public class DownloadMenuViewModel : ViewModelBase {
         if (filesDownload != null && filesDownload.Any()) {
             var countFiles = filesDownload.Count;
             var numberFile = 0;
-            
+            IsDownload = true;
             foreach (var file in filesDownload) {
                 numberFile++;
                 StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userSettings.Locale) + $": {numberFile} / {countFiles}";
@@ -95,7 +99,8 @@ public class DownloadMenuViewModel : ViewModelBase {
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }
         }
-
+        
+        IsDownload = false;
         DownloadFileName = string.Empty;
         launcherViewModel.SelectMenu();
     }
