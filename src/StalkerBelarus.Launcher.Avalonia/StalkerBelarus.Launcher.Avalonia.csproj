@@ -20,12 +20,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.2" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.2" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.2" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.0.2" Condition="'$(Configuration)' == 'Debug'" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.2" />
+        <PackageReference Include="Avalonia" Version="11.0.4" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.4" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.4" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.0.4" Condition="'$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.4" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
