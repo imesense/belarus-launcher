@@ -9,26 +9,27 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 
-public class DownloadResourcesService : IDownloadResourcesService {
+public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitialization {
     private readonly ILogger<DownloadResourcesService> _logger;
     private readonly IGitHubApiService _gitHubApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
     private readonly HashChecker _hashChecker;
-
+    private IList<GameResource>? _hashResources;
+    
+    public Task Initialization { get; }
+    
     public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitHubApiService gitHubApiService,
         IFileDownloadManager fileDownloadManager, HashChecker hashChecker) {
         _logger = logger;
         _gitHubApiService = gitHubApiService;
         _fileDownloadManager = fileDownloadManager;
         _hashChecker = hashChecker;
+        Initialization = InitializeAsync();
     }
 
     public async Task<IDictionary<string, string>?> GetFilesForDownloadAsync(IProgress<int> progress) {
         var filesRes = new ConcurrentDictionary<string, string>();
-        
-        var hashResources = await _gitHubApiService
-            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
-        if (hashResources == null) {
+        if (_hashResources == null) {
             return filesRes;
         }
 
@@ -43,10 +44,10 @@ public class DownloadResourcesService : IDownloadResourcesService {
         var parallelOptions = new ParallelOptions() {
             MaxDegreeOfParallelism = Environment.ProcessorCount
         };
-        var totalTasks = hashResources.Count;
+        var totalTasks = _hashResources.Count;
         var completedTasks = 0;
         await Parallel.ForEachAsync(release.Assets!, parallelOptions, async (asset, cancellationToken) => {
-            var assetFile = hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name, StringComparison.OrdinalIgnoreCase));
+            var assetFile = _hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name, StringComparison.OrdinalIgnoreCase));
             if (assetFile == null) {
                 return;
             }
@@ -82,8 +83,20 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 if (!dirInfo.Exists) {
                     dirInfo.Create();
                 }
-
-                await _fileDownloadManager.DownloadAsync(url, path, progress, tokenSource.Token);
+                
+                bool verifyFile;
+                do {
+                    await _fileDownloadManager.DownloadAsync(url, path, progress, tokenSource.Token);
+                    // Check the downloaded file for integrity
+                    var assetName = Path.GetFileName(path);
+                    var gameResource = _hashResources?.FirstOrDefault(x => x.Title.Equals(assetName, 
+                        StringComparison.OrdinalIgnoreCase));
+                    verifyFile = await _hashChecker.VerifyFileHashAsync(path, gameResource!.Hash);
+                    if (!verifyFile) {
+                        File.Delete(path);
+                    }
+                } while (!verifyFile);
+                
                 progress.Report(0);
             } catch (OperationCanceledException) {
             } catch (HttpRequestException ex) {
@@ -92,10 +105,17 @@ public class DownloadResourcesService : IDownloadResourcesService {
                     _logger.LogInformation("The file has already been uploaded");
                 } else {
                     _logger.LogError("HttpRequestException - {Message}", ex.Message);
+                    throw;
                 }
             } catch (Exception exception) {
                 _logger.LogError("{Message}", exception.Message);
             }
         }
+    }
+    
+    private async Task InitializeAsync() {
+        // Asynchronously initialize this instance.
+        _hashResources = await _gitHubApiService
+            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
     }
 }

@@ -85,9 +85,13 @@ public class FileDownloadManager : IFileDownloadManager {
                 status?.Report(progress);
                 _logger.LogInformation("URL [{Progress}]: {Url}", progress, url);
             }
-            
-        } catch (Exception ex) {
+        } catch (HttpRequestException ex) {
             _logger.LogError("{Message}", ex.Message);
+            throw;
+        } 
+        catch (Exception ex) {
+            _logger.LogError("{Message}", ex.Message);
+            throw;
         }
     }
 }
