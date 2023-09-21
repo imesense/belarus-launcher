@@ -3,13 +3,13 @@ using System.Diagnostics;
 namespace StalkerBelarus.Launcher.Core;
 
 public static class Launcher {
-    public static void Launch(string? path, string? workingDirectory = null,
+    public static Process? Launch(string? path, string? workingDirectory = null,
         IList<string> arguments = null!) {
         if (string.IsNullOrEmpty(path)) {
-            return;
+            return default;
         }
         if (!(File.Exists(path) && Path.GetExtension(path) != "exe")) {
-            return;
+            return default;
         }
 
         var process = new Process {
@@ -20,9 +20,11 @@ public static class Launcher {
                     : string.Empty,
                 WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
-                CreateNoWindow = true,
+                CreateNoWindow = true
             },
+            EnableRaisingEvents = true
         };
-        process.Start();
+
+        return process;
     }
 }
