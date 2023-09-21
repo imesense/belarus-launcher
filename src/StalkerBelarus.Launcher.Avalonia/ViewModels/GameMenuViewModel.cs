@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
@@ -58,6 +59,8 @@ public class GameMenuViewModel : ViewModelBase {
     }
 
     private void PlayGameImpl(MainWindowViewModel mainWindowViewModel) {
+        ProcessHelper.KillServers();
+        
         if (IsStartServer) {
             var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
@@ -77,6 +80,8 @@ public class GameMenuViewModel : ViewModelBase {
     }
 
     private void StartServerImpl() {
+        ProcessHelper.KillAllXrEngine();
+        
         var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
                 "-dedicated",

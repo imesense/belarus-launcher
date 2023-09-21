@@ -1,9 +1,8 @@
-using Avalonia.Markup.Xaml.Styling;
-
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.Models;
@@ -38,6 +37,8 @@ public class MainWindowViewModel : ViewModelBase {
         } else {
             ShowAuthorizationImpl();
         }
+        
+        ProcessHelper.KillAllXrEngine();
     }
 
 #if DEBUG
