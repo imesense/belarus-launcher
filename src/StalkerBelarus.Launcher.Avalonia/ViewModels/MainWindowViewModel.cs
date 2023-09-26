@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.Helpers;
@@ -17,7 +18,7 @@ public class MainWindowViewModel : ViewModelBase {
     private readonly StartGameViewModel _startGameViewModel;
     private readonly LauncherViewModel _launcherViewModel;
     
-    [Reactive] public ViewModelBase PageViewModel { get; set; } = null!;
+    [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
 
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, ILocaleManager localeManager,
         LauncherViewModel launcherViewModel,
