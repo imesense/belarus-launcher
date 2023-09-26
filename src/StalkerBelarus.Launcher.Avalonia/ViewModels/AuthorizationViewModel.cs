@@ -1,24 +1,31 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
+using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class AuthorizationViewModel : ViewModelBase {
+public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILogger<AuthorizationViewModel> _logger;
     private readonly ILocaleManager _localeManager;
 
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
+    private readonly AuthenticationValidator _authenticationValidator;
+
+    private CompositeDisposable? _disposables = null;
 
     [Reactive]
     public ObservableCollection<Locale> Languages { get; set; } = new() {
@@ -36,11 +43,13 @@ public class AuthorizationViewModel : ViewModelBase {
 
     public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
         ILocaleManager localeManager,
-        IWindowManager windowManager, UserSettings userSettings) {
+        IWindowManager windowManager, UserSettings userSettings,
+        AuthenticationValidator authenticationValidator) {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userSettings = userSettings;
+        _authenticationValidator = authenticationValidator;
 
         SetupBinding();
     }
@@ -51,6 +60,7 @@ public class AuthorizationViewModel : ViewModelBase {
         _localeManager = null!;
         _windowManager = null!;
         _userSettings = null!;
+        _authenticationValidator = null!;
     }
 #endif
 
@@ -80,15 +90,39 @@ public class AuthorizationViewModel : ViewModelBase {
                 nickname => !string.IsNullOrWhiteSpace(nickname) && nickname.Length <= 22)
             .ObserveOn(RxApp.MainThreadScheduler)
             .DistinctUntilChanged();
-        
-        ShowLauncher = ReactiveCommand.Create<MainWindowViewModel>(ShowLauncherImpl, canCreateUser);
+
+        if (_disposables is null) {
+            SetupValidation();
+        }
+
+        ShowLauncher = ReactiveCommand.Create<MainWindowViewModel>(ShowLauncherImpl, this.IsValid());
         Close = ReactiveCommand.Create(_windowManager.Close);
-        
+
         ShowLauncher.ThrownExceptions.Merge(Close.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
     }
-    
+
+    private void SetupValidation() {
+        _disposables = new() {
+            _authenticationValidator.EnsureUsernameNotEmpty(this),
+        };
+    }
+
     private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
+
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            if (_disposables is not null) {
+                _disposables?.Dispose();
+                _disposables = null;
+            }
+        }
+    }
+
+    public void Dispose() {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 }

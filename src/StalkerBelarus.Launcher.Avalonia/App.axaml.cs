@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
+using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Avalonia.ViewModels;
 using StalkerBelarus.Launcher.Avalonia.Views;
@@ -67,6 +68,7 @@ public partial class App : Application {
         services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<ILocaleManager, LocaleManager>();
+        services.AddSingleton<AuthenticationValidator>();
 
         return services;
     }
