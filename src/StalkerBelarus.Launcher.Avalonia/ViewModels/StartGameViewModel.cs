@@ -14,7 +14,7 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class StartGameViewModel : ViewModelBase {
+public class StartGameViewModel : ReactiveObject {
     private readonly ILogger<StartGameViewModel> _logger;
     private readonly ILocaleManager _localeManager;
     private readonly UserSettings _userSettings;

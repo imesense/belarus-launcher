@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.Helpers;
@@ -7,7 +8,7 @@ using StalkerBelarus.Launcher.Core.Validators;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class LauncherViewModel : ViewModelBase {
+public class LauncherViewModel : ReactiveObject {
     private readonly ILogger<LauncherViewModel> _logger;
     private readonly DownloadMenuViewModel _downloadMenuViewModel;
     private readonly GameMenuViewModel _gameMenuViewModel;
@@ -16,7 +17,7 @@ public class LauncherViewModel : ViewModelBase {
     public string AppVersion { get; set; }
     public string CompanyName { get; set; }
 
-    [Reactive] public ViewModelBase PageMenuViewModel { get; set; } = null!;
+    [Reactive] public ReactiveObject PageMenuViewModel { get; set; } = null!;
     [Reactive] public NewsSliderViewModel NewsSliderViewModel { get; set; }
 
 

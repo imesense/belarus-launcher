@@ -9,7 +9,7 @@ using StalkerBelarus.Launcher.Core.Services;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels; 
 
-public class LinkViewModel : ViewModelBase, IAsyncInitialization {
+public class LinkViewModel : ReactiveObject, IAsyncInitialization {
     private readonly IWebsiteLauncher _websiteLauncher;
     private readonly IGitHubApiService _gitHubApiService;
     public ObservableCollection<WebResource>? WebResources { get; set; } = new();

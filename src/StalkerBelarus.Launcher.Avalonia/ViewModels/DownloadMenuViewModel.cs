@@ -13,7 +13,7 @@ using StalkerBelarus.Launcher.Core.Services;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class DownloadMenuViewModel : ViewModelBase {
+public class DownloadMenuViewModel : ReactiveObject {
     private readonly ILogger<DownloadMenuViewModel> _logger;
     private readonly ILocaleManager _localeManager;
 
@@ -94,7 +94,8 @@ public class DownloadMenuViewModel : ViewModelBase {
             IsDownload = true;
             foreach (var file in filesDownload) {
                 numberFile++;
-                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userSettings.Locale) + $": {numberFile} / {countFiles}";
+                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userSettings.Locale) + 
+                                 $": {numberFile} / {countFiles}";
                 DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }

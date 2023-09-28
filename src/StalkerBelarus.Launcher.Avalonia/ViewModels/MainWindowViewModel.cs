@@ -10,7 +10,7 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase {
+public class MainWindowViewModel : ReactiveObject {
     private readonly ILogger<MainWindowViewModel> _logger;
     private readonly ILocaleManager _localeManager;
 
@@ -33,8 +33,7 @@ public class MainWindowViewModel : ViewModelBase {
         if (File.Exists(FileLocations.UserSettingPath) 
             && !string.IsNullOrEmpty(userSettings.Username)) {
             ShowLauncherImpl();
-
-            _localeManager.SetLocale(userSettings.Locale);
+           _localeManager.SetLocale(userSettings.Locale);
         } else {
             ShowAuthorizationImpl();
         }

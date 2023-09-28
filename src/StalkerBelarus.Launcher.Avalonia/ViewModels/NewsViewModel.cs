@@ -1,8 +1,9 @@
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class NewsViewModel : ViewModelBase {
+public class NewsViewModel : ReactiveObject {
     [Reactive] public string Title { get; set; }
     [Reactive] public string Description { get; set; }
 

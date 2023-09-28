@@ -12,7 +12,7 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class GameMenuViewModel : ViewModelBase {
+public class GameMenuViewModel : ReactiveObject {
     private readonly ILogger<GameMenuViewModel> _logger;
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;

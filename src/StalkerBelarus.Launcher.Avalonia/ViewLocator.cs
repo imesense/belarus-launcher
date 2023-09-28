@@ -3,6 +3,8 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
+using ReactiveUI;
+
 using StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 namespace StalkerBelarus.Launcher.Avalonia;
@@ -20,6 +22,6 @@ public class ViewLocator : IDataTemplate {
     }
 
     public bool Match(object? data) {
-        return data is ViewModelBase;
+        return data is ReactiveObject;
     }
 }

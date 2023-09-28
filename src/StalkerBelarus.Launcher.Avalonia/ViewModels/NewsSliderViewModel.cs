@@ -13,7 +13,7 @@ using StalkerBelarus.Launcher.Core.Services;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class NewsSliderViewModel : ViewModelBase, IAsyncInitialization {
+public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
     private readonly ILogger<NewsSliderViewModel> _logger;
     private readonly IGitHubApiService _newsService;
 
