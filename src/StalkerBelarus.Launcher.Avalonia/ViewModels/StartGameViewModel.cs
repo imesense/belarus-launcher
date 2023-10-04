@@ -69,10 +69,12 @@ public class StartGameViewModel : ReactiveObject {
         _userSettings.IpAddress = IpAddress;
         ConfigManager.SaveSettings(_userSettings);
 
-        Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
+        var process = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
                 @$"-start -center_screen -silent_error_mode client({_userSettings.IpAddress}/name={_userSettings.Username})"
             });
+
+        process?.Start();
         _windowManager.Close();
     }
 
