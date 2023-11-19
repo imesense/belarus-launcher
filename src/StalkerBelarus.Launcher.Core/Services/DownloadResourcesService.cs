@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using StalkerBelarus.Launcher.Core.FileHashVerification;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 

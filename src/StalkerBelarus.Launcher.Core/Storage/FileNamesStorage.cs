@@ -1,4 +1,4 @@
-namespace StalkerBelarus.Launcher.Core;
+namespace StalkerBelarus.Launcher.Core.Storage;
 
 public static class FileNamesStorage {
     public const string HashResources = "HashGameResources.json";

@@ -1,5 +1,7 @@
 using Serilog;
 
+using StalkerBelarus.Launcher.Core.Storage;
+
 namespace StalkerBelarus.Launcher.Core.Logger;
 
 public static class LauncherLoggerFactory {

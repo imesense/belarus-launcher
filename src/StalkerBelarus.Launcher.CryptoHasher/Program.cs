@@ -2,11 +2,11 @@
 using System.Text.Json;
 using System.Text.Unicode;
 
-using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.FileHashVerification;
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Storage;
 
-using static StalkerBelarus.Launcher.Core.FileLocations;
+using static StalkerBelarus.Launcher.Core.Storage.FileLocations;
 
 var hashing = new Md5HashProvider(null);
 var folders = GetDirectories();

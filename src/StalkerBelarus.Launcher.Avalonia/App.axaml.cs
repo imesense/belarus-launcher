@@ -18,6 +18,7 @@ using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.FileHashVerification;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Services;
+using StalkerBelarus.Launcher.Core.Storage;
 using StalkerBelarus.Launcher.Core.Validators;
 
 namespace StalkerBelarus.Launcher.Avalonia;
@@ -53,6 +54,7 @@ public partial class App : Application {
         services.AddTransient<GameMenuViewModel>();
         services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<ILocaleStorage, LocaleStorage>();
         services.AddSingleton<ILocaleManager, LocaleManager>();
         services.AddSingleton<AuthenticationValidator>();
 

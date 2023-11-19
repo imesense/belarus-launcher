@@ -1,4 +1,4 @@
-namespace StalkerBelarus.Launcher.Core;
+namespace StalkerBelarus.Launcher.Core.Storage;
 
 public static class FileLocations {
     public static string BaseDirectory => Path.GetDirectoryName(Environment.ProcessPath)!;

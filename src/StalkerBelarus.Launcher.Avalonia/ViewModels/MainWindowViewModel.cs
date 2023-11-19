@@ -5,8 +5,9 @@ using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Avalonia.Manager;
-using StalkerBelarus.Launcher.Core;
+using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 

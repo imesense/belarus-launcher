@@ -3,6 +3,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using DynamicData;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -14,11 +16,13 @@ using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILogger<AuthorizationViewModel> _logger;
+    private readonly ILocaleStorage _localeStorage;
     private readonly ILocaleManager _localeManager;
 
     private readonly IWindowManager _windowManager;
@@ -27,14 +31,10 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 
     private CompositeDisposable? _disposables = null;
 
-    [Reactive]
-    public ObservableCollection<Locale> Languages { get; set; } = new() {
-        new Locale { Key = "ru", Title = "Русский", },
-        new Locale { Key = "be", Title = "Беларуская", },
-        new Locale { Key = "en", Title = "English", },
-    };
-    [Reactive]
-    public string SelectedLanguageKey { get; set; } = string.Empty;
+    [Reactive] public ObservableCollection<Locale> Languages { get; set; } = new();
+
+    [Reactive] public Locale SelectedLanguage { get; set; } = new();
+
     [Reactive] public string Username { get; set; } = string.Empty;
 
     public ReactiveCommand<string, Unit> UpdateInterfaceCommand { get; private set; } = null!;
@@ -42,21 +42,22 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
     public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
-        ILocaleManager localeManager,
+        ILocaleStorage localeStorage, ILocaleManager localeManager,
         IWindowManager windowManager, UserSettings userSettings,
         AuthenticationValidator authenticationValidator) {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _localeStorage = localeStorage;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userSettings = userSettings;
         _authenticationValidator = authenticationValidator;
-
         SetupBinding();
     }
 
 #if DEBUG
     public AuthorizationViewModel() {
         _logger = null!;
+        _localeStorage = null!;
         _localeManager = null!;
         _windowManager = null!;
         _userSettings = null!;
@@ -70,18 +71,21 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
                 _userSettings.Locale));
         }
         _userSettings.Username = Username;
-        _userSettings.Locale = SelectedLanguageKey;
+        _userSettings.Locale = SelectedLanguage.Key;
         ConfigManager.SaveSettings(_userSettings);
 
         mainWindowViewModel.ShowLauncherImpl();
     }
 
     private void SetupBinding() {
+        Languages.AddRange(_localeStorage.GetLocales());
+        SelectedLanguage = Languages[0];
+
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
         });
 
-        this.WhenAnyValue(x => x.SelectedLanguageKey)
+        this.WhenAnyValue(x => x.SelectedLanguage.Key)
             .Where(key => !string.IsNullOrEmpty(key))
             .ObserveOn(RxApp.MainThreadScheduler)
             .InvokeCommand(UpdateInterfaceCommand);

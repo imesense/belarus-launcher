@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Unicode;
 
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Core.Manager;
 

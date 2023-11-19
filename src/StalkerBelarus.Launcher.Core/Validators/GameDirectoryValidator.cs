@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
 
+using StalkerBelarus.Launcher.Core.Storage;
+
 namespace StalkerBelarus.Launcher.Core.Validators;
 
 /// <summary>

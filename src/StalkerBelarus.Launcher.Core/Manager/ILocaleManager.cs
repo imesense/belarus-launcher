@@ -1,4 +1,4 @@
-namespace StalkerBelarus.Launcher.Avalonia.Manager;
+namespace StalkerBelarus.Launcher.Core.Manager;
 
 public interface ILocaleManager {
     void SetLocale(string locale);

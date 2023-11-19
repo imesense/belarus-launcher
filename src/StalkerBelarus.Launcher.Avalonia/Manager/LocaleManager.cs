@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml.Styling;
 
+using StalkerBelarus.Launcher.Core.Manager;
+
 namespace StalkerBelarus.Launcher.Avalonia.Manager;
 
 public class LocaleManager : ILocaleManager {

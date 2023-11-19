@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-using StalkerBelarus.Launcher.Core;
+using StalkerBelarus.Launcher.Core.Storage;
 
-namespace StalkerBelarus.Launcher.Avalonia.Helpers; 
+namespace StalkerBelarus.Launcher.Avalonia.Helpers;
 
 public static class ProcessHelper {
     private static Process[] GetXrEngineProcesses() {
