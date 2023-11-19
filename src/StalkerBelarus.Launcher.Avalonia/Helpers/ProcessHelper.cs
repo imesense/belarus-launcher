@@ -1,21 +1,23 @@
 ﻿using System.Diagnostics;
 
+using StalkerBelarus.Launcher.Core;
+
 namespace StalkerBelarus.Launcher.Avalonia.Helpers; 
 
 public static class ProcessHelper {
     private static Process[] GetXrEngineProcesses() {
-        return Process.GetProcessesByName("xrEngine");
+        return Process.GetProcessesByName(NamesStorage.GameProcess);
     }
     
     public static void KillAllXrEngine() {
-        foreach (var process in Process.GetProcessesByName("xrEngine")) {
+        foreach (var process in Process.GetProcessesByName(NamesStorage.GameProcess)) {
             process.Kill();
         }
     }
     
     public static IEnumerable<Process> GetServerProcesses() {
         var processes = GetXrEngineProcesses()
-            .Where(x => x.MainWindowTitle.Equals("S.T.A.L.K.E.R.: Belarus Server"));
+            .Where(x => x.MainWindowTitle.Equals(NamesStorage.TitleServerApp));
         foreach (var process in processes) {
             yield return process;
         }
@@ -29,7 +31,7 @@ public static class ProcessHelper {
             return;
         
         foreach (var process in processes.Take(1)) {
-            if (process.MainWindowTitle.Equals("S.T.A.L.K.E.R.: Belarus Server")) {
+            if (process.MainWindowTitle.Equals(NamesStorage.TitleServerApp)) {
                 process.Kill();
             }
         }
