@@ -26,22 +26,8 @@ public partial class App : Application {
     private readonly IServiceProvider _serviceProvider;
 
     public App() {
-        var pathLog = Path.Combine(FileLocations.LogsDirectory, FileNamesStorage.Log);
-        try {
-            if (!File.Exists(pathLog)) {
-                File.Delete(pathLog);
-            }
-        } catch (Exception exception) {
-            Debug.WriteLine(exception.Message);
-        } finally {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File(pathLog, rollingInterval: RollingInterval.Infinite)
-                .WriteTo.Debug()
-                .CreateLogger();
-        
-            _serviceProvider = ConfigureServices()
+        _serviceProvider = ConfigureServices()
                 .BuildServiceProvider();
-        }
     }
     
     private IServiceCollection ConfigureServices() {
