@@ -20,7 +20,8 @@ public static class Launcher {
                     : string.Empty,
                 WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                Verb = "runas"
             },
             EnableRaisingEvents = true
         };
