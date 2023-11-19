@@ -1,7 +1,8 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:s="using:System">
-    <s:String x:Key="LocalizedStrings.LocaliBack">Back</s:String>
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:s="using:System"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <s:String x:Key="LocalizedStrings.Back">Back</s:String>
     <s:String x:Key="LocalizedStrings.CheckUpdates">Check updates</s:String>
     <s:String x:Key="LocalizedStrings.Close">Close</s:String>
     <s:String x:Key="LocalizedStrings.Exit">Exit</s:String>
