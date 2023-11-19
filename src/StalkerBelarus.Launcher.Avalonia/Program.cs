@@ -16,12 +16,25 @@ class Program {
         try {
             LauncherLoggerFactory.CreateLogger();
             Log.Information("Start launcher");
+            PrintOsInfo();
             BuildAvaloniaApp()
                     .StartWithClassicDesktopLifetime(args);
         } catch (Exception exception) {
             Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
             throw;
         }
+    }
+
+    private static void PrintOsInfo() {
+        Log.Information("OS: {0}", Environment.OSVersion);
+        Log.Information("Processor architecture: {0}",
+            Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"));
+        Log.Information("User / PC: {UserName} / {MachineName}", Environment.UserName,
+            Environment.MachineName);
+        Log.Information(".NET: {0}", Environment.Version);
+        Log.Information("ProcessId: {0}", Environment.ProcessId);
+        Log.Information("Processor count: {0}", Environment.ProcessorCount);
+        Log.Information("Process path: {0}", Environment.ProcessPath);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
