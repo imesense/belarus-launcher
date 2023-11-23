@@ -17,8 +17,10 @@
     <s:String x:Key="LocalizedStrings.StartDownloading">Начать загрузку</s:String>
     <s:String x:Key="LocalizedStrings.StartGame">Начать игру</s:String>
     <s:String x:Key="LocalizedStrings.UsernameNotEntered">Имя пользователя не введено!</s:String>
-    <s:String x:Key="LocalizedStrings.EnterIpAddress">Введите IP-адрес:</s:String>
+    <s:String x:Key="LocalizedStrings.EnterIpAddress">IP-адрес:</s:String>
     <s:String x:Key="LocalizedStrings.EnterNickName">Введите никнейм</s:String>
     <s:String x:Key="LocalizedStrings.TooLongNickname">Слишком длинный никнейм!</s:String>
     <s:String x:Key="LocalizedStrings.InvalidCharacters">Запрещенные символы!</s:String>
+    <s:String x:Key="LocalizedStrings.IpAddressNotEntered">Введите IP-адрес</s:String>
+    <s:String x:Key="LocalizedStrings.InvalidIpAddress">Недопустимый формат IP-адреса или URL!</s:String>
 </ResourceDictionary>

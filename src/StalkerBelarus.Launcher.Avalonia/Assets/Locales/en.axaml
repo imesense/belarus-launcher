@@ -17,8 +17,10 @@
     <s:String x:Key="LocalizedStrings.StartDownloading">Start downloading</s:String>
     <s:String x:Key="LocalizedStrings.StartGame">Launch game</s:String>
     <s:String x:Key="LocalizedStrings.UsernameNotEntered">Username not entered!</s:String>
-    <s:String x:Key="LocalizedStrings.EnterIpAddress">Enter IP address:</s:String>
+    <s:String x:Key="LocalizedStrings.EnterIpAddress">IP address:</s:String>
     <s:String x:Key="LocalizedStrings.EnterNickName">Enter nickname</s:String>
     <s:String x:Key="LocalizedStrings.TooLongNickname">Nickname is too long!</s:String>
     <s:String x:Key="LocalizedStrings.InvalidCharacters">Invalid characters!</s:String>
+    <s:String x:Key="LocalizedStrings.IpAddressNotEntered">Enter IP address</s:String>
+    <s:String x:Key="LocalizedStrings.InvalidIpAddress">Invalid IP address or URL format!</s:String>
 </ResourceDictionary>

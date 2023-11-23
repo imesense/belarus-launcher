@@ -57,6 +57,7 @@ public partial class App : Application {
         services.AddSingleton<ILocaleStorage, LocaleStorage>();
         services.AddSingleton<ILocaleManager, LocaleManager>();
         services.AddSingleton<AuthenticationValidator>();
+        services.AddSingleton<StartGameValidator>();
 
         return services;
     }
