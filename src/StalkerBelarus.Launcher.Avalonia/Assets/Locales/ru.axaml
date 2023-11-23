@@ -1,6 +1,7 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:s="using:System">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:s="using:System"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <s:String x:Key="LocalizedStrings.Back">Назад</s:String>
     <s:String x:Key="LocalizedStrings.CheckUpdates">Проверить обновления</s:String>
     <s:String x:Key="LocalizedStrings.Close">Закрыть</s:String>
@@ -17,4 +18,7 @@
     <s:String x:Key="LocalizedStrings.StartGame">Начать игру</s:String>
     <s:String x:Key="LocalizedStrings.UsernameNotEntered">Имя пользователя не введено!</s:String>
     <s:String x:Key="LocalizedStrings.EnterIpAddress">Введите IP-адрес:</s:String>
+    <s:String x:Key="LocalizedStrings.EnterNickName">Введите никнейм</s:String>
+    <s:String x:Key="LocalizedStrings.TooLongNickname">Слишком длинный никнейм!</s:String>
+    <s:String x:Key="LocalizedStrings.InvalidCharacters">Запрещенные символы!</s:String>
 </ResourceDictionary>

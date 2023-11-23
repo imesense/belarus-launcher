@@ -66,11 +66,12 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 #endif
 
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel) {
-        if (string.IsNullOrWhiteSpace(Username)) {
+        var username = Username.Trim();
+        if (string.IsNullOrWhiteSpace(username)) {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered",
-                _userSettings.Locale));
+                SelectedLanguage.Key));
         }
-        _userSettings.Username = Username;
+        _userSettings.Username = username;
         _userSettings.Locale = SelectedLanguage.Key;
         ConfigManager.SaveSettings(_userSettings);
 
@@ -83,21 +84,14 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
+            _disposables?.Dispose();
+            SetupValidation();
         });
 
         this.WhenAnyValue(x => x.SelectedLanguage.Key)
             .Where(key => !string.IsNullOrEmpty(key))
             .ObserveOn(RxApp.MainThreadScheduler)
             .InvokeCommand(UpdateInterfaceCommand);
-
-        var canCreateUser = this.WhenAnyValue(x => x.Username,
-                nickname => !string.IsNullOrWhiteSpace(nickname) && nickname.Length <= 22)
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .DistinctUntilChanged();
-
-        if (_disposables is null) {
-            SetupValidation();
-        }
 
         ShowLauncher = ReactiveCommand.Create<MainWindowViewModel>(ShowLauncherImpl, this.IsValid());
         Close = ReactiveCommand.Create(_windowManager.Close);
@@ -108,8 +102,10 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     }
 
     private void SetupValidation() {
-        _disposables = new() {
-            _authenticationValidator.EnsureUsernameNotEmpty(this),
+        _disposables = new CompositeDisposable {
+            _authenticationValidator.EnsureUsernameNotEmpty(this, SelectedLanguage.Key),
+            _authenticationValidator.EnsureUsernameCorrectLength(this, SelectedLanguage.Key),
+            _authenticationValidator.EnsureUsernameCorrectCharacters(this, SelectedLanguage.Key),
         };
     }
 
