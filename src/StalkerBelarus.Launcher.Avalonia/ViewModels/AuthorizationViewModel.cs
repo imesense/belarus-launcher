@@ -80,10 +80,13 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 
     private void SetupBinding() {
         Languages.AddRange(_localeStorage.GetLocales());
-        SelectedLanguage = Languages[0];
+        if (_userSettings.Locale == string.Empty) {
+            SelectedLanguage = Languages[0];
+        }
 
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
+            _userSettings.Locale = SelectedLanguage.Key;
             _disposables?.Dispose();
             SetupValidation();
         });

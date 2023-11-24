@@ -55,10 +55,6 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
 #endif
 
     private void SetupCommands() {
-        if (_disposables is null) {
-            SetupValidation();
-        }
-
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());
         Back = ReactiveCommand.Create<MainWindowViewModel>(BackImpl);
         
@@ -67,7 +63,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
             .Subscribe(OnCommandException);
     }
 
-    private void SetupValidation() {
+    public void SetupValidation() {
         _disposables = new CompositeDisposable {
             _startGameValidator.EnsureIpAddressNotEmpty(this, _userSettings.Locale),
             _startGameValidator.EnsureValidIpAddressOrUrl(this, _userSettings.Locale)

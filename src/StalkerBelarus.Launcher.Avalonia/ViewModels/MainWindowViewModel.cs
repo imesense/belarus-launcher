@@ -31,14 +31,14 @@ public class MainWindowViewModel : ReactiveObject {
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
 
-        if (File.Exists(FileLocations.UserSettingPath) 
+        if (File.Exists(FileLocations.UserSettingPath)
             && !string.IsNullOrEmpty(userSettings.Username)) {
+            _localeManager.SetLocale(userSettings.Locale);
             ShowLauncherImpl();
-           _localeManager.SetLocale(userSettings.Locale);
         } else {
             ShowAuthorizationImpl();
         }
-        
+
         ProcessHelper.KillAllXrEngine();
     }
 
@@ -63,6 +63,8 @@ public class MainWindowViewModel : ReactiveObject {
     }
     
     public void ShowStartGameImpl() {
+        // Update locale
+        _startGameViewModel.SetupValidation();
         PageViewModel = _startGameViewModel;
     }
 }
