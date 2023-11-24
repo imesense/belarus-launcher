@@ -11,8 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using StalkerBelarus.Launcher.Avalonia.Helpers;
-using StalkerBelarus.Launcher.Avalonia.Manager;
+using StalkerBelarus.Launcher.Avalonia.ViewModels.Validators;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 
@@ -23,7 +22,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILocaleManager _localeManager;
     private readonly UserSettings _userSettings;
     private readonly IWindowManager _windowManager;
-    private readonly StartGameValidator _startGameValidator;
+    private readonly StartGameViewModelValidator _startGameViewModelValidator;
     private CompositeDisposable? _disposables = null;
 
     [Reactive] public string IpAddress { get; set; }
@@ -32,12 +31,12 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
     
     public StartGameViewModel(ILogger<StartGameViewModel> logger, UserSettings userSettings, 
-        IWindowManager windowManager, ILocaleManager localeManager, StartGameValidator startGameValidator) {
+        IWindowManager windowManager, ILocaleManager localeManager, StartGameViewModelValidator startGameViewModelValidator) {
         _logger = logger;
         _userSettings = userSettings;
         IpAddress = _userSettings.IpAddress;
         _windowManager = windowManager;
-        _startGameValidator = startGameValidator;
+        _startGameViewModelValidator = startGameViewModelValidator;
         _localeManager = localeManager;
 
         SetupCommands();
@@ -49,7 +48,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         _userSettings = null!;
         _windowManager = null!;
         _localeManager = null!;
-        _startGameValidator = null!;
+        _startGameViewModelValidator = null!;
         IpAddress = null!;
     }
 #endif
@@ -65,8 +64,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
 
     public void SetupValidation() {
         _disposables = new CompositeDisposable {
-            _startGameValidator.EnsureIpAddressNotEmpty(this, _userSettings.Locale),
-            _startGameValidator.EnsureValidIpAddressOrUrl(this, _userSettings.Locale)
+            _startGameViewModelValidator.EnsureIpAddressNotEmpty(this),
+            _startGameViewModelValidator.EnsureValidIpAddressOrUrl(this)
         };
     }
 

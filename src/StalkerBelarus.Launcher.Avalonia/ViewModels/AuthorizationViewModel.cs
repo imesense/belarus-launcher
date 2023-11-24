@@ -12,8 +12,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using StalkerBelarus.Launcher.Avalonia.Helpers;
-using StalkerBelarus.Launcher.Avalonia.Manager;
+using StalkerBelarus.Launcher.Avalonia.ViewModels.Validators;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
 using StalkerBelarus.Launcher.Core.Storage;
@@ -27,7 +26,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
-    private readonly AuthenticationValidator _authenticationValidator;
+    private readonly AuthenticationViewModelValidator _authenticationViewModelValidator;
 
     private CompositeDisposable? _disposables = null;
 
@@ -44,13 +43,13 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
         ILocaleStorage localeStorage, ILocaleManager localeManager,
         IWindowManager windowManager, UserSettings userSettings,
-        AuthenticationValidator authenticationValidator) {
+        AuthenticationViewModelValidator authenticationViewModelValidator) {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _localeStorage = localeStorage;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userSettings = userSettings;
-        _authenticationValidator = authenticationValidator;
+        _authenticationViewModelValidator = authenticationViewModelValidator;
         SetupBinding();
     }
 
@@ -61,7 +60,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _localeManager = null!;
         _windowManager = null!;
         _userSettings = null!;
-        _authenticationValidator = null!;
+        _authenticationViewModelValidator = null!;
     }
 #endif
 
@@ -106,9 +105,9 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 
     private void SetupValidation() {
         _disposables = new CompositeDisposable {
-            _authenticationValidator.EnsureUsernameNotEmpty(this, SelectedLanguage.Key),
-            _authenticationValidator.EnsureUsernameCorrectLength(this, SelectedLanguage.Key),
-            _authenticationValidator.EnsureUsernameCorrectCharacters(this, SelectedLanguage.Key),
+            _authenticationViewModelValidator.EnsureUsernameNotEmpty(this),
+            _authenticationViewModelValidator.EnsureUsernameCorrectLength(this),
+            _authenticationViewModelValidator.EnsureUsernameCorrectCharacters(this),
         };
     }
 

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Net.Http.Headers;
 
 using Avalonia;
@@ -10,11 +9,10 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Avalonia.Manager;
 using StalkerBelarus.Launcher.Avalonia.ViewModels;
+using StalkerBelarus.Launcher.Avalonia.ViewModels.Validators;
 using StalkerBelarus.Launcher.Avalonia.Views;
-using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.FileHashVerification;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Services;
@@ -47,6 +45,9 @@ public partial class App : Application {
         services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
         services.AddTransient<IWebsiteLauncher, WebsiteLauncher>();
         services.AddTransient<AuthorizationViewModel>();
+        services.AddTransient<IAuthenticationValidator, AuthenticationValidator>();
+        services.AddTransient<IStartGameValidator, StartGameValidator>();
+
         services.AddTransient<LinkViewModel>();
         services.AddTransient<NewsSliderViewModel>();
         services.AddSingleton<LauncherViewModel>();
@@ -56,8 +57,9 @@ public partial class App : Application {
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<ILocaleStorage, LocaleStorage>();
         services.AddSingleton<ILocaleManager, LocaleManager>();
-        services.AddSingleton<AuthenticationValidator>();
-        services.AddSingleton<StartGameValidator>();
+
+        services.AddSingleton<AuthenticationViewModelValidator>();
+        services.AddSingleton<StartGameViewModelValidator>();
 
         return services;
     }
