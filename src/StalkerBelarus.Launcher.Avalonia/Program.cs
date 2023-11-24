@@ -13,16 +13,23 @@ class Program {
     // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args) {
+#if DEBUG
+        StartApp(args);
+#else
         try {
-            LauncherLoggerFactory.CreateLogger();
-            Log.Information("Start launcher");
-            PrintOsInfo();
-            BuildAvaloniaApp()
-                    .StartWithClassicDesktopLifetime(args);
+            StartApp(args);
         } catch (Exception exception) {
             Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
             throw;
         }
+#endif
+    }
+
+    private static void StartApp(string[] args) {
+        LauncherLoggerFactory.CreateLogger();
+        Log.Information("Start launcher");
+        PrintOsInfo();
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
     private static void PrintOsInfo() {
