@@ -7,12 +7,31 @@ using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Core.Manager;
 
-public static class ConfigManager {
-    public static void SaveSettings(UserSettings settings) {
-        if (settings is null) {
-            throw new ArgumentNullException(nameof(settings));
+public class UserManager {
+    public UserSettings? UserSettings { get; set; }
+
+    public UserManager() {
+        Load();
+    }
+
+    public void Load() {
+        if (!File.Exists(FileLocations.UserSettingPath)) {
+            UserSettings = new UserSettings();
         }
-        if (string.IsNullOrEmpty(settings.Username)) {
+
+        try {
+            var json = File.ReadAllText(FileLocations.UserSettingPath);
+            UserSettings = JsonSerializer.Deserialize<UserSettings>(json)!;
+        } catch {
+            UserSettings = new UserSettings();
+        }
+    }
+
+    public void Save() {
+        if (UserSettings is null) {
+            throw new ArgumentNullException(nameof(UserSettings));
+        }
+        if (string.IsNullOrEmpty(UserSettings.Username)) {
             throw new Exception("Username not specified");
         }
         if (!Directory.Exists(FileLocations.UserDirectory)) {
@@ -27,20 +46,7 @@ public static class ConfigManager {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             WriteIndented = true
         };
-        var json = JsonSerializer.Serialize(settings, options);
+        var json = JsonSerializer.Serialize(UserSettings, options);
         writer.Write(json);
-    }
-
-    public static UserSettings LoadSettings() {
-        if (!File.Exists(FileLocations.UserSettingPath)) {
-            return new UserSettings();
-        }
-
-        try {
-            var json = File.ReadAllText(FileLocations.UserSettingPath);
-            return JsonSerializer.Deserialize<UserSettings>(json)!;
-        } catch {
-            return new UserSettings();
-        }
     }
 }

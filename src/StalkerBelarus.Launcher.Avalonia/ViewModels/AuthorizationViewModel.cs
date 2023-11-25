@@ -25,7 +25,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILocaleManager _localeManager;
 
     private readonly IWindowManager _windowManager;
-    private readonly UserSettings _userSettings;
+    private readonly UserManager _userManager;
     private readonly AuthenticationViewModelValidator _authenticationViewModelValidator;
 
     private CompositeDisposable? _disposables = null;
@@ -42,13 +42,13 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
 
     public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
         ILocaleStorage localeStorage, ILocaleManager localeManager,
-        IWindowManager windowManager, UserSettings userSettings,
+        IWindowManager windowManager, UserManager userManager,
         AuthenticationViewModelValidator authenticationViewModelValidator) {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _localeStorage = localeStorage;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
-        _userSettings = userSettings;
+        _userManager = userManager;
         _authenticationViewModelValidator = authenticationViewModelValidator;
         SetupBinding();
     }
@@ -59,7 +59,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _localeStorage = null!;
         _localeManager = null!;
         _windowManager = null!;
-        _userSettings = null!;
+        _userManager = null!;
         _authenticationViewModelValidator = null!;
     }
 #endif
@@ -70,22 +70,23 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered",
                 SelectedLanguage.Key));
         }
-        _userSettings.Username = username;
-        _userSettings.Locale = SelectedLanguage.Key;
-        ConfigManager.SaveSettings(_userSettings);
+
+        _userManager.UserSettings.Username = username;
+        _userManager.UserSettings.Locale = SelectedLanguage.Key;
+        _userManager.Save();
 
         mainWindowViewModel.ShowLauncherImpl();
     }
 
     private void SetupBinding() {
         Languages.AddRange(_localeStorage.GetLocales());
-        if (_userSettings.Locale == string.Empty) {
+        if (_userManager.UserSettings.Locale == string.Empty) {
             SelectedLanguage = Languages[0];
         }
 
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
-            _userSettings.Locale = SelectedLanguage.Key;
+            _userManager.UserSettings.Locale = SelectedLanguage.Key;
             _disposables?.Dispose();
             SetupValidation();
         });

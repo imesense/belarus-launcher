@@ -4,6 +4,7 @@ using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Legacy.Manager;
 
 namespace StalkerBelarus.Launcher.ViewModels;
 

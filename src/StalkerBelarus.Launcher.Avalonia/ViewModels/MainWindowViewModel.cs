@@ -17,23 +17,25 @@ public class MainWindowViewModel : ReactiveObject {
 
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly StartGameViewModel _startGameViewModel;
+    private readonly UserManager _userManager;
     private readonly LauncherViewModel _launcherViewModel;
     
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
 
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, ILocaleManager localeManager,
         LauncherViewModel launcherViewModel,
-        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel, UserSettings userSettings) {
+        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel, UserManager userManager) {
         _logger = logger;
         _localeManager = localeManager;
 
         _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
+        _userManager = userManager;
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
 
         if (File.Exists(FileLocations.UserSettingPath)
-            && !string.IsNullOrEmpty(userSettings.Username)) {
-            _localeManager.SetLocale(userSettings.Locale);
+            && !string.IsNullOrEmpty(_userManager.UserSettings.Username)) {
+            _localeManager.SetLocale(_userManager.UserSettings.Locale);
             ShowLauncherImpl();
         } else {
             ShowAuthorizationImpl();

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Splat;
 
 using StalkerBelarus.Launcher.Core.Manager;
+using StalkerBelarus.Launcher.Legacy.Manager;
 using StalkerBelarus.Launcher.Manager;
 
 namespace StalkerBelarus.Launcher;

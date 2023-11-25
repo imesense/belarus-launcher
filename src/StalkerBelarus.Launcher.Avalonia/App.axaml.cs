@@ -34,7 +34,7 @@ public partial class App : Application {
         services.AddLogging(loggingBuilder =>
             loggingBuilder.AddSerilog(dispose: true));
         services.AddSingleton<IWindowManager, WindowManager>();
-        services.AddSingleton(ConfigManager.LoadSettings());
+
         services.AddTransient<GameDirectoryValidator>();
         services.AddHttpClient<IGitHubApiService, GitHubApiService>()
             .ConfigureHttpClient(ConfigureClient);
@@ -44,15 +44,18 @@ public partial class App : Application {
         services.AddTransient<HashChecker>();
         services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
         services.AddTransient<IWebsiteLauncher, WebsiteLauncher>();
-        services.AddTransient<AuthorizationViewModel>();
         services.AddTransient<IAuthenticationValidator, AuthenticationValidator>();
         services.AddTransient<IStartGameValidator, StartGameValidator>();
+
+        services.AddSingleton<UserManager>();
 
         services.AddTransient<LinkViewModel>();
         services.AddTransient<NewsSliderViewModel>();
         services.AddSingleton<LauncherViewModel>();
         services.AddTransient<DownloadMenuViewModel>();
         services.AddTransient<GameMenuViewModel>();
+
+        services.AddTransient<AuthorizationViewModel>();
         services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<ILocaleStorage, LocaleStorage>();

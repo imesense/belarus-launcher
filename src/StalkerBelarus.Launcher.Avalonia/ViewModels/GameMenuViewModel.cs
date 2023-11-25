@@ -15,19 +15,18 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 public class GameMenuViewModel : ReactiveObject {
     private readonly ILogger<GameMenuViewModel> _logger;
     private readonly IWindowManager _windowManager;
-    private readonly UserSettings _userSettings;
+    private readonly UserManager _userManager;
     public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
     public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
     [Reactive] public bool IsStartServer { get; set; } = false;
 
-    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, 
-        UserSettings userSettings) {
+    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager) {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
-        _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
-        
+        _userManager = userManager;
+
         SetupCommands();
     }
 
@@ -35,7 +34,7 @@ public class GameMenuViewModel : ReactiveObject {
     public GameMenuViewModel() {
         _logger = null!;
         _windowManager = null!;
-        _userSettings = null!;
+        _userManager = null!;
     }
 #endif
 
@@ -64,8 +63,8 @@ public class GameMenuViewModel : ReactiveObject {
         if (IsStartServer) {
             var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
-                    @$"-start client(localhost/name={_userSettings.Username})",
-                    $"{_userSettings.Locale}",
+                    @$"-start client(localhost/name={_userManager.UserSettings.Username})",
+                    $"{_userManager.UserSettings.Locale}",
                 });
             
             if (launch == null) {

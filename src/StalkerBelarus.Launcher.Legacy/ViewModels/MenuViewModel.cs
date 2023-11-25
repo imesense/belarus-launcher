@@ -7,7 +7,7 @@ namespace StalkerBelarus.Launcher.ViewModels;
 
 public class MenuViewModel : ViewModelBase {
     private readonly IWindowManager _windowManager;
-    private readonly UserSettings _userSettings;
+    private readonly UserManager _userManager;
     private readonly DownloadManager _downloadService;
     public LauncherViewModel? LauncherViewModel { get; set; }
     private bool _isStartServer = false;
@@ -23,10 +23,10 @@ public class MenuViewModel : ViewModelBase {
     public ReactiveCommand<Unit, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartDownload { get; private set; } = null!;
 
-    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings, DownloadManager downloadService) {
+    public MenuViewModel(IWindowManager windowManager, UserManager userManager, DownloadManager downloadService) {
         _downloadService = downloadService;
         _windowManager = windowManager;
-        _userSettings = userSettings;
+        _userManager = userManager;
 
         SetupCommands();
     }
@@ -80,7 +80,7 @@ public class MenuViewModel : ViewModelBase {
         if (_isStartServer) {
             Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
-                @$"-start client(localhost/name={_userSettings.Username})"
+                @$"-start client(localhost/name={_userManager.UserSettings.Username})"
             });
             _windowManager.Close();
             return;

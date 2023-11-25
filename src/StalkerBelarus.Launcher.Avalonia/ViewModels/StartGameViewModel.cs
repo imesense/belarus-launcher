@@ -19,8 +19,8 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILogger<StartGameViewModel> _logger;
+    private readonly UserManager _userManager;
     private readonly ILocaleManager _localeManager;
-    private readonly UserSettings _userSettings;
     private readonly IWindowManager _windowManager;
     private readonly StartGameViewModelValidator _startGameViewModelValidator;
     private CompositeDisposable? _disposables = null;
@@ -30,11 +30,11 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
     
-    public StartGameViewModel(ILogger<StartGameViewModel> logger, UserSettings userSettings, 
+    public StartGameViewModel(ILogger<StartGameViewModel> logger, UserManager userManager,
         IWindowManager windowManager, ILocaleManager localeManager, StartGameViewModelValidator startGameViewModelValidator) {
         _logger = logger;
-        _userSettings = userSettings;
-        IpAddress = _userSettings.IpAddress;
+        _userManager = userManager;
+        IpAddress = _userManager.UserSettings?.IpAddress;
         _windowManager = windowManager;
         _startGameViewModelValidator = startGameViewModelValidator;
         _localeManager = localeManager;
@@ -45,7 +45,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
 #if DEBUG
     public StartGameViewModel() {
         _logger = null!;
-        _userSettings = null!;
+        _userManager = null!;
         _windowManager = null!;
         _localeManager = null!;
         _startGameViewModelValidator = null!;
@@ -72,15 +72,15 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     private void StartGameImpl() {
         if (string.IsNullOrWhiteSpace(IpAddress)) {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered",
-                _userSettings.Locale));
+                _userManager.UserSettings.Locale));
         }
 
-        _userSettings.IpAddress = IpAddress;
-        ConfigManager.SaveSettings(_userSettings);
+        _userManager.UserSettings.IpAddress = IpAddress;
+        _userManager.Save();
 
         var process = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
-                @$"-start -center_screen -silent_error_mode client({_userSettings.IpAddress}/name={_userSettings.Username})"
+                @$"-start -center_screen -silent_error_mode client({_userManager.UserSettings.IpAddress}/name={ _userManager.UserSettings.Username})"
             });
 
         process?.Start();
