@@ -11,14 +11,14 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class LinkViewModel : ReactiveObject, IAsyncInitialization {
     private readonly IWebsiteLauncher _websiteLauncher;
-    private readonly IGitHubApiService _gitHubApiService;
+    private readonly IGitStorageApiService _gitStorageApiService;
     public ObservableCollection<WebResource>? WebResources { get; set; } = new();
     public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
     public Task Initialization { get; }
 
-    public LinkViewModel(IWebsiteLauncher websiteLauncher, IGitHubApiService gitHubApiService) {
+    public LinkViewModel(IWebsiteLauncher websiteLauncher, IGitStorageApiService gitStorageApiService) {
         _websiteLauncher = websiteLauncher;
-        _gitHubApiService = gitHubApiService;
+        _gitStorageApiService = gitStorageApiService;
         Initialization = InitializeAsync();
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
     }
@@ -26,7 +26,7 @@ public class LinkViewModel : ReactiveObject, IAsyncInitialization {
 #if DEBUG
     public LinkViewModel() {
         _websiteLauncher = null!;
-        _gitHubApiService = null!;
+        _gitStorageApiService = null!;
 
         OpenUrlCommand = null!;
         Initialization = null!;
@@ -39,7 +39,7 @@ public class LinkViewModel : ReactiveObject, IAsyncInitialization {
     }
     
     private async Task LoadWebResources() {
-        var contents = _gitHubApiService.DownloadJsonArrayAsync<WebResource>("WebResources.json");
+        var contents = _gitStorageApiService.DownloadJsonArrayAsync<WebResource>("WebResources.json");
         await foreach (var content in contents) {
             if (content != null) {
                 WebResources?.Add(content);

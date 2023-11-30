@@ -36,7 +36,7 @@ public partial class App : Application {
         services.AddSingleton<IWindowManager, WindowManager>();
 
         services.AddTransient<GameDirectoryValidator>();
-        services.AddHttpClient<IGitHubApiService, GitHubApiService>()
+        services.AddHttpClient<IGitStorageApiService, GitHubApiService>()
             .ConfigureHttpClient(ConfigureClient);
         services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
             .ConfigureHttpClient(ConfigureClient);

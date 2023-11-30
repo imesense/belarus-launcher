@@ -7,7 +7,7 @@ using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 
-public class GitHubApiService : IGitHubApiService {
+public class GitHubApiService : IGitStorageApiService {
     private readonly ILogger<GitHubApiService> _logger;
     private readonly HttpClient _httpClient;
 

@@ -12,17 +12,17 @@ namespace StalkerBelarus.Launcher.Core.Services;
 
 public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitialization {
     private readonly ILogger<DownloadResourcesService> _logger;
-    private readonly IGitHubApiService _gitHubApiService;
+    private readonly IGitStorageApiService _gitStorageApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
     private readonly HashChecker _hashChecker;
     private IList<GameResource>? _hashResources;
     
     public Task Initialization { get; }
     
-    public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitHubApiService gitHubApiService,
+    public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitStorageApiService gitStorageApiService,
         IFileDownloadManager fileDownloadManager, HashChecker hashChecker) {
         _logger = logger;
-        _gitHubApiService = gitHubApiService;
+        _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
         _hashChecker = hashChecker;
         Initialization = InitializeAsync();
@@ -34,7 +34,7 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
             return filesRes;
         }
 
-        var release = await _gitHubApiService.GetGitHubReleaseAsync();
+        var release = await _gitStorageApiService.GetGitHubReleaseAsync();
         if (release == null) {
             return filesRes;
         }
@@ -116,7 +116,7 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
     
     private async Task InitializeAsync() {
         // Asynchronously initialize this instance.
-        _hashResources = await _gitHubApiService
+        _hashResources = await _gitStorageApiService
             .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
     }
 }

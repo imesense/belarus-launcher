@@ -15,7 +15,7 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
     private readonly ILogger<NewsSliderViewModel> _logger;
-    private readonly IGitHubApiService _newsService;
+    private readonly IGitStorageApiService _newsService;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
@@ -25,7 +25,7 @@ public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
     
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, IGitHubApiService newsService, LinkViewModel linkViewModel) {
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, IGitStorageApiService newsService, LinkViewModel linkViewModel) {
         _logger = logger;
         _newsService = newsService;
         LinkViewModel = linkViewModel;
