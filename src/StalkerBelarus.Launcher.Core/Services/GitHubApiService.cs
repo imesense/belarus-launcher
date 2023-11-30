@@ -17,7 +17,7 @@ public class GitHubApiService : IGitStorageApiService {
     }
 
     public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class {
-        var release = await GetGitHubReleaseAsync();
+        var release = await GetLastReleaseAsync();
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
         var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
@@ -34,17 +34,17 @@ public class GitHubApiService : IGitStorageApiService {
     /// <returns>The deserialized object of type T if successful, or null if the file is not found or deserialization fails</returns>
     public async Task<T?> DownloadJsonAsync<T>(string filename) where T : class {
         // Get the GitHub release information
-        var release = await GetGitHubReleaseAsync();
+        var release = await GetLastReleaseAsync();
         // Find the asset with the specified filename
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         // Download the asset
         return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
     }
 
-    public async Task<GitHubRelease?> GetGitHubReleaseAsync() {
+    public async Task<GitHubRelease?> GetLastReleaseAsync() {
         if (_httpClient.BaseAddress == null)
             return default;
-        
+
         return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
     }
 
