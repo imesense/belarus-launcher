@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 using Microsoft.Extensions.Logging;
@@ -41,6 +41,10 @@ public class GitHubApiService : IGitStorageApiService {
         return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
     }
 
-    public async Task<GitHubRelease?> GetGitHubReleaseAsync() => 
-        await _httpClient.GetFromJsonAsync<GitHubRelease>(_httpClient.BaseAddress);
+    public async Task<GitHubRelease?> GetGitHubReleaseAsync() {
+        if (_httpClient.BaseAddress == null)
+            return default;
+        
+        return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
+    }
 }
