@@ -48,6 +48,14 @@ public class GitHubApiService : IGitStorageApiService {
         return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
     }
 
+    public async Task<GitHubRelease?> GetReleaseAsync(string tag) {
+        if (_httpClient.BaseAddress == null)
+            return default;
+
+        var json = await _httpClient.GetFromJsonAsync<IList<GitHubRelease>>(new Uri(_httpClient.BaseAddress, $"releases"));
+        return json?.FirstOrDefault(t => t.TagName.Equals(tag));
+    }
+
     public async IAsyncEnumerable<Tag?> GetTagsAsync() {
         if (_httpClient.BaseAddress == null)
             yield break;

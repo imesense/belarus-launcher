@@ -7,4 +7,5 @@ public interface IGitStorageApiService {
     Task<T?> DownloadJsonAsync<T>(string filename) where T : class;
     Task<GitHubRelease?> GetLastReleaseAsync();
     IAsyncEnumerable<Tag?> GetTagsAsync();
+    Task<GitHubRelease?> GetReleaseAsync(string tag);
 }
