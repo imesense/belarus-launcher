@@ -4,24 +4,39 @@ using System.Text.Unicode;
 
 using StalkerBelarus.Launcher.Core.Models;
 using StalkerBelarus.Launcher.Core.Storage;
+using StalkerBelarus.Launcher.Core.Validators;
 
 namespace StalkerBelarus.Launcher.Core.Manager;
 
 public class UserManager {
+    private readonly IAuthenticationValidator _authenticationValidator;
+    private readonly IStartGameValidator _startGameValidator;
     public UserSettings? UserSettings { get; set; }
 
-    public UserManager() {
+    public UserManager(IAuthenticationValidator authenticationValidator, IStartGameValidator startGameValidator) {
+        _authenticationValidator = authenticationValidator;
+        _startGameValidator = startGameValidator;
+
         Load();
     }
 
-    public void Load() {
+    private void Load() {
         if (!File.Exists(FileLocations.UserSettingPath)) {
             UserSettings = new UserSettings();
         }
 
         try {
             var json = File.ReadAllText(FileLocations.UserSettingPath);
-            UserSettings = JsonSerializer.Deserialize<UserSettings>(json)!;
+            var user = JsonSerializer.Deserialize<UserSettings>(json)!;
+            if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress))
+            {
+                user.IpAddress = string.Empty;
+            }
+
+            var isUsernameCorrect = _authenticationValidator.IsUsernameNotEmpty(user.Username) &&
+                                    _authenticationValidator.IsUsernameCorrectLength(user.Username) &&
+                                    _authenticationValidator.IsUsernameCorrectCharacters(user.Username);
+            UserSettings = isUsernameCorrect ? user : new UserSettings();
         } catch {
             UserSettings = new UserSettings();
         }
