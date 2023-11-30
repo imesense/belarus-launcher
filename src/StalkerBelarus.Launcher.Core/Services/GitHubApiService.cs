@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 
 using Microsoft.Extensions.Logging;
@@ -46,5 +46,16 @@ public class GitHubApiService : IGitStorageApiService {
             return default;
         
         return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
+    }
+
+    public async IAsyncEnumerable<Tag?> GetTagsAsync() {
+        if (_httpClient.BaseAddress == null)
+            yield break;
+
+        await using var tagsStream = await _httpClient.GetStreamAsync(new Uri(_httpClient.BaseAddress, "tags"));
+        var tags = JsonSerializer.DeserializeAsyncEnumerable<Tag>(tagsStream);
+        await foreach (var tag in tags) {
+            yield return tag;
+        }
     }
 }
