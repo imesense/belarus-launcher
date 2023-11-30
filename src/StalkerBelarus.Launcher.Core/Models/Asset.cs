@@ -4,7 +4,7 @@ namespace StalkerBelarus.Launcher.Core.Models;
 
 public class Asset {
     [JsonPropertyName("url")]
-    public string Url { get; set; } = null!;
+    public Uri? Url { get; set; }
     [JsonPropertyName("id")]
     public int Id { get; set; }
     [JsonPropertyName("node_id")]
@@ -26,5 +26,5 @@ public class Asset {
     [JsonPropertyName("updated_at")]
     public DateTime UpdatedAt { get; set; }
     [JsonPropertyName("browser_download_url")]
-    public string BrowserDownloadUrl { get; set; } = null!;
+    public Uri? BrowserDownloadUrl { get; set; }
 }

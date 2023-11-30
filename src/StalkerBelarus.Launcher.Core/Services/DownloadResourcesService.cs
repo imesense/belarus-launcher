@@ -28,8 +28,8 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
         Initialization = InitializeAsync();
     }
 
-    public async Task<IDictionary<string, string>?> GetFilesForDownloadAsync(IProgress<int> progress) {
-        var filesRes = new ConcurrentDictionary<string, string>();
+    public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress) {
+        var filesRes = new ConcurrentDictionary<string, Uri>();
         if (_hashResources == null) {
             return filesRes;
         }
@@ -75,8 +75,8 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
 
         return filesRes;
     }
-    
-    public async Task DownloadAsync(string path, string url, IProgress<int> progress, 
+
+    public async Task DownloadAsync(string path, Uri url, IProgress<int> progress,
         CancellationTokenSource? tokenSource) {
         using (tokenSource = new CancellationTokenSource()) {
             try {

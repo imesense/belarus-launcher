@@ -4,13 +4,13 @@ namespace StalkerBelarus.Launcher.Core.Models;
 
 public class GitHubRelease {
     [JsonPropertyName("url")]
-    public string Url { get; set; } = null!;
+    public Uri? Url { get; set; }
     [JsonPropertyName("assets_url")]
-    public string? AssetsUrl { get; set; }
+    public Uri? AssetsUrl { get; set; }
     [JsonPropertyName("upload_url")]
-    public string UploadUrl { get; set; } = null!;
+    public Uri? UploadUrl { get; set; }
     [JsonPropertyName("html_url")]
-    public string HtmlUrl { get; set; } = null!;
+    public Uri? HtmlUrl { get; set; }
     [JsonPropertyName("id")]
     public int Id { get; set; }
     [JsonPropertyName("node_id")]
@@ -32,9 +32,9 @@ public class GitHubRelease {
     [JsonPropertyName("assets")]
     public IEnumerable<Asset>? Assets { get; set; }
     [JsonPropertyName("tarball_url")]
-    public string? TarballUrl { get; set; }
+    public Uri? TarballUrl { get; set; }
     [JsonPropertyName("zipball_url")]
-    public string? ZipballUrl { get; set; }
+    public Uri? ZipballUrl { get; set; }
     [JsonPropertyName("body")]
     public string Body { get; set; } = null!;
 }

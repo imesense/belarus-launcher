@@ -29,7 +29,7 @@ public class FileDownloadManager : IFileDownloadManager {
     /// It uses the 'Accept-Ranges' response header to check for server support before attempting to resume.
     /// If the server does not support resuming, the download will start from the beginning.
     /// </remarks>
-    public async Task DownloadAsync(string url, string filePath, IProgress<int>? status, CancellationToken token = default) {
+    public async Task DownloadAsync(Uri url, string filePath, IProgress<int>? status, CancellationToken token = default) {
         try {
             _logger.LogInformation("Url: {Url}", url);
 
