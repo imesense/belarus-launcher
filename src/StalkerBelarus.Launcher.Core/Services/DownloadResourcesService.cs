@@ -34,7 +34,7 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
             return filesRes;
         }
 
-        var release = await _gitStorageApiService.GetGitHubReleaseAsync();
+        var release = await _gitStorageApiService.GetLastReleaseAsync();
         if (release == null) {
             return filesRes;
         }
