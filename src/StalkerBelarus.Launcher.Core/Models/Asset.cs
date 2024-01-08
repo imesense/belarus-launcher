@@ -19,8 +19,8 @@ public class Asset {
     public string State { get; set; } = null!;
     [JsonPropertyName("size")]
     public int Size { get; set; }
-    [JsonPropertyName("download_count")]
-    public int DownloadCount { get; set; }
+    //[JsonPropertyName("download_count")]
+    //public int DownloadCount { get; set; }
     [JsonPropertyName("created_at")]
     public DateTime CreatedAt { get; set; }
     [JsonPropertyName("updated_at")]
