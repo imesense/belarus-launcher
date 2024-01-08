@@ -34,7 +34,13 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         IWindowManager windowManager, ILocaleManager localeManager, StartGameViewModelValidator startGameViewModelValidator) {
         _logger = logger;
         _userManager = userManager;
-        IpAddress = _userManager.UserSettings?.IpAddress;
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+        IpAddress = _userManager.UserSettings.IpAddress;
         _windowManager = windowManager;
         _startGameViewModelValidator = startGameViewModelValidator;
         _localeManager = localeManager;
@@ -70,6 +76,13 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     }
 
     private void StartGameImpl() {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         if (string.IsNullOrWhiteSpace(IpAddress)) {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered",
                 _userManager.UserSettings.Locale));

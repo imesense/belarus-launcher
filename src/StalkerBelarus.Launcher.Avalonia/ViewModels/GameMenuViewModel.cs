@@ -8,7 +8,6 @@ using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Core.Manager;
-using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
@@ -58,6 +57,13 @@ public class GameMenuViewModel : ReactiveObject {
     }
 
     private void PlayGameImpl(MainWindowViewModel mainWindowViewModel) {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         ProcessHelper.KillServers();
         
         if (IsStartServer) {

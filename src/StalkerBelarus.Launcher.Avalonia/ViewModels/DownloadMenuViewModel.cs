@@ -79,6 +79,13 @@ public class DownloadMenuViewModel : ReactiveObject {
     }
 
     private async Task DownloadsImplAsync(LauncherViewModel launcherViewModel) {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         var progress = new Progress<int>(percentage => {
             DownloadProgress = percentage;
         });

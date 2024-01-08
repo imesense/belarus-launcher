@@ -71,6 +71,13 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
                 SelectedLanguage.Key));
         }
 
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         _userManager.UserSettings.Username = username;
         _userManager.UserSettings.Locale = SelectedLanguage.Key;
         _userManager.Save();
@@ -79,6 +86,13 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     }
 
     private void SetupBinding() {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         Languages.AddRange(_localeStorage.GetLocales());
         if (_userManager.UserSettings.Locale == string.Empty) {
             SelectedLanguage = Languages[0];
