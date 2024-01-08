@@ -10,14 +10,12 @@ using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 
-public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitialization {
+public class DownloadResourcesService : IDownloadResourcesService {
     private readonly ILogger<DownloadResourcesService> _logger;
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
     private readonly HashChecker _hashChecker;
     private IList<GameResource>? _hashResources;
-    
-    public Task Initialization { get; }
     
     public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitStorageApiService gitStorageApiService,
         IFileDownloadManager fileDownloadManager, HashChecker hashChecker) {
@@ -25,17 +23,15 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
         _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
         _hashChecker = hashChecker;
-        Initialization = InitializeAsync();
     }
 
     public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress) {
         var filesRes = new ConcurrentDictionary<string, Uri>();
-        if (_hashResources == null) {
-            return filesRes;
-        }
+        _hashResources ??= await _gitStorageApiService
+            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
 
         var release = await _gitStorageApiService.GetLastReleaseAsync();
-        if (release == null) {
+        if (release is null) {
             return filesRes;
         }
 
@@ -45,17 +41,28 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
         var parallelOptions = new ParallelOptions() {
             MaxDegreeOfParallelism = Environment.ProcessorCount
         };
+
+        if (_hashResources is null) {
+            throw new NullReferenceException("HashResources object is null");
+        }
         var totalTasks = _hashResources.Count;
         var completedTasks = 0;
         await Parallel.ForEachAsync(release.Assets!, parallelOptions, async (asset, cancellationToken) => {
+            if (asset is null) {
+                return;
+            }
+            if (asset.BrowserDownloadUrl is null) {
+                return;
+            }
+
             var assetFile = _hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name, StringComparison.OrdinalIgnoreCase));
-            if (assetFile == null) {
+            if (assetFile is null) {
                 return;
             }
 
             var path = Path.Combine(FileLocations.BaseDirectory, assetFile.Directory, assetFile.Title);
             if (!File.Exists(path)) {
-                filesRes.TryAdd(path, asset.BrowserDownloadUrl);
+                var result = filesRes.TryAdd(path, asset.BrowserDownloadUrl);
             } else {
                 var verifyFile = await _hashChecker.VerifyFileHashAsync(path, assetFile.Hash, cancellationToken);
                 if (!verifyFile) {
@@ -84,7 +91,10 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
                 if (!dirInfo.Exists) {
                     dirInfo.Create();
                 }
-                
+
+                _hashResources ??= await _gitStorageApiService
+                    .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
+
                 bool verifyFile;
                 do {
                     await _fileDownloadManager.DownloadAsync(url, path, progress, tokenSource.Token);
@@ -112,11 +122,5 @@ public class DownloadResourcesService : IDownloadResourcesService, IAsyncInitial
                 _logger.LogError("{Message}", exception.Message);
             }
         }
-    }
-    
-    private async Task InitializeAsync() {
-        // Asynchronously initialize this instance.
-        _hashResources = await _gitStorageApiService
-            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
     }
 }
