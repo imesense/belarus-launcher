@@ -23,6 +23,8 @@ public class UserManager {
     private void Load() {
         if (!File.Exists(FileLocations.UserSettingPath)) {
             UserSettings = new UserSettings();
+
+            return;
         }
 
         try {
