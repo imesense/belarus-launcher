@@ -60,8 +60,8 @@ public class DownloadMenuViewModel : ReactiveObject {
     }
 #endif
 
-    public void Update(LauncherViewModel launcherViewModel) {
-        StartDownload.Execute(launcherViewModel);
+    public async Task UpdateAsync(LauncherViewModel launcherViewModel) {
+        await StartDownload.Execute(launcherViewModel);
     }
 
     private void SetupCommands() {

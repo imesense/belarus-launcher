@@ -56,8 +56,8 @@ public class LauncherViewModel : ReactiveObject {
         }
     }
 
-    public void SelectUpdateMenu() {
+    public async Task SelectUpdateMenuAsync() {
         PageMenuViewModel = _downloadMenuViewModel;
-        _downloadMenuViewModel.Update(this);
+        await _downloadMenuViewModel.UpdateAsync(this);
     }
 }

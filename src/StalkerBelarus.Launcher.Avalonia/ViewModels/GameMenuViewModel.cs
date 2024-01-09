@@ -44,7 +44,7 @@ public class GameMenuViewModel : ReactiveObject {
         
         PlayGame = ReactiveCommand.Create<MainWindowViewModel>(PlayGameImpl);
         StartServer = ReactiveCommand.Create(StartServerImpl, canExecuteServer);
-        CheckUpdates = ReactiveCommand.Create<LauncherViewModel>(CheckUpdatesImpl);
+        CheckUpdates = ReactiveCommand.CreateFromTask<LauncherViewModel>(CheckUpdatesImplAsync);
         Close = ReactiveCommand.Create(_windowManager.Close);
         
         Observable.Merge(PlayGame.ThrownExceptions, StartServer.ThrownExceptions, Close.ThrownExceptions)
@@ -52,8 +52,8 @@ public class GameMenuViewModel : ReactiveObject {
             .Subscribe(OnCommandException);
     }
 
-    private void CheckUpdatesImpl(LauncherViewModel launcherViewModel) {
-        launcherViewModel.SelectUpdateMenu();
+    private async Task CheckUpdatesImplAsync(LauncherViewModel launcherViewModel) {
+        await launcherViewModel.SelectUpdateMenuAsync();
     }
 
     private void PlayGameImpl(MainWindowViewModel mainWindowViewModel) {
