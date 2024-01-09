@@ -48,7 +48,7 @@ public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
     }
 #endif
 
-    private async Task LoadNews() {
+    public async Task LoadNewsAsync() {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -102,7 +102,7 @@ public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
 
     private async Task InitializeAsync() {
         // Asynchronously initialize this instance.
-        await LoadNews();
+        await LoadNewsAsync();
     }
     
     private void OnCommandException(Exception exception) 
