@@ -82,10 +82,13 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
 
         if (string.IsNullOrWhiteSpace(IpAddress)) {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered",
-                _userManager.UserSettings.Locale));
+                _userManager.UserSettings.Locale.Key));
         }
 
         _userManager.UserSettings.IpAddress = IpAddress;

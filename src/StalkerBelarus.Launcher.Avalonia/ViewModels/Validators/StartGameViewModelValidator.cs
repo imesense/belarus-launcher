@@ -25,10 +25,13 @@ public sealed class StartGameViewModelValidator {
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
 
         return startGameViewModel.ValidationRule(viewModel => viewModel.IpAddress,
             serverAddress => serverAddress != null && _validator.IsIpAddressNotEmpty(serverAddress),
-            _localeManager.GetStringByKey("LocalizedStrings.IpAddressNotEntered", _userManager.UserSettings.Locale));
+            _localeManager.GetStringByKey("LocalizedStrings.IpAddressNotEntered", _userManager.UserSettings.Locale.Key));
     }
 
     public ValidationHelper EnsureValidIpAddressOrUrl(StartGameViewModel startGameViewModel) {
@@ -38,9 +41,12 @@ public sealed class StartGameViewModelValidator {
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
 
         return startGameViewModel.ValidationRule(viewModel => viewModel.IpAddress,
                 serverAddress => serverAddress != null && _validator.IsValidIpAddressOrUrl(serverAddress),
-                _localeManager.GetStringByKey("LocalizedStrings.InvalidIpAddress", _userManager.UserSettings.Locale));
+                _localeManager.GetStringByKey("LocalizedStrings.InvalidIpAddress", _userManager.UserSettings.Locale.Key));
     }
 }

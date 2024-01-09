@@ -77,9 +77,12 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
 
         _userManager.UserSettings.Username = username;
-        _userManager.UserSettings.Locale = SelectedLanguage.Key;
+        _userManager.UserSettings.Locale.Key = SelectedLanguage.Key;
         _userManager.Save();
 
         mainWindowViewModel.ShowLauncherImpl();
@@ -92,15 +95,20 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
 
         Languages.AddRange(_localeStorage.GetLocales());
-        if (_userManager.UserSettings.Locale == string.Empty) {
+        if (_userManager.UserSettings.Locale.Key == string.Empty) {
             SelectedLanguage = Languages[0];
+        } else {
+            SelectedLanguage = Languages.FirstOrDefault(x => x.Key.Equals(_userManager.UserSettings.Locale.Key)) ?? Languages[0];
         }
 
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
-            _userManager.UserSettings.Locale = SelectedLanguage.Key;
+            _userManager.UserSettings.Locale = SelectedLanguage ?? Languages[0];
             _disposables?.Dispose();
             SetupValidation();
         });

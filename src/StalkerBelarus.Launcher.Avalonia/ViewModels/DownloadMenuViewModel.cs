@@ -85,13 +85,16 @@ public class DownloadMenuViewModel : ReactiveObject {
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
 
         var progress = new Progress<int>(percentage => {
             DownloadProgress = percentage;
         });
 
         IsProgress = true;
-        StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.IntegrityChecking", _userManager.UserSettings.Locale);
+        StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.IntegrityChecking", _userManager.UserSettings.Locale.Key);
 
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
         if (filesDownload != null && filesDownload.Any()) {
@@ -100,7 +103,7 @@ public class DownloadMenuViewModel : ReactiveObject {
             IsDownload = true;
             foreach (var file in filesDownload) {
                 numberFile++;
-                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userManager.UserSettings.Locale) +
+                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userManager.UserSettings.Locale.Key) +
                                  $": {numberFile} / {countFiles}";
                 DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);

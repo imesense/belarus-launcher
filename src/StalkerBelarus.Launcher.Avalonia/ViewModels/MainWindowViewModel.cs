@@ -30,12 +30,20 @@ public class MainWindowViewModel : ReactiveObject {
 
         _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
+
         _userManager = userManager;
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
 
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         if (File.Exists(FileLocations.UserSettingPath)
             && !string.IsNullOrEmpty(_userManager.UserSettings.Username)) {
-            _localeManager.SetLocale(_userManager.UserSettings.Locale);
+            _localeManager.SetLocale(_userManager.UserSettings.Locale.Key);
             ShowLauncherImpl();
         } else {
             ShowAuthorizationImpl();
@@ -48,7 +56,7 @@ public class MainWindowViewModel : ReactiveObject {
     public MainWindowViewModel() {
         _logger = null!;
         _localeManager = null!;
-
+        _userManager = null!;
         _authorizationViewModel = null!;
         _startGameViewModel = null!;
         _launcherViewModel = null!;

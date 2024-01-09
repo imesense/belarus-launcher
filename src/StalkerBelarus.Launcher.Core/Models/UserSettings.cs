@@ -5,12 +5,12 @@ public class UserSettings {
 
     public string IpAddress { get; set; } = string.Empty;
 
-    public string Locale { get; set; } = string.Empty;
+    public Locale Locale { get; set; } = new();
 
     public UserSettings() {
     }
 
-    public UserSettings(string userName, string ipAddress, string locale) {
+    public UserSettings(string userName, string ipAddress, Locale locale) {
         Username = userName;
         IpAddress = ipAddress;
         Locale = locale;
