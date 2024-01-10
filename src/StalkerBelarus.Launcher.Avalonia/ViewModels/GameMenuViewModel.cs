@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using StalkerBelarus.Launcher.Avalonia.Helpers;
+using StalkerBelarus.Launcher.Core.Helpers;
 using StalkerBelarus.Launcher.Core.Manager;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;

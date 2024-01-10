@@ -19,7 +19,7 @@ public static class Launcher {
                     ? string.Join(" ", arguments)
                     : string.Empty,
                 WorkingDirectory = workingDirectory,
-                UseShellExecute = false,
+                UseShellExecute = true,
                 CreateNoWindow = true,
                 Verb = "runas"
             },

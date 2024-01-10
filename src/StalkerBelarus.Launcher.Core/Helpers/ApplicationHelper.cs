@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace StalkerBelarus.Launcher.Avalonia.Helpers; 
+namespace StalkerBelarus.Launcher.Core.Helpers;
 
 public static class ApplicationHelper {
     public static string GetAppVersion() {
