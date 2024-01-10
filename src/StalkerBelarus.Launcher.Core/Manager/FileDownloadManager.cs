@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 namespace StalkerBelarus.Launcher.Core.Manager;
 
 public class FileDownloadManager : IFileDownloadManager {
-    private readonly ILogger<FileDownloadManager> _logger;
+    private readonly ILogger<FileDownloadManager>? _logger;
     private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    public FileDownloadManager(ILogger<FileDownloadManager> logger, HttpClient httpClient) {
+    public FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClient httpClient) {
         _logger = logger;
         _httpClient = httpClient;
     }
@@ -31,7 +31,7 @@ public class FileDownloadManager : IFileDownloadManager {
     /// </remarks>
     public async Task DownloadAsync(Uri url, string filePath, IProgress<int>? status, CancellationToken token = default) {
         try {
-            _logger.LogInformation("Url: {Url}", url);
+            _logger?.LogInformation("Url: {Url}", url);
 
             const int bufferLength = 8192;
             
@@ -83,14 +83,14 @@ public class FileDownloadManager : IFileDownloadManager {
                     continue;
                 }
                 status?.Report(progress);
-                _logger.LogInformation("URL [{Progress}]: {Url}", progress, url);
+                _logger?.LogInformation("URL [{Progress}]: {Url}", progress, url);
             }
         } catch (HttpRequestException ex) {
-            _logger.LogError("{Message}", ex.Message);
+            _logger?.LogError("{Message}", ex.Message);
             throw;
         } 
         catch (Exception ex) {
-            _logger.LogError("{Message}", ex.Message);
+            _logger?.LogError("{Message}", ex.Message);
             throw;
         }
     }

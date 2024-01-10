@@ -9,27 +9,24 @@ using StalkerBelarus.Launcher.Core.Storage;
 namespace StalkerBelarus.Launcher.Core.Services;
 
 public class GitHubApiService : IGitStorageApiService {
-    private readonly ILogger<GitHubApiService> _logger;
+    private readonly ILogger<GitHubApiService>? _logger;
     private readonly HttpClient _httpClient;
-    private readonly ILauncherStorage _launcherStorage;
+    private readonly ILauncherStorage? _launcherStorage;
 
-    public GitHubApiService(ILogger<GitHubApiService> logger, HttpClient httpClient, ILauncherStorage launcherStorage) {
+    public GitHubApiService(ILogger<GitHubApiService>? logger, HttpClient httpClient, ILauncherStorage? launcherStorage) {
         _logger = logger;
         _httpClient = httpClient;
         _launcherStorage = launcherStorage;
     }
 
-    //public Task<T?> DownloadJson<T>(string filename) where T : class {
-    //    // Get the GitHub release information
-    //    var release = GetLastRelease();
-    //    // Find the asset with the specified filename
-    //    var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
-    //    // Download the asset
-    //    return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
-    //}
-
     public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class {
-        var release = _launcherStorage.GitHubRelease;
+        GitHubRelease? release;
+        if (_launcherStorage == null) {
+            release = await GetLastReleaseAsync();
+        } else {
+            release = _launcherStorage.GitHubRelease;
+        }
+
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
         var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
@@ -46,7 +43,12 @@ public class GitHubApiService : IGitStorageApiService {
     /// <returns>The deserialized object of type T if successful, or null if the file is not found or deserialization fails</returns>
     public async Task<T?> DownloadJsonAsync<T>(string filename) where T : class {
         // Get the GitHub release information
-        var release = _launcherStorage.GitHubRelease;
+        GitHubRelease? release;
+        if (_launcherStorage == null) {
+            release = await GetLastReleaseAsync();
+        } else {
+            release = _launcherStorage.GitHubRelease;
+        }
         // Find the asset with the specified filename
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         // Download the asset
@@ -68,14 +70,18 @@ public class GitHubApiService : IGitStorageApiService {
         return json?.FirstOrDefault(t => t.TagName.Equals(tag));
     }
 
-    public async IAsyncEnumerable<Tag?> GetTagsAsync() {
+    public async Task<IEnumerable<Tag?>?> GetTagsAsync() {
         if (_httpClient.BaseAddress == null)
-            yield break;
+            return default;
 
         await using var tagsStream = await _httpClient.GetStreamAsync(new Uri(_httpClient.BaseAddress, "tags"));
-        var tags = JsonSerializer.DeserializeAsyncEnumerable<Tag>(tagsStream);
-        await foreach (var tag in tags) {
-            yield return tag;
+        var tags = JsonSerializer.Deserialize<IEnumerable<Tag>>(tagsStream);
+
+        if (tags is not null) {
+            return tags;
+        } else {
+            _logger?.LogError("Tags not found");
+            return default;
         }
     }
 }
