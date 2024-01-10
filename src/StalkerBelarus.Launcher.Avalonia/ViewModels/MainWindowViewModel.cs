@@ -51,6 +51,19 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
 #endif
 
     public async Task InitializeAsync() {
+        try {
+            var isLauncherReleaseCurrent = await InitializerManager.IsLauncherReleaseCurrentAsync();
+            if (!isLauncherReleaseCurrent) {
+                var path = Path.Combine(FileLocations.BaseDirectory,
+                    FileNamesStorage.SBLauncherUpdater);
+                var updater = Core.Launcher.Launch(path);
+                updater?.Start();
+            }
+        } catch (Exception ex) {
+            _logger.LogError("{Message}", ex.Message);
+            _logger.LogError("{StackTrace}", ex.StackTrace);
+        }
+
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net.Http.Headers;
 
 using Microsoft.Extensions.Logging;
 
@@ -61,6 +62,26 @@ public class InitializerManager {
             _logger.LogError("{Message}", ex.Message);
             _logger.LogError("{StackTrace}", ex.StackTrace);
         }
+    }
+
+    public static async Task<bool> IsLauncherReleaseCurrentAsync() {
+        using var httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri("https://api.github.com/repos/imesense/belarus-launcher/");
+        httpClient.DefaultRequestHeaders.Accept.Clear();
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+        httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+
+        var gitHubService = new GitHubApiService(null, httpClient, null);
+        var tags = await gitHubService.GetTagsAsync();
+        if (tags != null) {
+            var firstTag = tags.FirstOrDefault();
+            if (firstTag != null) {
+                var currentVersion = ApplicationHelper.GetAppVersion();
+                return firstTag.Name.Equals(currentVersion);
+            }
+            return true;
+        }
+        return true;
     }
 
     private async Task<bool> IsGameReleaseCurrentAsync() {
