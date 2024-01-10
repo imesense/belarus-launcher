@@ -1,9 +1,10 @@
-﻿using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 
 public interface IGitStorageApiService {
     IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class;
+    //Task<T?> DownloadJson<T>(string filename) where T : class;
     Task<T?> DownloadJsonAsync<T>(string filename) where T : class;
     Task<GitHubRelease?> GetLastReleaseAsync();
     IAsyncEnumerable<Tag?> GetTagsAsync();

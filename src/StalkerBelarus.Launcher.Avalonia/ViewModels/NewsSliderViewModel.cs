@@ -7,72 +7,48 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using StalkerBelarus.Launcher.Core;
-using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Models;
-using StalkerBelarus.Launcher.Core.Services;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
+public class NewsSliderViewModel : ReactiveObject {
     private readonly ILogger<NewsSliderViewModel> _logger;
-    private readonly IGitStorageApiService _newsService;
-    private readonly UserManager _userManager;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
     [Reactive] public LinkViewModel LinkViewModel { get; set; }
-    [Reactive] public ObservableCollection<NewsViewModel> News { get; set; } = new();
-    public Task Initialization { get; }
+    [Reactive] public ObservableCollection<NewsViewModel>? News { get; set; } 
+
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
-    
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, IGitStorageApiService newsService, LinkViewModel linkViewModel,
-        UserManager userManager) {
+
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, LinkViewModel linkViewModel) {
+
+        logger.LogInformation("NewsSliderViewModel CTOR");
         _logger = logger;
-        _newsService = newsService;
+
         LinkViewModel = linkViewModel;
-        _userManager = userManager;
         SetupBinding();
         SetupCommands();
-        Initialization = InitializeAsync();
     }
 
 #if DEBUG
+
     public NewsSliderViewModel() {
         _logger = null!;
-        _newsService = null!;
-        _userManager = null!;
         LinkViewModel = null!;
-        Initialization = null!;
     }
+
 #endif
 
-    public async Task LoadNewsAsync() {
-        if (_userManager is null) {
-            throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
-        }
-
-        var locale = _userManager.UserSettings.Locale;
-        var news = _newsService.DownloadJsonArrayAsync<NewsContent>($"news_content_{locale}.json");
-        await foreach (var content in news) {
-            News.Add(new NewsViewModel(content!.Title, content.Description));
-        }
-        
-        NumPage = News.Count - 1;
-    }
-
     private void SetupCommands() {
-        var canExecuteBack = this.WhenAnyValue(x => x.NumPage, 
+        var canExecuteBack = this.WhenAnyValue(x => x.NumPage,
                 (numPage) => numPage != 0)
             .ObserveOn(RxApp.MainThreadScheduler);
-        var canExecuteNext = this.WhenAnyValue(x => x.NumPage, 
-                (numPage) => numPage != News.Count - 1 && News.Count != 0)
+        var canExecuteNext = this.WhenAnyValue(x => x.NumPage,
+                (numPage) => News != null && numPage != News.Count - 1 && News.Count != 0)
             .ObserveOn(RxApp.MainThreadScheduler);
-        
+
         GoNext = ReactiveCommand.Create(GoNextImpl, canExecuteNext);
         GoBack = ReactiveCommand.Create(GoBackImpl, canExecuteBack);
 
@@ -84,11 +60,18 @@ public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
     private void SetupBinding() {
         this.WhenAnyValue(x => x.NumPage)
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Where(x => x >= 0 && x < News.Count)
-            .Subscribe(x => SelectedNewsViewModel = News[x]);
+            .Where(x => News != null && x >= 0 && x < News.Count)
+            .Subscribe(x => {
+                if (News is not null && News.Any()) {
+                    SelectedNewsViewModel = News[x];
+                }
+            });
     }
 
     private void GoNextImpl() {
+        if (News is null) {
+            return;
+        }
         if (NumPage < News.Count - 1) {
             NumPage++;
         }
@@ -100,11 +83,21 @@ public class NewsSliderViewModel : ReactiveObject, IAsyncInitialization {
         }
     }
 
-    private async Task InitializeAsync() {
-        // Asynchronously initialize this instance.
-        await LoadNewsAsync();
+    public void SetNews(IEnumerable<NewsContent> newsContents) {
+        News = new ObservableCollection<NewsViewModel>();
+
+        foreach (var content in newsContents) {
+            News.Add(new NewsViewModel(content!.Title, content.Description));
+        }
+
+        NumPage = News.Count - 1;
+        SelectedNewsViewModel = News[NumPage];
+
+        if (LinkViewModel.WebResources.Count == 0) {
+            LinkViewModel.Init();
+        }
     }
-    
-    private void OnCommandException(Exception exception) 
+
+    private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
 }

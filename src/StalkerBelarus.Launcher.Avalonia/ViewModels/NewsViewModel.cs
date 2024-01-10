@@ -1,6 +1,8 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using StalkerBelarus.Launcher.Core.Models;
+
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class NewsViewModel : ReactiveObject {
@@ -10,6 +12,11 @@ public class NewsViewModel : ReactiveObject {
     public NewsViewModel(string title, string description) {
         Title = title;
         Description = description;
+    }
+
+    public NewsViewModel(NewsContent newsContent) {
+        Title = newsContent.Title;
+        Description = newsContent.Description;
     }
 
 #if DEBUG

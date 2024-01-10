@@ -1,49 +1,48 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 
+using DynamicData;
+
+using Microsoft.Extensions.Logging;
+
 using ReactiveUI;
 
-using StalkerBelarus.Launcher.Core;
 using StalkerBelarus.Launcher.Core.Models;
 using StalkerBelarus.Launcher.Core.Services;
+using StalkerBelarus.Launcher.Core.Storage;
 
-namespace StalkerBelarus.Launcher.Avalonia.ViewModels; 
+namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class LinkViewModel : ReactiveObject, IAsyncInitialization {
+public class LinkViewModel : ReactiveObject {
+    private readonly ILogger<LinkViewModel> _logger;
     private readonly IWebsiteLauncher _websiteLauncher;
-    private readonly IGitStorageApiService _gitStorageApiService;
-    public ObservableCollection<WebResource>? WebResources { get; set; } = new();
-    public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
-    public Task Initialization { get; }
+    private readonly ILauncherStorage _launcherStorage;
 
-    public LinkViewModel(IWebsiteLauncher websiteLauncher, IGitStorageApiService gitStorageApiService) {
+    public ObservableCollection<WebResource> WebResources { get; set; } = new();
+    public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
+
+    public LinkViewModel(ILogger<LinkViewModel> logger, IWebsiteLauncher websiteLauncher, ILauncherStorage launcherStorage) {
+        _logger = logger;
         _websiteLauncher = websiteLauncher;
-        _gitStorageApiService = gitStorageApiService;
-        Initialization = InitializeAsync();
+        _launcherStorage = launcherStorage;
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
     }
 
 #if DEBUG
     public LinkViewModel() {
         _websiteLauncher = null!;
-        _gitStorageApiService = null!;
-
         OpenUrlCommand = null!;
-        Initialization = null!;
+        _logger = null!;
+        _launcherStorage = null!;
     }
 #endif
 
-    private async Task InitializeAsync() {
-        // Asynchronously initialize this instance.
-        await LoadWebResources();
-    }
-    
-    private async Task LoadWebResources() {
-        var contents = _gitStorageApiService.DownloadJsonArrayAsync<WebResource>("WebResources.json");
-        await foreach (var content in contents) {
-            if (content != null) {
-                WebResources?.Add(content);
-            }
+    public void Init() {
+        if (_launcherStorage.WebResources != null) {
+            _logger.LogInformation("Web resources are initialized");
+            WebResources.AddRange(_launcherStorage.WebResources);
+        } else {
+            _logger.LogError("Web resources is null!");
         }
     }
 

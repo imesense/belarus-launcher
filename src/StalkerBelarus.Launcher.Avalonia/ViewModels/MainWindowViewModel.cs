@@ -4,64 +4,77 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.Helpers;
-using StalkerBelarus.Launcher.Avalonia.Manager;
+using StalkerBelarus.Launcher.Core;
+using StalkerBelarus.Launcher.Core.Helpers;
 using StalkerBelarus.Launcher.Core.Manager;
-using StalkerBelarus.Launcher.Core.Models;
 using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject {
+public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
     private readonly ILogger<MainWindowViewModel> _logger;
-    private readonly ILocaleManager _localeManager;
 
+    private readonly InitializerManager _initializerManager;
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly StartGameViewModel _startGameViewModel;
-    private readonly UserManager _userManager;
     private readonly LauncherViewModel _launcherViewModel;
-    
+
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
+    
+    public Task Initialization { get; private set; }
 
-    public MainWindowViewModel(ILogger<MainWindowViewModel> logger, ILocaleManager localeManager,
-        LauncherViewModel launcherViewModel,
-        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel, UserManager userManager) {
+    public MainWindowViewModel(ILogger<MainWindowViewModel> logger, InitializerManager initializerManager,
+        LauncherViewModel launcherViewModel, AuthorizationViewModel authorizationViewModel,
+        StartGameViewModel startGameViewModel) {
         _logger = logger;
-        _localeManager = localeManager;
+        _initializerManager = initializerManager;
 
-        _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
+        _authorizationViewModel = authorizationViewModel;
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
-
-        _userManager = userManager;
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
 
-        if (_userManager is null) {
-            throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
+        Initialization = InitializeAsync();
+    }
+
+#if DEBUG
+
+    public MainWindowViewModel() {
+        _logger = null!;
+        _authorizationViewModel = null!;
+        _startGameViewModel = null!;
+        _launcherViewModel = null!;
+        _initializerManager = null!;
+        Initialization = null!;
+    }
+
+#endif
+
+    public async Task InitializeAsync() {
+        ProcessHelper.KillAllXrEngine();
+
+        await _initializerManager.InitializeAsync();
+        _authorizationViewModel.SetupBinding();
+
+        var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
+
+        if (File.Exists(FileLocations.UserSettingPath)) {
+            try {
+                if (!isCurrentRelease) {
+                    PageViewModel = _launcherViewModel;
+                    await _launcherViewModel.SelectUpdateMenuAsync();
+                }
+            } catch (Exception ex) {
+                _logger.LogError("{Message}", ex.Message);
+                _logger.LogError("{StackTrace}", ex.StackTrace);
+            }
         }
 
-        if (File.Exists(FileLocations.UserSettingPath)
-            && !string.IsNullOrEmpty(_userManager.UserSettings.Username)) {
-            _localeManager.SetLocale(_userManager.UserSettings.Locale.Key);
+        if (File.Exists(FileLocations.UserSettingPath)) {
             ShowLauncherImpl();
         } else {
             ShowAuthorizationImpl();
         }
-
-        ProcessHelper.KillAllXrEngine();
     }
-
-#if DEBUG
-    public MainWindowViewModel() {
-        _logger = null!;
-        _localeManager = null!;
-        _userManager = null!;
-        _authorizationViewModel = null!;
-        _startGameViewModel = null!;
-        _launcherViewModel = null!;
-    }
-#endif
 
     public void ShowLauncherImpl() {
         _launcherViewModel.SelectMenu();
@@ -71,7 +84,7 @@ public class MainWindowViewModel : ReactiveObject {
     public void ShowAuthorizationImpl() {
         PageViewModel = _authorizationViewModel;
     }
-    
+
     public void ShowStartGameImpl() {
         // Update locale
         _startGameViewModel.SetupValidation();

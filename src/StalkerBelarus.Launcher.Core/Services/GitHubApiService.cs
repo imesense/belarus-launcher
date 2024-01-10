@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 using Microsoft.Extensions.Logging;
@@ -15,6 +15,15 @@ public class GitHubApiService : IGitStorageApiService {
         _logger = logger;
         _httpClient = httpClient;
     }
+
+    //public Task<T?> DownloadJson<T>(string filename) where T : class {
+    //    // Get the GitHub release information
+    //    var release = GetLastRelease();
+    //    // Find the asset with the specified filename
+    //    var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
+    //    // Download the asset
+    //    return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
+    //}
 
     public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class {
         var release = await GetLastReleaseAsync();
@@ -47,6 +56,16 @@ public class GitHubApiService : IGitStorageApiService {
 
         return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
     }
+
+    //public GitHubRelease? GetLastRelease() {
+    //    if (_httpClient.BaseAddress == null)
+    //        return default;
+
+    //    using var request = new HttpRequestMessage(HttpMethod.Head, new Uri(_httpClient.BaseAddress, "releases/latest"));
+    //    using HttpResponseMessage response = _httpClient.Send(new HttpRequestMessage());
+
+    //    return _httpClient.GetFromJson<GitHubRelease>();
+    //}
 
     public async Task<GitHubRelease?> GetReleaseAsync(string tag) {
         if (_httpClient.BaseAddress == null)

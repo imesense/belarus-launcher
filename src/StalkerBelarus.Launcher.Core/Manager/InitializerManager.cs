@@ -12,26 +12,37 @@ public class InitializerManager {
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly UserManager _userManager;
     private readonly ILocaleManager _localeManager;
-    private readonly ILocaleStorage _localeStorage;
+    private readonly ILauncherStorage _launcherStorage;
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService;
 
+    public bool IsGameReleaseCurrent { get; private set; }
+
     public InitializerManager(ILogger<InitializerManager> logger, IGitStorageApiService gitStorageApiService, UserManager userManager,
-        ILocaleManager localeManager, ILocaleStorage localeStorage, IReleaseComparerService<GitHubRelease> releaseComparerService) {
+        ILocaleManager localeManager, ILauncherStorage launcherStorage, IReleaseComparerService<GitHubRelease> releaseComparerService) {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _userManager = userManager;
         _localeManager = localeManager;
-        _localeStorage = localeStorage;
+        _launcherStorage = launcherStorage;
         _releaseComparerService = releaseComparerService;
-
-        Initialize();
     }
 
-    public void Initialize() {
+    public async Task<bool> InitializeAsync() {
         SetLocale();
+        try {
+            IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
+            _launcherStorage.WebResources = await LoadWebResourcesAsync();
+            _launcherStorage.NewsContents = await LoadNewsAsync();
+        } catch (Exception ex) {
+            _logger.LogError("{Message}", ex.Message);
+            _logger.LogError("{StackTrace}", ex.StackTrace);
+        }
+
+        
+        return true;
     }
 
-    public async Task<bool> IsGameReleaseCurrentAsync() {
+    private async Task<bool> IsGameReleaseCurrentAsync() {
         var gitStorageRelease = await _gitStorageApiService.GetLastReleaseAsync();
 
         if (File.Exists(FileLocations.CurrentRelease)) {
@@ -59,11 +70,54 @@ public class InitializerManager {
         }
 
         if (userSettings.Locale.Key == string.Empty) {
-            var defaultLocale = _localeStorage.GetLocales()[0];
+            var defaultLocale = _launcherStorage.Locales[0];
             userSettings.Locale = defaultLocale;
         }
 
         _localeManager.SetLocale(userSettings.Locale.Key);
-        
+    }
+
+    private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync() {
+        try {
+            var contents = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<WebResource>>(FileNamesStorage.WebResources);
+            var webResources = new List<WebResource>();
+
+            if (contents != null) {
+                foreach (var content in contents) {
+                    if (content != null) {
+                        webResources.Add(content);
+                    }
+                }
+            }
+
+            return webResources;
+        } catch (Exception ex) {
+            _logger.LogError("{Message}", ex.Message);
+            _logger.LogError("{StackTrace}", ex.StackTrace);
+            throw;
+        }
+
+    }
+
+    public async Task<IEnumerable<LangNewsContent>?> LoadNewsAsync() {
+        // News in all languages
+        var allNews = new List<LangNewsContent>();
+
+        try {
+            foreach (var locale in _launcherStorage.Locales) {
+                var news = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json");
+
+                if (news != null) {
+                    allNews.Add(new LangNewsContent(locale, news));
+                } else {
+                    _logger.LogError("Failure to load news in {locale}", locale.Title);
+                }
+            }
+        } catch (Exception ex) {
+            _logger.LogError("{Message}", ex.Message);
+            _logger.LogError("{StackTrace}", ex.StackTrace);
+        }
+
+        return allNews;
     }
 }

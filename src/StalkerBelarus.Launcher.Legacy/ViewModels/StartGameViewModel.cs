@@ -40,6 +40,13 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
     }
 
     private void StartGameImpl() {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         if (string.IsNullOrWhiteSpace(IpAddress)) {
             throw new Exception("Ip-адрес не введен!");
         }

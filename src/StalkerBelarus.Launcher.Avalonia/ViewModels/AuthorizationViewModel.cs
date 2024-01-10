@@ -21,13 +21,13 @@ namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 
 public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILogger<AuthorizationViewModel> _logger;
-    private readonly ILocaleStorage _localeStorage;
+    private readonly ILauncherStorage _launcherStorage;
     private readonly ILocaleManager _localeManager;
 
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
     private readonly AuthenticationViewModelValidator _authenticationViewModelValidator;
-
+    private readonly LauncherViewModel _launcherViewModel;
     private CompositeDisposable? _disposables = null;
 
     [Reactive] public ObservableCollection<Locale> Languages { get; set; } = new();
@@ -41,26 +41,28 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
     public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
-        ILocaleStorage localeStorage, ILocaleManager localeManager,
+        ILauncherStorage launcherStorage, ILocaleManager localeManager,
         IWindowManager windowManager, UserManager userManager,
-        AuthenticationViewModelValidator authenticationViewModelValidator) {
+        AuthenticationViewModelValidator authenticationViewModelValidator,
+        LauncherViewModel launcherViewModel) {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _localeStorage = localeStorage;
+        _launcherStorage = launcherStorage;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userManager = userManager;
         _authenticationViewModelValidator = authenticationViewModelValidator;
-        SetupBinding();
+        _launcherViewModel = launcherViewModel;
     }
 
 #if DEBUG
     public AuthorizationViewModel() {
         _logger = null!;
-        _localeStorage = null!;
+        _launcherStorage = null!;
         _localeManager = null!;
         _windowManager = null!;
         _userManager = null!;
         _authenticationViewModelValidator = null!;
+        _launcherViewModel = null!;
     }
 #endif
 
@@ -82,13 +84,13 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         }
 
         _userManager.UserSettings.Username = username;
-        _userManager.UserSettings.Locale.Key = SelectedLanguage.Key;
+        _userManager.UserSettings.Locale = SelectedLanguage;
         _userManager.Save();
 
         mainWindowViewModel.ShowLauncherImpl();
     }
 
-    private void SetupBinding() {
+    public void SetupBinding() {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -99,7 +101,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
             throw new NullReferenceException("User settings locale object is null");
         }
 
-        Languages.AddRange(_localeStorage.GetLocales());
+        Languages.AddRange(_launcherStorage.Locales);
         if (_userManager.UserSettings.Locale.Key == string.Empty) {
             SelectedLanguage = Languages[0];
         } else {
@@ -109,6 +111,14 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
             _userManager.UserSettings.Locale = SelectedLanguage ?? Languages[0];
+
+            var news = _launcherStorage?.NewsContents?.FirstOrDefault(x => x.Locale!.Key.Equals(_userManager.UserSettings.Locale.Key));
+            if (news is not null) {
+                if (news.NewsContents is not null) {
+                    _launcherViewModel.NewsSliderViewModel.SetNews(news.NewsContents);
+                }
+            }
+            
             _disposables?.Dispose();
             SetupValidation();
         });

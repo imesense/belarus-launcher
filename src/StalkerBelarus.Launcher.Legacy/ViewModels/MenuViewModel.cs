@@ -77,6 +77,13 @@ public class MenuViewModel : ViewModelBase {
     }
 
     private void PlayGameImpl() {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
         if (_isStartServer) {
             Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {

@@ -25,6 +25,8 @@ public class LauncherViewModel : ReactiveObject {
         GameMenuViewModel gameMenuViewModel, NewsSliderViewModel newsSliderViewModel,
         GameDirectoryValidator directoryValidator) {
         _logger = logger;
+
+        _logger.LogInformation("LauncherViewModel CTOR");
         _downloadMenuViewModel = downloadMenuViewModel;
         _gameMenuViewModel = gameMenuViewModel;
         _directoryValidator = directoryValidator;

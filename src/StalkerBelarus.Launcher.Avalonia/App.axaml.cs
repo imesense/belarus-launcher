@@ -47,7 +47,7 @@ public partial class App : Application {
         services.AddTransient<IWebsiteLauncher, WebsiteLauncher>();
         services.AddTransient<IAuthenticationValidator, AuthenticationValidator>();
         services.AddTransient<IStartGameValidator, StartGameValidator>();
-        services.AddSingleton<ILocaleStorage, LocaleStorage>();
+        services.AddSingleton<ILauncherStorage, MemoryLauncherStorage>();
         services.AddSingleton<ILocaleManager, LocaleManager>();
         services.AddTransient<IReleaseComparerService<GitHubRelease>, ReleaseComparerService>();
         services.AddSingleton<AuthenticationViewModelValidator>();
@@ -77,6 +77,7 @@ public partial class App : Application {
 
     public override void Initialize() {
         var logger = _serviceProvider.GetRequiredService<ILogger<App>>();
+
         try {
             AvaloniaXamlLoader.Load(this);
         } catch (Exception exception) {
