@@ -74,9 +74,16 @@ public class InitializerManager {
         var gitHubService = new GitHubApiService(null, httpClient, null);
         var tags = await gitHubService.GetTagsAsync();
         if (tags != null) {
+            var currentVersion = $"v{ApplicationHelper.GetAppVersion()}" ;
+
+            var countTag = tags.Count(x => x!.Name.Equals(currentVersion));
+            if (countTag == 0) {
+                // Если такого релиза нет, то возвращаем true, чтобы не было зацикливания
+                return true;
+            }
+
             var firstTag = tags.FirstOrDefault();
             if (firstTag != null) {
-                var currentVersion = ApplicationHelper.GetAppVersion();
                 return firstTag.Name.Equals(currentVersion);
             }
             return true;
