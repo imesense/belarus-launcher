@@ -1,4 +1,4 @@
-namespace StalkerBelarus.Launcher.Updater;
+namespace StalkerBelarus.Launcher.Reloader;
 
 internal class Program {
     private const string MutexName = "StalkerBelarus.Launcher";

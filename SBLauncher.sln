@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher.The
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher.CryptoHasher", "src\StalkerBelarus.Launcher.CryptoHasher\StalkerBelarus.Launcher.CryptoHasher.csproj", "{C74DB453-DB02-4324-BAD0-1E24290E3B98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StalkerBelarus.Launcher.Updater", "src\StalkerBelarus.Launcher.Updater\StalkerBelarus.Launcher.Updater.csproj", "{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StalkerBelarus.Launcher.Reloader", "src\StalkerBelarus.Launcher.Updater\StalkerBelarus.Launcher.Reloader.csproj", "{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

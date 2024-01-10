@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace StalkerBelarus.Launcher.Updater;
+namespace StalkerBelarus.Launcher.Reloader;
 
 public class ProcessService {
     private const int RestartCount = 1;
