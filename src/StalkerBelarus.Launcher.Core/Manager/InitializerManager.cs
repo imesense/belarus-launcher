@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 using Microsoft.Extensions.Logging;
 
 using StalkerBelarus.Launcher.Core.Helpers;
@@ -27,23 +29,41 @@ public class InitializerManager {
         _releaseComparerService = releaseComparerService;
     }
 
-    public async Task<bool> InitializeAsync() {
+    public async Task InitializeAsync() {
         SetLocale();
         try {
-            IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
-            _launcherStorage.WebResources = await LoadWebResourcesAsync();
-            _launcherStorage.NewsContents = await LoadNewsAsync();
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
+            Task<IEnumerable<LangNewsContent>?> task3;
+            var isUserAuthorized = File.Exists(FileLocations.UserSettingPath);
+            if (isUserAuthorized) {
+                var locale = _userManager?.UserSettings?.Locale;
+                task3 = LoadNewsAsync(locale);
+            } else {
+                task3 = LoadNewsAsync();
+            }
+
+            var task1 = IsGameReleaseCurrentAsync();
+            var task2 = LoadWebResourcesAsync();
+
+            await Task.WhenAll(task1, task2, task3);
+
+            IsGameReleaseCurrent = task1.Result;
+            _launcherStorage.WebResources = task2.Result;
+            _launcherStorage.NewsContents = task3.Result;
+
+            stopwatch.Stop();
+            _logger.LogInformation("Parsing time: {Time}", stopwatch.ElapsedMilliseconds);
         } catch (Exception ex) {
             _logger.LogError("{Message}", ex.Message);
             _logger.LogError("{StackTrace}", ex.StackTrace);
         }
-
-        
-        return true;
     }
 
     private async Task<bool> IsGameReleaseCurrentAsync() {
-        var gitStorageRelease = await _gitStorageApiService.GetLastReleaseAsync();
+        var gitStorageRelease = _launcherStorage.GitHubRelease;
 
         if (File.Exists(FileLocations.CurrentRelease)) {
             var releaseComparer = gitStorageRelease != null && await _releaseComparerService.IsComparerAsync(gitStorageRelease);
@@ -99,19 +119,19 @@ public class InitializerManager {
 
     }
 
-    public async Task<IEnumerable<LangNewsContent>?> LoadNewsAsync() {
+    private async Task<IEnumerable<LangNewsContent>?> LoadNewsAsync(Locale? locale = null) {
         // News in all languages
         var allNews = new List<LangNewsContent>();
 
         try {
-            foreach (var locale in _launcherStorage.Locales) {
-                var news = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json");
-
-                if (news != null) {
-                    allNews.Add(new LangNewsContent(locale, news));
-                } else {
-                    _logger.LogError("Failure to load news in {locale}", locale.Title);
+            if (locale is null) {
+                foreach (var lang in _launcherStorage.Locales) {
+                    var news = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json");
+                    AddNews(lang, allNews, news);
                 }
+            } else {
+                var news = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json");
+                AddNews(locale, allNews, news);
             }
         } catch (Exception ex) {
             _logger.LogError("{Message}", ex.Message);
@@ -119,5 +139,18 @@ public class InitializerManager {
         }
 
         return allNews;
+    }
+
+    private void AddNews(Locale? locale, List<LangNewsContent> allNews, IEnumerable<NewsContent>? news) {
+        if (locale is null) {
+            _logger.LogError("Failure to load locale!");
+            return;
+        }
+
+        if (news != null) {
+            allNews.Add(new LangNewsContent(locale, news));
+        } else {
+            _logger.LogError("Failure to load news in {locale}", locale.Title);
+        }
     }
 }

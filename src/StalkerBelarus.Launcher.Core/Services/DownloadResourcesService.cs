@@ -14,14 +14,16 @@ public class DownloadResourcesService : IDownloadResourcesService {
     private readonly ILogger<DownloadResourcesService> _logger;
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
+    private readonly ILauncherStorage _launcherStorage;
     private readonly HashChecker _hashChecker;
     private IList<GameResource>? _hashResources;
     
     public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitStorageApiService gitStorageApiService,
-        IFileDownloadManager fileDownloadManager, HashChecker hashChecker) {
+        IFileDownloadManager fileDownloadManager, ILauncherStorage launcherStorage, HashChecker hashChecker) {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
+        _launcherStorage = launcherStorage;
         _hashChecker = hashChecker;
     }
 
@@ -30,7 +32,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
         _hashResources ??= await _gitStorageApiService
             .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources);
 
-        var release = await _gitStorageApiService.GetLastReleaseAsync();
+        var release = _launcherStorage.GitHubRelease;
         if (release is null) {
             return filesRes;
         }

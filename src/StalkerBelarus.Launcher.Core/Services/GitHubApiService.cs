@@ -4,16 +4,19 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
 using StalkerBelarus.Launcher.Core.Models;
+using StalkerBelarus.Launcher.Core.Storage;
 
 namespace StalkerBelarus.Launcher.Core.Services;
 
 public class GitHubApiService : IGitStorageApiService {
     private readonly ILogger<GitHubApiService> _logger;
     private readonly HttpClient _httpClient;
+    private readonly ILauncherStorage _launcherStorage;
 
-    public GitHubApiService(ILogger<GitHubApiService> logger, HttpClient httpClient) {
+    public GitHubApiService(ILogger<GitHubApiService> logger, HttpClient httpClient, ILauncherStorage launcherStorage) {
         _logger = logger;
         _httpClient = httpClient;
+        _launcherStorage = launcherStorage;
     }
 
     //public Task<T?> DownloadJson<T>(string filename) where T : class {
@@ -26,7 +29,7 @@ public class GitHubApiService : IGitStorageApiService {
     //}
 
     public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class {
-        var release = await GetLastReleaseAsync();
+        var release = _launcherStorage.GitHubRelease;
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
         var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
@@ -43,7 +46,7 @@ public class GitHubApiService : IGitStorageApiService {
     /// <returns>The deserialized object of type T if successful, or null if the file is not found or deserialization fails</returns>
     public async Task<T?> DownloadJsonAsync<T>(string filename) where T : class {
         // Get the GitHub release information
-        var release = await GetLastReleaseAsync();
+        var release = _launcherStorage.GitHubRelease;
         // Find the asset with the specified filename
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         // Download the asset
@@ -56,16 +59,6 @@ public class GitHubApiService : IGitStorageApiService {
 
         return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
     }
-
-    //public GitHubRelease? GetLastRelease() {
-    //    if (_httpClient.BaseAddress == null)
-    //        return default;
-
-    //    using var request = new HttpRequestMessage(HttpMethod.Head, new Uri(_httpClient.BaseAddress, "releases/latest"));
-    //    using HttpResponseMessage response = _httpClient.Send(new HttpRequestMessage());
-
-    //    return _httpClient.GetFromJson<GitHubRelease>();
-    //}
 
     public async Task<GitHubRelease?> GetReleaseAsync(string tag) {
         if (_httpClient.BaseAddress == null)
