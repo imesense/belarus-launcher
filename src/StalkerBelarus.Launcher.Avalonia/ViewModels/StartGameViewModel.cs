@@ -33,6 +33,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     public StartGameViewModel(ILogger<StartGameViewModel> logger, UserManager userManager,
         IWindowManager windowManager, ILocaleManager localeManager, StartGameViewModelValidator startGameViewModelValidator) {
         _logger = logger;
+        _logger.LogInformation("StartGameViewModel ctor");
+
         _userManager = userManager;
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
@@ -69,6 +71,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     }
 
     public void SetupValidation() {
+        _logger.LogInformation("StartGameViewModel SetupValidation");
+        _disposables?.Dispose();
         _disposables = new CompositeDisposable {
             _startGameViewModelValidator.EnsureIpAddressNotEmpty(this),
             _startGameViewModelValidator.EnsureValidIpAddressOrUrl(this)
