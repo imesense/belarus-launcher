@@ -18,6 +18,7 @@ public class InitializerManager {
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService;
 
     public bool IsGameReleaseCurrent { get; private set; }
+    public bool IsUserAuthorized { get; private set; }
 
     public InitializerManager(ILogger<InitializerManager> logger, IGitStorageApiService gitStorageApiService, UserManager userManager,
         ILocaleManager localeManager, ILauncherStorage launcherStorage, IReleaseComparerService<GitHubRelease> releaseComparerService) {
@@ -37,8 +38,8 @@ public class InitializerManager {
 
             _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
             Task<IEnumerable<LangNewsContent>?> task3;
-            var isUserAuthorized = File.Exists(FileLocations.UserSettingPath);
-            if (isUserAuthorized) {
+            IsUserAuthorized = File.Exists(FileLocations.UserSettingPath);
+            if (IsUserAuthorized) {
                 var locale = _userManager?.UserSettings?.Locale;
                 task3 = LoadNewsAsync(locale);
             } else {

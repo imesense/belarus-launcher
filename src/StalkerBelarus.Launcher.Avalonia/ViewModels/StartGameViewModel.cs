@@ -2,8 +2,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-using Avalonia;
-
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -13,7 +11,6 @@ using ReactiveUI.Validation.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.ViewModels.Validators;
 using StalkerBelarus.Launcher.Core.Manager;
-using StalkerBelarus.Launcher.Core.Models;
 
 namespace StalkerBelarus.Launcher.Avalonia.ViewModels;
 

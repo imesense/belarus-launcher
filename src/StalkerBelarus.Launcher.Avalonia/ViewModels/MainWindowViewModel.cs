@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -5,7 +7,6 @@ using ReactiveUI.Fody.Helpers;
 
 using StalkerBelarus.Launcher.Avalonia.Helpers;
 using StalkerBelarus.Launcher.Core;
-using StalkerBelarus.Launcher.Core.Helpers;
 using StalkerBelarus.Launcher.Core.Manager;
 using StalkerBelarus.Launcher.Core.Storage;
 
@@ -50,10 +51,18 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
 #endif
 
     public async Task InitializeAsync() {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         ProcessHelper.KillAllXrEngine();
 
         await _initializerManager.InitializeAsync();
-        _authorizationViewModel.SetupBinding();
+
+        if (!_initializerManager.IsUserAuthorized) {
+            _authorizationViewModel.SetupBinding();
+        } else {
+            _authorizationViewModel.UpdateNews();
+        }
 
         var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
 
@@ -74,6 +83,9 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         } else {
             ShowAuthorizationImpl();
         }
+
+        stopwatch.Stop();
+        _logger.LogInformation("MainWindowViewModel Initialize: {Time}", stopwatch.ElapsedMilliseconds);
     }
 
     public void ShowLauncherImpl() {

@@ -90,6 +90,26 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         mainWindowViewModel.ShowLauncherImpl();
     }
 
+    public void UpdateNews() {
+        _logger.LogInformation("Update News");
+
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+        if (_userManager.UserSettings.Locale is null) {
+            throw new NullReferenceException("User settings locale object is null");
+        }
+        var news = _launcherStorage?.NewsContents?.FirstOrDefault(x => x.Locale!.Key.Equals(_userManager.UserSettings.Locale.Key));
+        if (news is not null) {
+            if (news.NewsContents is not null) {
+                _launcherViewModel.NewsSliderViewModel.SetNews(news.NewsContents);
+            }
+        }
+    }
+
     public void SetupBinding() {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
@@ -111,14 +131,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
             _localeManager.SetLocale(key);
             _userManager.UserSettings.Locale = SelectedLanguage ?? Languages[0];
-
-            var news = _launcherStorage?.NewsContents?.FirstOrDefault(x => x.Locale!.Key.Equals(_userManager.UserSettings.Locale.Key));
-            if (news is not null) {
-                if (news.NewsContents is not null) {
-                    _launcherViewModel.NewsSliderViewModel.SetNews(news.NewsContents);
-                }
-            }
-            
+            UpdateNews();
             _disposables?.Dispose();
             SetupValidation();
         });
