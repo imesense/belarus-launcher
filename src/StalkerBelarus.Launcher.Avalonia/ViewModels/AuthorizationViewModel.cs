@@ -87,6 +87,11 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _userManager.UserSettings.Locale = SelectedLanguage;
         _userManager.Save();
 
+        if (!File.Exists(FileLocations.GameUser)) {
+            using var writer = new StreamWriter(FileLocations.GameUser, true);
+            writer.WriteLine($"language {SelectedLanguage.Key}");
+        }
+
         mainWindowViewModel.ShowLauncherImpl();
     }
 

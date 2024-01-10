@@ -9,4 +9,5 @@ public static class FileLocations {
     public static string LogsDirectory => Path.Combine(UserDirectory, "logs");
     public static string UserSettingPath => Path.Combine(UserDirectory, "sblauncher.json");
     public static string CurrentRelease => Path.Combine(UserDirectory, "CurrentRelease.json");
+    public static string GameUser => Path.Combine(UserDirectory, "user.ltx");
 }
