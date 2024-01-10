@@ -1,6 +1,6 @@
-# S.T.A.L.K.E.R Belarus Launcher
+# Belarus Launcher
 
-[![Build launcher](https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus/actions/workflows/build-launcher.yml/badge.svg)](https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus/actions/workflows/build-launcher.yml)
+[![Build launcher](https://github.com/imesense/belarus-launcher/actions/workflows/build-launcher.yml/badge.svg)](https://github.com/imesense/belarus-launcher/actions/workflows/build-launcher.yml)
 
 Handy modification launcher that provides a simple and intuitive interface for downloading and updating the modification, viewing current news, and launching the game with server
 
@@ -24,7 +24,7 @@ Launcher provides ease of use and easy access to the necessary functions so that
 - Download the repository:
 
   ```console
-  git clone https://github.com/Choice-Developers/ChoiceTeam.StalkerBelarus.git
+  git clone https://github.com/imesense/belarus-launcher.git
   ```
 
 - Build `SBLauncher.sln` using IDE or command:
