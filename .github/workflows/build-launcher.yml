@@ -24,18 +24,22 @@ defaults:
 
 jobs:
   publish:
-    name: 'Publishing'
+    name: 'Publish'
 
     strategy:
       matrix:
-        system: [ windows-2022 ]
-        config: [ Release ]
-        runtime: [ win-x86, win-x64 ]
+        system:
+        - windows-2022
+        config: 
+        - Release
+        runtime: 
+        - win-x86
+        - win-x64
 
     runs-on: ${{ matrix.system }}
 
     env:
-      Project: src\StalkerBelarus.Launcher.Legacy\StalkerBelarus.Launcher.Legacy.csproj
+      Project: src\StalkerBelarus.Launcher.Avalonia\StalkerBelarus.Launcher.Avalonia.csproj
 
     steps:
     - name: Checkout
@@ -43,7 +47,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install .NET
+    - name: Setup .NET
       uses: actions/setup-dotnet@v3.0.3
       with:
         dotnet-version: '7.0.x'
@@ -60,11 +64,11 @@ jobs:
           -p:DebugSymbols=false `
           -p:DebugType=None
 
-    - name: Publish installer
-      if: matrix.runtime == 'win-x86'
-      shell: cmd
-      run: |
-        "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\StalkerBelarus.Launcher.Setup\Setup.iss
+    #- name: Publish installer
+    #  if: matrix.runtime == 'win-x86'
+    #  shell: cmd
+    #  run: |
+    #    "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\StalkerBelarus.Launcher.Setup\Setup.iss
 
     - name: Upload launcher
       uses: actions/upload-artifact@v3
@@ -72,9 +76,9 @@ jobs:
         name: sblauncher-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/Release/${{ matrix.runtime }}/publish/
 
-    - name: Upload installer
-      uses: actions/upload-artifact@v3
-      if: matrix.runtime == 'win-x86'
-      with:
-        name: sbinstaller-${{ github.sha }}
-        path: src/StalkerBelarus.Launcher.Setup/Output/
+    #- name: Upload installer
+    #  uses: actions/upload-artifact@v3
+    #  if: matrix.runtime == 'win-x86'
+    #  with:
+    #    name: sbinstaller-${{ github.sha }}
+    #    path: src/StalkerBelarus.Launcher.Setup/Output/
