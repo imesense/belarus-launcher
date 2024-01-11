@@ -1,4 +1,4 @@
-﻿using System.Text.Encodings.Web;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 
@@ -7,6 +7,9 @@ using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
 using static ImeSense.Launchers.Belarus.Core.Storage.FileLocations;
+IEnumerable<string> GetDirectories() {
+    return new[] { BinariesDirectory, ResourcesDirectory, PatchesDirectory };
+}
 
 var hashing = new Md5HashProvider(null);
 var folders = GetDirectories();
@@ -38,8 +41,3 @@ await JsonSerializer.SerializeAsync(fs, gameResources, options);
 using var reader = new StreamReader(fs);
 
 Console.WriteLine(File.ReadAllText(FileNamesStorage.HashResources));
-return;
-
-IEnumerable<string> GetDirectories() {
-    return new[] { BinariesDirectory, ResourcesDirectory, PatchesDirectory };
-}

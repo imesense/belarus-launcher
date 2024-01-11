@@ -9,6 +9,7 @@ using ImeSense.Launchers.Belarus.Core;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Core.Services;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
@@ -55,9 +56,11 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         try {
             var isLauncherReleaseCurrent = await InitializerManager.IsLauncherReleaseCurrentAsync();
             if (!isLauncherReleaseCurrent) {
-                var path = Path.Combine(FileLocations.BaseDirectory,
+                var pathLauncherUpdater = Path.Combine(FileLocations.BaseDirectory,
                     FileNamesStorage.SBLauncherUpdater);
-                var updater = Launcher.Launch(path);
+                await UpdaterService.UpdaterAsync(UriStorage.LauncherUri, pathLauncherUpdater);
+
+                var updater = Launcher.Launch(pathLauncherUpdater);
                 updater?.Start();
 
                 return;

@@ -69,7 +69,7 @@ public class InitializerManager {
 
     public static async Task<bool> IsLauncherReleaseCurrentAsync() {
         using var httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri("https://api.github.com/repos/imesense/belarus-launcher/");
+        httpClient.BaseAddress = UriStorage.LauncherUri;
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
         httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
