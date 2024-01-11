@@ -17,7 +17,6 @@ public class InitializerManager {
     private readonly ILocaleManager _localeManager;
     private readonly ILauncherStorage _launcherStorage;
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService;
-
     public bool IsGameReleaseCurrent { get; private set; }
     public bool IsUserAuthorized { get; private set; }
 
@@ -38,23 +37,23 @@ public class InitializerManager {
             stopwatch.Start();
 
             _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
-            Task<IEnumerable<LangNewsContent>?> task3;
+            Task<IEnumerable<LangNewsContent>?> taskLoadNews;
             IsUserAuthorized = File.Exists(FileLocations.UserSettingPath);
             if (IsUserAuthorized) {
                 var locale = _userManager?.UserSettings?.Locale;
-                task3 = LoadNewsAsync(locale);
+                taskLoadNews = LoadNewsAsync(locale);
             } else {
-                task3 = LoadNewsAsync();
+                taskLoadNews = LoadNewsAsync();
             }
 
-            var task1 = IsGameReleaseCurrentAsync();
-            var task2 = LoadWebResourcesAsync();
+            var taskIsGameReleaseCurrent = IsGameReleaseCurrentAsync();
+            var taskLoadWebResources = LoadWebResourcesAsync();
 
-            await Task.WhenAll(task1, task2, task3);
+            await Task.WhenAll(taskIsGameReleaseCurrent, taskLoadWebResources, taskLoadNews);
 
-            IsGameReleaseCurrent = task1.Result;
-            _launcherStorage.WebResources = task2.Result;
-            _launcherStorage.NewsContents = task3.Result;
+            IsGameReleaseCurrent = taskIsGameReleaseCurrent.Result;
+            _launcherStorage.WebResources = taskLoadWebResources.Result;
+            _launcherStorage.NewsContents = taskLoadNews.Result;
 
             stopwatch.Stop();
             _logger.LogInformation("Parsing time: {Time}", stopwatch.ElapsedMilliseconds);
@@ -74,11 +73,14 @@ public class InitializerManager {
         var gitHubService = new GitHubApiService(null, httpClient, null);
         var tags = await gitHubService.GetTagsAsync();
         if (tags != null) {
-            var currentVersion = $"v{ApplicationHelper.GetAppVersion()}" ;
-
+            var currentVersion = $"{ApplicationHelper.GetAppVersion()}";
+            if (currentVersion[0] != 'v') {
+                currentVersion = currentVersion.Insert(0, "v"); 
+            }
+            
             var countTag = tags.Count(x => x!.Name.Equals(currentVersion));
             if (countTag == 0) {
-                // Если такого релиза нет, то возвращаем true, чтобы не было зацикливания
+                // If there is no such release, we return true so that there is no looping
                 return true;
             }
 
