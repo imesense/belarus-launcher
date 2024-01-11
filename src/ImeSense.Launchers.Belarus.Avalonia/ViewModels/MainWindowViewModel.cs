@@ -56,8 +56,10 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
             if (!isLauncherReleaseCurrent) {
                 var path = Path.Combine(FileLocations.BaseDirectory,
                     FileNamesStorage.SBLauncherUpdater);
-                var updater = Core.Launcher.Launch(path);
+                var updater = Launcher.Launch(path);
                 updater?.Start();
+
+                return;
             }
         } catch (Exception ex) {
             _logger.LogError("{Message}", ex.Message);
