@@ -1,0 +1,21 @@
+{
+    "folders": [
+        {
+            "name": "Belarus Launcher",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "*.csproj": "xml",
+            "*.props": "xml",
+            "*.iss": "ini"
+        },
+        "dotnet.defaultSolution": "BelarusLauncher.sln",
+        "markdownlint.ignore": [
+            ".github/**.md"
+        ],
+        "vsicons.dontShowNewVersionMessage": true,
+        "vssolution.lineEndings": "crlf"
+    }
+}

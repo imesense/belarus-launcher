@@ -7,19 +7,43 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/SBLauncher.sln",
+                "${workspaceFolder}/BelarusLauncher.sln",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish",
+            "label": "publish-launcher",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "publish",
                 "${workspaceFolder}/src/ImeSense.Launchers.Belarus.Avalonia/ImeSense.Launchers.Belarus.Avalonia.csproj",
+                "-p:GenerateFullPaths=true",
+                "--consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-hasher",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.CryptoHasher/ImeSense.Launchers.Belarus.CryptoHasher.csproj",
+                "-p:GenerateFullPaths=true",
+                "--consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-updater",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.Updater/ImeSense.Launchers.Belarus.Updater.csproj",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +57,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/SBLauncher.sln"
+                "${workspaceFolder}/BelarusLauncher.sln"
             ],
             "problemMatcher": "$msCompile"
         }

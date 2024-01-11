@@ -3,6 +3,7 @@
         "ms-dotnettools.csharp",
         "fernandoescolar.vscode-solution-explorer",
         "vscode-icons-team.vscode-icons",
-        "EditorConfig.EditorConfig"
+        "EditorConfig.EditorConfig",
+        "DavidAnson.vscode-markdownlint"
     ]
 }
