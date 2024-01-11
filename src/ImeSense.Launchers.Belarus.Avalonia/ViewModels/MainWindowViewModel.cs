@@ -45,6 +45,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         _startGameViewModel = null!;
         _launcherViewModel = null!;
         _initializerManager = null!;
+
         Initialization = null!;
     }
 

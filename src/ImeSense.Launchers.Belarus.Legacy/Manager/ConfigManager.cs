@@ -15,9 +15,11 @@ public static class ConfigManager {
         if (string.IsNullOrEmpty(settings.Username)) {
             throw new Exception("Username not specified");
         }
+
         if (!Directory.Exists(FileLocations.UserDirectory)) {
             Directory.CreateDirectory(FileLocations.UserDirectory);
         }
+
         using var fileStream = new FileStream(FileLocations.UserSettingPath,
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);

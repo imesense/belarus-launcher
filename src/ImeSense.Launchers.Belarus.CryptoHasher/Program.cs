@@ -43,4 +43,3 @@ return;
 IEnumerable<string> GetDirectories() {
     return new[] { BinariesDirectory, ResourcesDirectory, PatchesDirectory };
 }
-

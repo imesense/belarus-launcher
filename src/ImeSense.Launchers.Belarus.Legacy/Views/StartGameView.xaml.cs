@@ -19,6 +19,7 @@ public partial class StartGameView : IViewFor<StartGameViewModel> {
         get => (StartGameViewModel) GetValue(ViewModelProperty);
         set => SetValue(ViewModelProperty, value);
     }
+
     public static readonly DependencyProperty ViewModelProperty =
         DependencyProperty.Register("ViewModel", typeof(StartGameViewModel), typeof(StartGameView), new PropertyMetadata(null));
 

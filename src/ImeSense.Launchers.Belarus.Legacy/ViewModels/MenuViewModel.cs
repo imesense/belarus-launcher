@@ -9,7 +9,9 @@ public class MenuViewModel : ViewModelBase {
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
     private readonly DownloadManager _downloadService;
+
     public LauncherViewModel? LauncherViewModel { get; set; }
+
     private bool _isStartServer = false;
 
     [Reactive] public bool IsVisibleDownload { get; set; } = true;
@@ -40,6 +42,7 @@ public class MenuViewModel : ViewModelBase {
             IsVisibleDownload = false;
             IsVisiblePlayGame = true;
         }
+
         Close = ReactiveCommand.Create(_windowManager.Close);
         PlayGame = ReactiveCommand.Create(PlayGameImpl);
         StartServer = ReactiveCommand.Create(StartServerImpl);
@@ -48,22 +51,24 @@ public class MenuViewModel : ViewModelBase {
     }
 
     private async Task DownloadsImpl() {
-            IsVisibleDownload = false;
-            IsVisiblePlayGame = false;
-            IsDownloadStart = false;
-            IsDownloadCheak = true;
-            await Task.Run(
-            () => {
-                if (_downloadService.CheckFiles()) {
-                    IsDownloadStart = true;
-                    IsDownloadCheak = false;
-                    _downloadService.CheckFiles(true);
-                }
-                IsDownloadStart = false;
-                IsVisiblePlayGame = true;
-                IsVisibleDownload = false;
+        IsVisibleDownload = false;
+        IsVisiblePlayGame = false;
+        IsDownloadStart = false;
+        IsDownloadCheak = true;
+
+        await Task.Run(() => {
+            if (_downloadService.CheckFiles()) {
+                IsDownloadStart = true;
                 IsDownloadCheak = false;
-            });
+
+                _downloadService.CheckFiles(true);
+            }
+
+            IsDownloadStart = false;
+            IsVisiblePlayGame = true;
+            IsVisibleDownload = false;
+            IsDownloadCheak = false;
+        });
     }
 
     private void StartServerImpl() {

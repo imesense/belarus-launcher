@@ -28,7 +28,9 @@ class Program {
     private static void StartApp(string[] args) {
         LauncherLoggerFactory.CreateLogger();
         Log.Information("Start launcher");
+
         PrintOsInfo();
+
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 

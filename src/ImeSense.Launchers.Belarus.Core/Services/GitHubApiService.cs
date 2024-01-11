@@ -34,7 +34,7 @@ public class GitHubApiService : IGitStorageApiService {
             yield return content;
         }
     }
-    
+
     /// <summary>
     /// Downloads a JSON file from a GitHub release and deserializes it into the specified object type
     /// </summary>
@@ -56,23 +56,26 @@ public class GitHubApiService : IGitStorageApiService {
     }
 
     public async Task<GitHubRelease?> GetLastReleaseAsync() {
-        if (_httpClient.BaseAddress == null)
+        if (_httpClient.BaseAddress == null) {
             return default;
+        }
 
         return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
     }
 
     public async Task<GitHubRelease?> GetReleaseAsync(string tag) {
-        if (_httpClient.BaseAddress == null)
+        if (_httpClient.BaseAddress == null) {
             return default;
+        }
 
         var json = await _httpClient.GetFromJsonAsync<IList<GitHubRelease>>(new Uri(_httpClient.BaseAddress, $"releases"));
         return json?.FirstOrDefault(t => t.TagName.Equals(tag));
     }
 
     public async Task<IEnumerable<Tag?>?> GetTagsAsync() {
-        if (_httpClient.BaseAddress == null)
+        if (_httpClient.BaseAddress == null) {
             return default;
+        }
 
         await using var tagsStream = await _httpClient.GetStreamAsync(new Uri(_httpClient.BaseAddress, "tags"));
         var tags = JsonSerializer.Deserialize<IEnumerable<Tag>>(tagsStream);

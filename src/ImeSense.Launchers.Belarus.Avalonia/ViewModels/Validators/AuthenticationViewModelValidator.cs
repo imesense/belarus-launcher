@@ -61,6 +61,7 @@ public sealed class AuthenticationViewModelValidator {
         if (_userManager.UserSettings.Locale is null) {
             throw new NullReferenceException("User settings locale object is null");
         }
+
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
             username => username != null && _validator.IsUsernameCorrectCharacters(username),
             _localeManager.GetStringByKey("LocalizedStrings.InvalidCharacters", _userManager.UserSettings.Locale.Key));

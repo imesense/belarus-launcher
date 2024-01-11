@@ -23,7 +23,6 @@ public class NewsSliderViewModel : ReactiveObject {
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
 
     public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, LinkViewModel linkViewModel) {
-
         logger.LogInformation("NewsSliderViewModel CTOR");
         _logger = logger;
 
@@ -33,12 +32,11 @@ public class NewsSliderViewModel : ReactiveObject {
     }
 
 #if DEBUG
-
     public NewsSliderViewModel() {
         _logger = null!;
+
         LinkViewModel = null!;
     }
-
 #endif
 
     private void SetupCommands() {

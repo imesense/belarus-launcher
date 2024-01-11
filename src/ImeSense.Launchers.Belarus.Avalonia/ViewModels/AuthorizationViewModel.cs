@@ -28,6 +28,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     private readonly UserManager _userManager;
     private readonly AuthenticationViewModelValidator _authenticationViewModelValidator;
     private readonly LauncherViewModel _launcherViewModel;
+
     private CompositeDisposable? _disposables = null;
 
     [Reactive] public ObservableCollection<Locale> Languages { get; set; } = new();
@@ -107,6 +108,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         if (_userManager.UserSettings.Locale is null) {
             throw new NullReferenceException("User settings locale object is null");
         }
+
         var news = _launcherStorage?.NewsContents?.FirstOrDefault(x => x.Locale!.Key.Equals(_userManager.UserSettings.Locale.Key));
         if (news is not null) {
             if (news.NewsContents is not null) {

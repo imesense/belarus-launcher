@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+
 using ImeSense.Launchers.Belarus.Core.Models;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
@@ -66,7 +67,6 @@ public class DownloadManager : IDisposable {
         }
 
         newsList.Reverse();
-
         return newsList;
     }
 
@@ -79,7 +79,6 @@ public class DownloadManager : IDisposable {
                 return Item;
             }
         }
-
         return root;
     }
 
@@ -109,6 +108,7 @@ public class DownloadManager : IDisposable {
     private void LoadFile(string FilePath, string FileName) {
         try {
             DebugOutput("Load " + FilePath + FileName);
+
             var Adress = FindFileByName(FileName).GetProperty("browser_download_url").ToString();
 #pragma warning disable SYSLIB0014
             using var Client = new WebClient();

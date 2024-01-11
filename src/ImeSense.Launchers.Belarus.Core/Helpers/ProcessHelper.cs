@@ -27,8 +27,9 @@ public static class ProcessHelper {
         var processes = GetServerProcesses();
         var countServers = processes.Count();
 
-        if (countServers <= 1)
+        if (countServers <= 1) {
             return;
+        }
 
         foreach (var process in processes.Take(1)) {
             if (process.MainWindowTitle.Equals(NamesStorage.TitleServerApp)) {

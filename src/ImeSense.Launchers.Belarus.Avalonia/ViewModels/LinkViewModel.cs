@@ -21,10 +21,12 @@ public class LinkViewModel : ReactiveObject {
     public ObservableCollection<WebResource> WebResources { get; set; } = new();
     public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
 
-    public LinkViewModel(ILogger<LinkViewModel> logger, IWebsiteLauncher websiteLauncher, ILauncherStorage launcherStorage) {
+    public LinkViewModel(ILogger<LinkViewModel> logger, IWebsiteLauncher websiteLauncher,
+        ILauncherStorage launcherStorage) {
         _logger = logger;
         _websiteLauncher = websiteLauncher;
         _launcherStorage = launcherStorage;
+
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
     }
 

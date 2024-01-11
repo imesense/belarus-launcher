@@ -15,10 +15,12 @@ public class GameMenuViewModel : ReactiveObject {
     private readonly ILogger<GameMenuViewModel> _logger;
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
+
     public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
     public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
+
     [Reactive] public bool IsStartServer { get; set; } = false;
 
     public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager) {
@@ -65,19 +67,19 @@ public class GameMenuViewModel : ReactiveObject {
         }
 
         ProcessHelper.KillServers();
-        
+
         if (IsStartServer) {
             var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
                     @$"-start client(localhost/name={_userManager.UserSettings.Username})",
                     $"{_userManager.UserSettings.Locale}",
                 });
-            
+
             if (launch == null) {
                 return;
             }
             launch.Start();
-            
+
             _windowManager.Close();
         } else {
             mainWindowViewModel.ShowStartGameImpl(); 
@@ -86,7 +88,7 @@ public class GameMenuViewModel : ReactiveObject {
 
     private void StartServerImpl() {
         ProcessHelper.KillAllXrEngine();
-        
+
         var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
             arguments: new List<string> {
                 "-dedicated",
@@ -94,12 +96,13 @@ public class GameMenuViewModel : ReactiveObject {
                 @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
             });
 
-        if (launch == null) {
+        if (launch is null) {
             return;
         }
+
         launch.Exited += LaunchOnExited;
         launch.Start();
-        
+
         IsStartServer = true;
     }
 

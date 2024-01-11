@@ -17,11 +17,14 @@ public class InitializerManager {
     private readonly ILocaleManager _localeManager;
     private readonly ILauncherStorage _launcherStorage;
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService;
+
     public bool IsGameReleaseCurrent { get; private set; }
     public bool IsUserAuthorized { get; private set; }
 
-    public InitializerManager(ILogger<InitializerManager> logger, IGitStorageApiService gitStorageApiService, UserManager userManager,
-        ILocaleManager localeManager, ILauncherStorage launcherStorage, IReleaseComparerService<GitHubRelease> releaseComparerService) {
+    public InitializerManager(ILogger<InitializerManager> logger,
+        IGitStorageApiService gitStorageApiService, UserManager userManager,
+        ILocaleManager localeManager, ILauncherStorage launcherStorage,
+        IReleaseComparerService<GitHubRelease> releaseComparerService) {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _userManager = userManager;
@@ -32,6 +35,7 @@ public class InitializerManager {
 
     public async Task InitializeAsync() {
         SetLocale();
+
         try {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -77,7 +81,7 @@ public class InitializerManager {
             if (currentVersion[0] != 'v') {
                 currentVersion = currentVersion.Insert(0, "v"); 
             }
-            
+
             var countTag = tags.Count(x => x!.Name.Equals(currentVersion));
             if (countTag == 0) {
                 // If there is no such release, we return true so that there is no looping

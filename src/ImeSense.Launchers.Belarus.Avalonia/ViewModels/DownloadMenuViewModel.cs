@@ -21,7 +21,7 @@ public class DownloadMenuViewModel : ReactiveObject {
 
     // The cancellation token is used to interrupt the loader at any time
     private readonly CancellationTokenSource? _tokenSource = null;
-    
+
     public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
@@ -43,6 +43,7 @@ public class DownloadMenuViewModel : ReactiveObject {
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _downloadResourcesService = downloadResourcesService ?? throw new ArgumentNullException(nameof(downloadResourcesService));
         _userManager = userManager;
+
         IsDownload = false;
 
         SetupCommands();
@@ -65,7 +66,7 @@ public class DownloadMenuViewModel : ReactiveObject {
     private void SetupCommands() {
         StartDownload = ReactiveCommand.CreateFromTask<LauncherViewModel>(DownloadsImplAsync);
         Close = ReactiveCommand.Create(CloseImpl);
-        
+
         StartDownload.ThrownExceptions.Merge(Close.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
@@ -107,7 +108,7 @@ public class DownloadMenuViewModel : ReactiveObject {
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
             }
         }
-        
+
         IsDownload = false;
         DownloadFileName = string.Empty;
         launcherViewModel.SelectMenu();

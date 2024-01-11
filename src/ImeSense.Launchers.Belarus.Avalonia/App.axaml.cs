@@ -32,15 +32,19 @@ public partial class App : Application {
     
     private IServiceCollection ConfigureServices() {
         var services = new ServiceCollection();
+
         services.AddLogging(loggingBuilder =>
             loggingBuilder.AddSerilog(dispose: true));
+
         services.AddSingleton<IWindowManager, WindowManager>();
 
         services.AddTransient<GameDirectoryValidator>();
+
         services.AddHttpClient<IGitStorageApiService, GitHubApiService>()
             .ConfigureHttpClient(ConfigureClient);
         services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
             .ConfigureHttpClient(ConfigureClient);
+
         services.AddTransient<IHashProvider, Md5HashProvider>();
         services.AddTransient<HashChecker>();
         services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
@@ -67,8 +71,7 @@ public partial class App : Application {
         return services;
     }
 
-    private static void ConfigureClient(HttpClient httpClient)
-    {
+    private static void ConfigureClient(HttpClient httpClient) {
         httpClient.BaseAddress = new Uri("https://api.github.com/repos/Belarus-Mod/Mod-Data/");
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));

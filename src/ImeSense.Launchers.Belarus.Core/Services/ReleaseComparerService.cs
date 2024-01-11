@@ -6,10 +6,8 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
-public class ReleaseComparerService : IReleaseComparerService<GitHubRelease>
-{
-    public async Task<bool> IsComparerAsync(GitHubRelease gitStorageRelease)
-    {
+public class ReleaseComparerService : IReleaseComparerService<GitHubRelease> {
+    public async Task<bool> IsComparerAsync(GitHubRelease gitStorageRelease) {
         var gitStorageReleaseStream = await SerializationHelper.SerializeToStreamAsync(gitStorageRelease);
         var localRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(FileLocations.CurrentRelease);
         var localReleaseStream = await SerializationHelper.SerializeToStreamAsync(localRelease);

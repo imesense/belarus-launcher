@@ -18,6 +18,7 @@ public class LauncherViewModel : ViewModelBase, IRoutableViewModel {
         MenuViewModel = menuViewModel;
         MenuViewModel.LauncherViewModel = this;
         NewsSliderViewModel = newsSliderViewModel;
+
         _startGameViewModel = startGameViewModel;
         _startGameViewModel.HostScreen = HostScreen;
     }

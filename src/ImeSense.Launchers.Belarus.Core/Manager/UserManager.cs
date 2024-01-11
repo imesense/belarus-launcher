@@ -11,6 +11,7 @@ namespace ImeSense.Launchers.Belarus.Core.Manager;
 public class UserManager {
     private readonly IAuthenticationValidator _authenticationValidator;
     private readonly IStartGameValidator _startGameValidator;
+
     public UserSettings? UserSettings { get; set; }
 
     public UserManager(IAuthenticationValidator authenticationValidator, IStartGameValidator startGameValidator) {
@@ -30,15 +31,17 @@ public class UserManager {
         try {
             var json = File.ReadAllText(FileLocations.UserSettingPath);
             var user = JsonSerializer.Deserialize<UserSettings>(json)!;
-            if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress))
-            {
+            if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress)) {
                 user.IpAddress = string.Empty;
             }
 
-            var isUsernameCorrect = _authenticationValidator.IsUsernameNotEmpty(user.Username) &&
-                                    _authenticationValidator.IsUsernameCorrectLength(user.Username) &&
-                                    _authenticationValidator.IsUsernameCorrectCharacters(user.Username);
-            UserSettings = isUsernameCorrect ? user : new UserSettings();
+            var isUsernameCorrect =
+                _authenticationValidator.IsUsernameNotEmpty(user.Username) &&
+                _authenticationValidator.IsUsernameCorrectLength(user.Username) &&
+                _authenticationValidator.IsUsernameCorrectCharacters(user.Username);
+            UserSettings = isUsernameCorrect
+                ? user
+                : new UserSettings();
         } catch {
             UserSettings = new UserSettings();
         }
@@ -51,9 +54,11 @@ public class UserManager {
         if (string.IsNullOrEmpty(UserSettings.Username)) {
             throw new Exception("Username not specified");
         }
+
         if (!Directory.Exists(FileLocations.UserDirectory)) {
             Directory.CreateDirectory(FileLocations.UserDirectory);
         }
+
         using var fileStream = new FileStream(FileLocations.UserSettingPath,
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);

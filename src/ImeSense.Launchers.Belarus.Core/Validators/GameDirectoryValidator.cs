@@ -7,14 +7,13 @@ namespace ImeSense.Launchers.Belarus.Core.Validators;
 /// <summary>
 /// Class for validating game directories
 /// </summary>
-public class GameDirectoryValidator
-{
+public class GameDirectoryValidator {
     private readonly ILogger<GameDirectoryValidator> _logger;
 
     public GameDirectoryValidator(ILogger<GameDirectoryValidator> logger) {
         _logger = logger;
     }
-    
+
     /// <summary>
     /// Check if the directory contains all the required files
     /// </summary>
@@ -23,13 +22,13 @@ public class GameDirectoryValidator
         if (!Directory.Exists(FileLocations.BinariesDirectory)) {
             return false;
         }
-        
+
         // Check if the "xrEngine.exe" file exists in the "BinariesDirectory" path
         // If it exists, the directory is not valid
         if (!File.Exists(Path.Combine(FileLocations.BinariesDirectory, "xrEngine.exe"))) {
             return false;
         }
-        
+
         // Check if the Resources directory exists
         if (!Directory.Exists(FileLocations.ResourcesDirectory)) {
             return false;
@@ -39,8 +38,7 @@ public class GameDirectoryValidator
         // If there are at least 11 files, the directory is valid
         return CountFilesInDirectory(FileLocations.ResourcesDirectory) >= 11;
     }
-    
-    
+
     /// <summary>
     /// Method to count the number of files in a given directory path
     /// </summary>

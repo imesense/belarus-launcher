@@ -20,6 +20,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     private readonly ILocaleManager _localeManager;
     private readonly IWindowManager _windowManager;
     private readonly StartGameViewModelValidator _startGameViewModelValidator;
+
     private CompositeDisposable? _disposables = null;
 
     [Reactive] public string IpAddress { get; set; }
@@ -28,18 +29,22 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
     
     public StartGameViewModel(ILogger<StartGameViewModel> logger, UserManager userManager,
-        IWindowManager windowManager, ILocaleManager localeManager, StartGameViewModelValidator startGameViewModelValidator) {
+        IWindowManager windowManager, ILocaleManager localeManager,
+        StartGameViewModelValidator startGameViewModelValidator) {
         _logger = logger;
         _logger.LogInformation("StartGameViewModel ctor");
 
         _userManager = userManager;
+
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
+
         IpAddress = _userManager.UserSettings.IpAddress;
+
         _windowManager = windowManager;
         _startGameViewModelValidator = startGameViewModelValidator;
         _localeManager = localeManager;
@@ -54,6 +59,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         _windowManager = null!;
         _localeManager = null!;
         _startGameViewModelValidator = null!;
+
         IpAddress = null!;
     }
 #endif
@@ -61,7 +67,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     private void SetupCommands() {
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());
         Back = ReactiveCommand.Create<MainWindowViewModel>(BackImpl);
-        
+
         StartGame.ThrownExceptions.Merge(Back.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
@@ -107,7 +113,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
     private void BackImpl(MainWindowViewModel mainWindowViewModel) {
         mainWindowViewModel.ShowLauncherImpl();
     }
-    
+
     private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
 

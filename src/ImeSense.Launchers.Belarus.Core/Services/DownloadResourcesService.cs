@@ -16,10 +16,13 @@ public class DownloadResourcesService : IDownloadResourcesService {
     private readonly IFileDownloadManager _fileDownloadManager;
     private readonly ILauncherStorage _launcherStorage;
     private readonly HashChecker _hashChecker;
+
     private IList<GameResource>? _hashResources;
     
-    public DownloadResourcesService(ILogger<DownloadResourcesService> logger, IGitStorageApiService gitStorageApiService,
-        IFileDownloadManager fileDownloadManager, ILauncherStorage launcherStorage, HashChecker hashChecker) {
+    public DownloadResourcesService(ILogger<DownloadResourcesService> logger,
+        IGitStorageApiService gitStorageApiService,
+        IFileDownloadManager fileDownloadManager,
+        ILauncherStorage launcherStorage, HashChecker hashChecker) {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
@@ -39,7 +42,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
 
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        
+
         var parallelOptions = new ParallelOptions() {
             MaxDegreeOfParallelism = Environment.ProcessorCount
         };
@@ -47,6 +50,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
         if (_hashResources is null) {
             throw new NullReferenceException("HashResources object is null");
         }
+
         var totalTasks = _hashResources.Count;
         var completedTasks = 0;
         await Parallel.ForEachAsync(release.Assets!, parallelOptions, async (asset, cancellationToken) => {
