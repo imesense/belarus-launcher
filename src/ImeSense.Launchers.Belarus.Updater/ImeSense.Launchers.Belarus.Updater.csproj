@@ -4,6 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <AssemblyName>SBLauncherUpdater</AssemblyName>
         <AssemblyVersion>2.0</AssemblyVersion>
+        <Company>ImeSense</Company>
+        <Authors>Drombeys</Authors>
     </PropertyGroup>
 
     <ItemGroup>

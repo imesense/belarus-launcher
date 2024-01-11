@@ -23,6 +23,15 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="app.manifest">
+            <DependentUpon>App.axaml</DependentUpon>
+        </None>
+        <None Include="FodyWeavers.xsd">
+            <DependentUpon>FodyWeavers.xml</DependentUpon>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.6" />
         <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />

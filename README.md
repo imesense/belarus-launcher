@@ -27,10 +27,10 @@ Launcher provides ease of use and easy access to the necessary functions so that
   git clone https://github.com/imesense/belarus-launcher.git
   ```
 
-- Build `SBLauncher.sln` using IDE or command:
+- Build `BelarusLauncher.sln` using IDE or command:
 
   ```console
-  dotnet build SBLauncher.sln
+  dotnet build BelarusLauncher.sln
   ```
 
 ## Contributors
