@@ -2,7 +2,11 @@
 
 [![Build launcher](https://github.com/imesense/belarus-launcher/actions/workflows/build-launcher.yml/badge.svg)](https://github.com/imesense/belarus-launcher/actions/workflows/build-launcher.yml)
 
+English | [Русский](./README.ru.md)
+
 Specialized launcher for Belarus modification for downloading and updating modification, viewing current news and launching modification with server
+
+![Launcher](./doc/launcher.png)
 
 ## Features
 
@@ -40,4 +44,4 @@ Everyone who involved in the development listed in [this](./CONTRIBUTORS.md) fil
 
 ## License
 
-Contents of this repository licensed under terms of the custom MIT-like noncommercial license unless otherwise specified. See [this](./LICENSE) file for details
+Contents of this repository licensed under terms of the custom MIT-like noncommercial license unless otherwise specified. See [this](./LICENSE.md) file for details
