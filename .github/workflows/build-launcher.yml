@@ -39,7 +39,8 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      Project: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
+      LauncherProject: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
+      UpdaterProject:  src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
 
     steps:
     - name: Checkout
@@ -54,7 +55,7 @@ jobs:
 
     - name: Publish launcher
       run: |
-        dotnet publish $env:Project `
+        dotnet publish $env:LauncherProject `
           --configuration ${{ matrix.config }} `
           --runtime ${{ matrix.runtime }} `
           --self-contained true `
@@ -64,11 +65,23 @@ jobs:
           -p:DebugSymbols=false `
           -p:DebugType=None
 
-    #- name: Publish installer
-    #  if: matrix.runtime == 'win-x86'
-    #  shell: cmd
-    #  run: |
-    #    "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\ImeSense.Launchers.Belarus.Setup\Setup.iss
+    - name: Publish updater
+      run: |
+        dotnet publish $env:UpdaterProject `
+          --configuration ${{ matrix.config }} `
+          --runtime ${{ matrix.runtime }} `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:DebugSymbols=false `
+          -p:DebugType=None
+
+    - name: Publish installer
+      if: matrix.runtime == 'win-x86'
+      shell: cmd
+      run: |
+        "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\ImeSense.Launchers.Belarus.Setup\Setup.iss
 
     - name: Upload launcher
       uses: actions/upload-artifact@v3
@@ -76,9 +89,9 @@ jobs:
         name: sblauncher-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/Release/${{ matrix.runtime }}/publish/
 
-    #- name: Upload installer
-    #  uses: actions/upload-artifact@v3
-    #  if: matrix.runtime == 'win-x86'
-    #  with:
-    #    name: sbinstaller-${{ github.sha }}
-    #    path: src/ImeSense.Launchers.Belarus.Setup/Output/
+    - name: Upload installer
+      uses: actions/upload-artifact@v3
+      if: matrix.runtime == 'win-x86'
+      with:
+        name: sbinstaller-${{ github.sha }}
+        path: bin/SBLauncherInstaller.exe

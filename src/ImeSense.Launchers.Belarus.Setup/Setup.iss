@@ -1,7 +1,7 @@
-#define MyAppName "S.T.A.L.K.E.R Belarus"
-#define MyAppVersion "1.0"
-#define MyAppPublisher "Belarus Team"
-#define MyAppURL "https://vk.com/stalker_belarus"
+#define MyAppName "Belarus Launcher"
+#define MyAppVersion "2.0"
+#define MyAppPublisher "ImeSense"
+#define MyAppURL "https://github.com/imesense"
 #define MyAppExeName "SBLauncher.exe"
 
 [Setup]
@@ -17,11 +17,12 @@ DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=mysetup
+OutputBaseFilename=SBLauncherInstaller
+OutputDir=..\..\bin
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-SetupIconFile=stalker_cs.ico
+SetupIconFile=logo.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -32,6 +33,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\..\bin\Release\win-x86\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\Release\win-x86\publish\SBLauncherUpdater.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
