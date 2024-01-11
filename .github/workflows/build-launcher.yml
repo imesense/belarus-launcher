@@ -39,7 +39,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      Project: src\StalkerBelarus.Launcher.Avalonia\StalkerBelarus.Launcher.Avalonia.csproj
+      Project: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
 
     steps:
     - name: Checkout
@@ -68,7 +68,7 @@ jobs:
     #  if: matrix.runtime == 'win-x86'
     #  shell: cmd
     #  run: |
-    #    "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\StalkerBelarus.Launcher.Setup\Setup.iss
+    #    "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\ImeSense.Launchers.Belarus.Setup\Setup.iss
 
     - name: Upload launcher
       uses: actions/upload-artifact@v3
@@ -81,4 +81,4 @@ jobs:
     #  if: matrix.runtime == 'win-x86'
     #  with:
     #    name: sbinstaller-${{ github.sha }}
-    #    path: src/StalkerBelarus.Launcher.Setup/Output/
+    #    path: src/ImeSense.Launchers.Belarus.Setup/Output/

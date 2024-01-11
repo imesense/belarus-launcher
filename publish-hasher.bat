@@ -1,4 +1,4 @@
-dotnet publish src\StalkerBelarus.Launcher.CryptoHasher\StalkerBelarus.Launcher.CryptoHasher.csproj ^
+dotnet publish src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj ^
     --configuration Release ^
     --runtime win-x86 ^
     --self-contained true ^

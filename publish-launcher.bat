@@ -1,4 +1,4 @@
-dotnet publish src\StalkerBelarus.Launcher.Avalonia\StalkerBelarus.Launcher.Avalonia.csproj ^
+dotnet publish src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj ^
     --configuration Release ^
     --runtime win-x86 ^
     --self-contained true ^

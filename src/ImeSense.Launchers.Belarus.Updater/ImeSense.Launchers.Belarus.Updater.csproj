@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StalkerBelarus.Launcher.Core\StalkerBelarus.Launcher.Core.csproj" />
+    <ProjectReference Include="..\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj" />
   </ItemGroup>
 
 </Project>

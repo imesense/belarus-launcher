@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0-windows10.0.19041</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <UseWPF>true</UseWPF>
+
+        <ApplicationIcon>Assets\Icons\icon_app.ico</ApplicationIcon>
+
+        <AssemblyName>SBLauncher.Wpf</AssemblyName>
+        <Company>СhoiceTeam</Company>
+        <Authors>Drombeys</Authors>
+
+        <PublishSingleFile>true</PublishSingleFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Resource Include="Assets\Fonts\*.ttf" />
+        <Resource Include="Assets\Icons\*.png" />
+        <Resource Include="Assets\Images\*.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="ReactiveUI.Fody" Version="19.5.39" />
+        <PackageReference Include="ReactiveUI.WPF" Version="19.5.39" />
+        <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.8.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj" />
+    </ItemGroup>
+</Project>

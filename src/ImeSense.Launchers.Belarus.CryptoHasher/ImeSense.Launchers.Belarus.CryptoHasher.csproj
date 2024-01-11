@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <AssemblyName>CryptoHasher</AssemblyName>
+        <Company>ImeSense</Company>
+        <Authors>Drombeys</Authors>
+        <AssemblyVersion>2.0</AssemblyVersion>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj" />
+    </ItemGroup>
+</Project>

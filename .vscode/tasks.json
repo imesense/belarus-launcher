@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/StalkerBelarus.Launcher.Avalonia/StalkerBelarus.Launcher.Avalonia.csproj",
+                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.Avalonia/ImeSense.Launchers.Belarus.Avalonia.csproj",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],

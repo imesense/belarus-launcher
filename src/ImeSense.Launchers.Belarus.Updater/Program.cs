@@ -1,10 +1,10 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
 
-using StalkerBelarus.Launcher.Core;
-using StalkerBelarus.Launcher.Core.Manager;
-using StalkerBelarus.Launcher.Core.Services;
-using StalkerBelarus.Launcher.Core.Storage;
+using ImeSense.Launchers.Belarus.Core;
+using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Services;
+using ImeSense.Launchers.Belarus.Core.Storage;
 
 Console.Title = "Belarus Launcher Updater";
 

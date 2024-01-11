@@ -1,0 +1,32 @@
+<UserControl
+    x:Class="ImeSense.Launchers.Belarus.Avalonia.Views.LinkView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:ImeSense.Launchers.Belarus.Avalonia.ViewModels"
+    x:DataType="vm:LinkViewModel"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:LinkViewModel />
+    </Design.DataContext>
+
+    <ItemsControl x:Name="ItemsControl" ItemsSource="{Binding WebResources}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Button
+                    Command="{Binding #ItemsControl.((vm:LinkViewModel)DataContext).OpenUrlCommand}"
+                    CommandParameter="{Binding Url}"
+                    Content="{Binding Title}"
+                    Classes="styled" />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>
