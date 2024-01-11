@@ -28,9 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.CryptoHasher", "src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj", "{C74DB453-DB02-4324-BAD0-1E24290E3B98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Reloader", "src\ImeSense.Launchers.Belarus.Reloader\ImeSense.Launchers.Belarus.Reloader.csproj", "{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImeSense.Launchers.Belarus.Updater", "src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj", "{5C302503-C8E0-442C-BD33-7B70930858F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Updater", "src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj", "{5C302503-C8E0-442C-BD33-7B70930858F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,10 +56,6 @@ Global
 		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C74DB453-DB02-4324-BAD0-1E24290E3B98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{116C3A32-97F3-4F5E-BCD7-C4E77B750FC2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
