@@ -54,7 +54,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
 
     public async Task InitializeAsync() {
         try {
-            var isLauncherReleaseCurrent = await InitializerManager.IsLauncherReleaseCurrentAsync();
+            var isLauncherReleaseCurrent = await _initializerManager.IsLauncherReleaseCurrentAsync();
             if (!isLauncherReleaseCurrent) {
                 var pathLauncherUpdater = Path.Combine(FileLocations.BaseDirectory,
                     FileNamesStorage.SBLauncherUpdater);

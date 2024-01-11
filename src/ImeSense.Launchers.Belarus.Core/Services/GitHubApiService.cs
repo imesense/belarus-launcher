@@ -72,12 +72,15 @@ public class GitHubApiService : IGitStorageApiService {
         return json?.FirstOrDefault(t => t.TagName.Equals(tag));
     }
 
-    public async Task<IEnumerable<Tag?>?> GetTagsAsync() {
-        if (_httpClient.BaseAddress == null) {
-            return default;
+    public async Task<IEnumerable<Tag?>?> GetTagsAsync(Uri? uriRepository = null) {
+        if (uriRepository == null) {
+            if (_httpClient.BaseAddress == null) {
+                return default;
+            }
+            uriRepository = _httpClient.BaseAddress;
         }
 
-        await using var tagsStream = await _httpClient.GetStreamAsync(new Uri(_httpClient.BaseAddress, "tags"));
+        await using var tagsStream = await _httpClient.GetStreamAsync(new Uri(uriRepository, "tags"));
         var tags = JsonSerializer.Deserialize<IEnumerable<Tag>>(tagsStream);
 
         if (tags is not null) {

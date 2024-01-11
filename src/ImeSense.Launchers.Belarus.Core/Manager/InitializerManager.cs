@@ -67,15 +67,8 @@ public class InitializerManager {
         }
     }
 
-    public static async Task<bool> IsLauncherReleaseCurrentAsync() {
-        using var httpClient = new HttpClient();
-        httpClient.BaseAddress = UriStorage.LauncherUri;
-        httpClient.DefaultRequestHeaders.Accept.Clear();
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-        httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-        var gitHubService = new GitHubApiService(null, httpClient, null);
-        var tags = await gitHubService.GetTagsAsync();
+    public async Task<bool> IsLauncherReleaseCurrentAsync() {
+        var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherUri);
         if (tags != null) {
             var currentVersion = $"{ApplicationHelper.GetAppVersion()}";
             if (currentVersion[0] != 'v') {
