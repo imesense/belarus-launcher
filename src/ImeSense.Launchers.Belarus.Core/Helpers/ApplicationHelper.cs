@@ -14,5 +14,4 @@ public static class ApplicationHelper {
         var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
         return versionInfo.CompanyName;
     }
-
 }

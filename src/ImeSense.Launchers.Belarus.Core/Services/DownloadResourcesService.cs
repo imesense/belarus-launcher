@@ -33,7 +33,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
     public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress) {
         var filesRes = new ConcurrentDictionary<string, Uri>();
         _hashResources ??= await _gitStorageApiService
-            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusUri);
+            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusApiUri);
 
         var release = _launcherStorage.GitHubRelease;
         if (release is null) {
@@ -99,7 +99,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 }
 
                 _hashResources ??= await _gitStorageApiService
-                    .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusUri);
+                    .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusApiUri);
 
                 bool verifyFile;
                 do {

@@ -37,8 +37,8 @@
                     Margin="10"
                     Orientation="Horizontal"
                     VerticalAlignment="Bottom">
-                    <TextBlock FontSize="16" Text="{Binding AppVersion}" />
-                    <TextBlock FontSize="16" Text="{Binding CompanyName}" />
+                    <Button FontSize="16" Padding="0" Command="{Binding OpenMainRepositoryUriCommand}" Content="{Binding AppVersion}" />
+                    <Button FontSize="16" Padding="0" Command="{Binding OpenOrganizationUriCommand}" Content="{Binding CompanyName}" />
                 </StackPanel>
 
                 <!--  PageMenuView  -->

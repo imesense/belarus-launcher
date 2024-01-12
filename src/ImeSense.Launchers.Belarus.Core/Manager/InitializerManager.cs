@@ -68,7 +68,7 @@ public class InitializerManager {
     }
 
     public async Task<bool> IsLauncherReleaseCurrentAsync() {
-        var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherUri);
+        var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherApiUri);
         if (tags != null) {
             var currentVersion = $"{ApplicationHelper.GetAppVersion()}";
             if (currentVersion[0] != 'v') {
@@ -128,7 +128,7 @@ public class InitializerManager {
     private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync() {
         try {
             var contents = await _gitStorageApiService
-                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNamesStorage.WebResources, UriStorage.BelarusUri);
+                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNamesStorage.WebResources, UriStorage.BelarusApiUri);
             var webResources = new List<WebResource>();
 
             if (contents != null) {
@@ -156,12 +156,12 @@ public class InitializerManager {
             if (locale is null) {
                 foreach (var lang in _launcherStorage.Locales) {
                     var news = await _gitStorageApiService
-                        .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json", UriStorage.BelarusUri);
+                        .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json", UriStorage.BelarusApiUri);
                     AddNews(lang, allNews, news);
                 }
             } else {
                 var news = await _gitStorageApiService
-                    .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json", UriStorage.BelarusUri);
+                    .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json", UriStorage.BelarusApiUri);
                 AddNews(locale, allNews, news);
             }
         } catch (Exception ex) {

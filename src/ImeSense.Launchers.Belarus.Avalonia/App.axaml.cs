@@ -73,7 +73,7 @@ public partial class App : Application {
     }
 
     private static void ConfigureClient(HttpClient httpClient) {
-        httpClient.BaseAddress = UriStorage.BelarusUri;
+        httpClient.BaseAddress = UriStorage.BelarusApiUri;
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
         httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");

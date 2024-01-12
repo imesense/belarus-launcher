@@ -59,7 +59,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
             if (!isLauncherReleaseCurrent) {
                 var pathLauncherUpdater = Path.Combine(FileLocations.BaseDirectory,
                     FileNamesStorage.SBLauncherUpdater);
-                await _updaterService.UpdaterAsync(UriStorage.LauncherUri, pathLauncherUpdater);
+                await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
 
                 var updater = Launcher.Launch(pathLauncherUpdater);
                 updater?.Start();

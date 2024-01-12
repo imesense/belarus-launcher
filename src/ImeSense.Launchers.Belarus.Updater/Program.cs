@@ -17,7 +17,7 @@ try {
     var fileSavePath = Path.Combine(FileLocations.BaseDirectory, FileNamesStorage.SBLauncher);
 
     using var httpClient = new HttpClient();
-    httpClient.BaseAddress = UriStorage.LauncherUri;
+    httpClient.BaseAddress = UriStorage.LauncherApiUri;
     httpClient.DefaultRequestHeaders.Accept.Clear();
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
     httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
@@ -25,7 +25,7 @@ try {
     var updaterService = new UpdaterService( 
         new GitHubApiService(null, httpClient, null), 
         new FileDownloadManager(null, httpClient));
-    await updaterService.UpdaterAsync(UriStorage.LauncherUri, fileSavePath);
+    await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath);
 
     Console.WriteLine($"Finish!");
     Launcher.Launch(fileSavePath)?.Start();
