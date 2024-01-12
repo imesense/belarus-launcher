@@ -6,6 +6,7 @@
         <AssemblyVersion>2.0</AssemblyVersion>
         <Company>ImeSense</Company>
         <Authors>Drombeys</Authors>
+        <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">

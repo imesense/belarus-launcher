@@ -2,6 +2,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
+        <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
     </PropertyGroup>
 
     <PropertyGroup>
