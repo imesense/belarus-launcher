@@ -12,3 +12,7 @@ Detail list of all contributors to Belarus Launcher
 - Belarus Team
   - Vozbuditel
   - Hozar_2002
+
+## Community helpers
+
+- PSIget
