@@ -54,6 +54,7 @@ public partial class App : Application {
         services.AddSingleton<ILauncherStorage, MemoryLauncherStorage>();
         services.AddSingleton<ILocaleManager, LocaleManager>();
         services.AddTransient<IReleaseComparerService<GitHubRelease>, ReleaseComparerService>();
+        services.AddTransient<IUpdaterService, UpdaterService>();
         services.AddSingleton<AuthenticationViewModelValidator>();
         services.AddSingleton<StartGameViewModelValidator>();
         services.AddSingleton<UserManager>();

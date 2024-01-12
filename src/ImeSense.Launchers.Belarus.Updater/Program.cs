@@ -15,7 +15,18 @@ try {
 
     Console.WriteLine($"Start update");
     var fileSavePath = Path.Combine(FileLocations.BaseDirectory, FileNamesStorage.SBLauncher);
-    await UpdaterService.UpdaterAsync(UriStorage.LauncherUri, fileSavePath);
+
+    using var httpClient = new HttpClient();
+    httpClient.BaseAddress = UriStorage.LauncherUri;
+    httpClient.DefaultRequestHeaders.Accept.Clear();
+    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+
+    var updaterService = new UpdaterService( 
+        new GitHubApiService(null, httpClient, null), 
+        new FileDownloadManager(null, httpClient));
+    await updaterService.UpdaterAsync(UriStorage.LauncherUri, fileSavePath);
+
     Console.WriteLine($"Finish!");
     Launcher.Launch(fileSavePath)?.Start();
 } catch (Exception ex) {

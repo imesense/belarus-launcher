@@ -127,7 +127,8 @@ public class InitializerManager {
 
     private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync() {
         try {
-            var contents = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<WebResource>>(FileNamesStorage.WebResources);
+            var contents = await _gitStorageApiService
+                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNamesStorage.WebResources, UriStorage.BelarusUri);
             var webResources = new List<WebResource>();
 
             if (contents != null) {
@@ -154,11 +155,13 @@ public class InitializerManager {
         try {
             if (locale is null) {
                 foreach (var lang in _launcherStorage.Locales) {
-                    var news = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json");
+                    var news = await _gitStorageApiService
+                        .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json", UriStorage.BelarusUri);
                     AddNews(lang, allNews, news);
                 }
             } else {
-                var news = await _gitStorageApiService.DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json");
+                var news = await _gitStorageApiService
+                    .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json", UriStorage.BelarusUri);
                 AddNews(locale, allNews, news);
             }
         } catch (Exception ex) {

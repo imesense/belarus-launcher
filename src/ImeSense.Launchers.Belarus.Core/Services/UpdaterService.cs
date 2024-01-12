@@ -1,24 +1,22 @@
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
-using System.Net.Http.Headers;
-
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
-// TODO: Decompose and deploy IoC
-public class UpdaterService {
-    public static async Task UpdaterAsync(Uri uri, string fileSavePath) {
+public class UpdaterService : IUpdaterService {
+    private readonly IGitStorageApiService _gitStorageApiService;
+    private readonly IFileDownloadManager _fileDownloadManager;
+
+    public UpdaterService(IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager) {
+        _gitStorageApiService = gitStorageApiService;
+        _fileDownloadManager = fileDownloadManager;
+    }
+
+    public async Task UpdaterAsync(Uri uri, string fileSavePath) {
         var appName = Path.GetFileNameWithoutExtension(fileSavePath);
         var fullAppName = Path.GetFileName(fileSavePath);
 
-        using var httpClient = new HttpClient();
-        httpClient.BaseAddress = uri;
-        httpClient.DefaultRequestHeaders.Accept.Clear();
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-        httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-        var gitHubService = new GitHubApiService(null, httpClient, null);
-        var lastRelease = await gitHubService.GetLastReleaseAsync()
+        var lastRelease = await _gitStorageApiService.GetLastReleaseAsync(uri)
             ?? throw new NullReferenceException("Latest release is null!");
         var sblauncher = lastRelease.Assets?.FirstOrDefault(x => x.Name.Equals(fullAppName))
             ?? throw new NullReferenceException($"{appName} asset is null!");
@@ -37,8 +35,7 @@ public class UpdaterService {
             Directory.CreateDirectory(pathDownloadFolder);
         }
 
-        var download = new FileDownloadManager(null, httpClient);
-        await download.DownloadAsync(sblauncher.BrowserDownloadUrl, fileDownloadPath, progress);
+        await _fileDownloadManager.DownloadAsync(sblauncher.BrowserDownloadUrl, fileDownloadPath, progress);
 
         if (File.Exists(fileSavePath)) {
             File.Delete(fileSavePath);

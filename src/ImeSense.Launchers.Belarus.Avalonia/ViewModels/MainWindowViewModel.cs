@@ -17,6 +17,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
     private readonly ILogger<MainWindowViewModel> _logger;
 
     private readonly InitializerManager _initializerManager;
+    private readonly IUpdaterService _updaterService;
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly StartGameViewModel _startGameViewModel;
     private readonly LauncherViewModel _launcherViewModel;
@@ -26,11 +27,11 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
     public Task Initialization { get; private set; }
 
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, InitializerManager initializerManager,
-        LauncherViewModel launcherViewModel, AuthorizationViewModel authorizationViewModel,
-        StartGameViewModel startGameViewModel) {
+        IUpdaterService updaterService, LauncherViewModel launcherViewModel,
+        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel) {
         _logger = logger;
         _initializerManager = initializerManager;
-
+        _updaterService = updaterService;
         _authorizationViewModel = authorizationViewModel;
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
@@ -46,7 +47,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         _startGameViewModel = null!;
         _launcherViewModel = null!;
         _initializerManager = null!;
-
+        _updaterService = null!;
         Initialization = null!;
     }
 
@@ -58,7 +59,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
             if (!isLauncherReleaseCurrent) {
                 var pathLauncherUpdater = Path.Combine(FileLocations.BaseDirectory,
                     FileNamesStorage.SBLauncherUpdater);
-                await UpdaterService.UpdaterAsync(UriStorage.LauncherUri, pathLauncherUpdater);
+                await _updaterService.UpdaterAsync(UriStorage.LauncherUri, pathLauncherUpdater);
 
                 var updater = Launcher.Launch(pathLauncherUpdater);
                 updater?.Start();

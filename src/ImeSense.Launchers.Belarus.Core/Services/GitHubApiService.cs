@@ -19,7 +19,16 @@ public class GitHubApiService : IGitStorageApiService {
         _launcherStorage = launcherStorage;
     }
 
-    public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename) where T : class {
+    public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename, 
+        Uri? uriRepository = null) where T : class
+    {
+        if (uriRepository == null) {
+            if (_httpClient.BaseAddress == null) {
+                throw new NullReferenceException("No base address for HttpClient");
+            }
+            uriRepository = _httpClient.BaseAddress;
+        }
+
         GitHubRelease? release;
         if (_launcherStorage == null) {
             release = await GetLastReleaseAsync();
@@ -41,7 +50,14 @@ public class GitHubApiService : IGitStorageApiService {
     /// <typeparam name="T">The type of the object to deserialize the JSON into</typeparam>
     /// <param name="filename">The name of the JSON file to download</param>
     /// <returns>The deserialized object of type T if successful, or null if the file is not found or deserialization fails</returns>
-    public async Task<T?> DownloadJsonAsync<T>(string filename) where T : class {
+    public async Task<T?> DownloadJsonAsync<T>(string filename, Uri? uriRepository = null) where T : class {
+        if (uriRepository == null) {
+            if (_httpClient.BaseAddress == null) {
+                throw new NullReferenceException("No base address for HttpClient");
+            }
+            uriRepository = _httpClient.BaseAddress;
+        }
+
         // Get the GitHub release information
         GitHubRelease? release;
         if (_launcherStorage == null) {
@@ -55,27 +71,33 @@ public class GitHubApiService : IGitStorageApiService {
         return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
     }
 
-    public async Task<GitHubRelease?> GetLastReleaseAsync() {
-        if (_httpClient.BaseAddress == null) {
-            return default;
+    public async Task<GitHubRelease?> GetLastReleaseAsync(Uri? uriRepository = null) {
+        if (uriRepository == null) {
+            if (_httpClient.BaseAddress == null) {
+                throw new NullReferenceException("No base address for HttpClient");
+            }
+            uriRepository = _httpClient.BaseAddress;
         }
 
-        return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(_httpClient.BaseAddress, "releases/latest"));
+        return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(uriRepository, "releases/latest"));
     }
 
-    public async Task<GitHubRelease?> GetReleaseAsync(string tag) {
-        if (_httpClient.BaseAddress == null) {
-            return default;
+    public async Task<GitHubRelease?> GetReleaseAsync(string tag, Uri? uriRepository = null) {
+        if (uriRepository == null) {
+            if (_httpClient.BaseAddress == null) {
+                throw new NullReferenceException("No base address for HttpClient");
+            }
+            uriRepository = _httpClient.BaseAddress;
         }
 
-        var json = await _httpClient.GetFromJsonAsync<IList<GitHubRelease>>(new Uri(_httpClient.BaseAddress, $"releases"));
+        var json = await _httpClient.GetFromJsonAsync<IList<GitHubRelease>>(new Uri(uriRepository, $"releases"));
         return json?.FirstOrDefault(t => t.TagName.Equals(tag));
     }
 
     public async Task<IEnumerable<Tag?>?> GetTagsAsync(Uri? uriRepository = null) {
         if (uriRepository == null) {
             if (_httpClient.BaseAddress == null) {
-                return default;
+                throw new NullReferenceException("No base address for HttpClient");
             }
             uriRepository = _httpClient.BaseAddress;
         }
