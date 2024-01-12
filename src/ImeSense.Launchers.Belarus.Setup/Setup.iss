@@ -1,7 +1,7 @@
 #define MyAppName "Belarus Launcher"
 #define MyAppVersion "2.0"
 #define MyAppPublisher "ImeSense"
-#define MyAppURL "https://github.com/imesense"
+#define MyAppURL "https://github.com/imesense/belarus-launcher"
 #define MyAppExeName "SBLauncher.exe"
 
 [Setup]
@@ -13,7 +13,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={sd}\Games\S.T.A.L.K.E.R. Belarus
 DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
@@ -24,6 +24,7 @@ SolidCompression=yes
 WizardStyle=modern
 SetupIconFile=logo.ico
 LicenseFile=license.txt
+DisableDirPage=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -41,4 +42,7 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent shellexec
+
+[UninstallDelete]
+Type: FilesAndOrDirs; Name: {app}
