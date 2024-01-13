@@ -88,6 +88,7 @@ public class DownloadMenuViewModel : ReactiveObject {
             throw new NullReferenceException("User settings locale object is null");
         }
 
+        DownloadFileName = string.Empty;
         var progress = new Progress<int>(percentage => {
             DownloadProgress = percentage;
         });

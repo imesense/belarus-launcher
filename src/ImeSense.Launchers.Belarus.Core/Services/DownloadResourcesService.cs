@@ -101,17 +101,22 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 _hashResources ??= await _gitStorageApiService
                     .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusApiUri);
 
-                bool verifyFile;
+                var verifyFile = false;
                 do {
-                    await _fileDownloadManager.DownloadAsync(url, path, progress, tokenSource.Token);
-                    // Check the downloaded file for integrity
-                    var assetName = Path.GetFileName(path);
-                    var gameResource = _hashResources?.FirstOrDefault(x => x.Title.Equals(assetName, 
-                        StringComparison.OrdinalIgnoreCase));
-                    verifyFile = await _hashChecker.VerifyFileHashAsync(path, gameResource!.Hash);
-                    if (!verifyFile) {
+                    try {
+                        await _fileDownloadManager.DownloadAsync(url, path, progress, tokenSource.Token);
+                        // Check the downloaded file for integrity
+                        var assetName = Path.GetFileName(path);
+                        var gameResource = _hashResources?.FirstOrDefault(x => x.Title.Equals(assetName,
+                            StringComparison.OrdinalIgnoreCase));
+                        verifyFile = await _hashChecker.VerifyFileHashAsync(path, gameResource!.Hash);
+                        if (!verifyFile) {
+                            File.Delete(path);
+                        }
+                    } catch (HttpRequestException ex) when (ex.Message.Contains("416")) {
+                        _logger.LogInformation("Unsuccessful attempt to download the file! The file will be deleted and downloaded again");
                         File.Delete(path);
-                    }
+                    } 
                 } while (!verifyFile);
                 
                 progress.Report(0);
