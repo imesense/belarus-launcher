@@ -3,7 +3,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
         <AssemblyName>SBLauncherUpdater</AssemblyName>
-        <AssemblyVersion>2.0</AssemblyVersion>
+        <AssemblyVersion>2.1</AssemblyVersion>
         <Company>ImeSense</Company>
         <Authors>Drombeys</Authors>
         <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
