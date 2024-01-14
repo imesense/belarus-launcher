@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
 
@@ -49,15 +50,15 @@ public class DownloadMenuViewModel : ReactiveObject {
         SetupCommands();
     }
 
-#if DEBUG
     public DownloadMenuViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(DownloadMenuViewModel)}");
+
         _logger = null!;
         _localeManager = null!;
         _windowManager = null!;
         _downloadResourcesService = null!;
         _userManager = null!;
     }
-#endif
 
     public async Task UpdateAsync(LauncherViewModel launcherViewModel) {
         await StartDownload.Execute(launcherViewModel);

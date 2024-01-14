@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 
@@ -31,13 +32,13 @@ public class GameMenuViewModel : ReactiveObject {
         SetupCommands();
     }
 
-#if DEBUG
     public GameMenuViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(GameMenuViewModel)}");
+
         _logger = null!;
         _windowManager = null!;
         _userManager = null!;
     }
-#endif
 
     private void SetupCommands() {
         var canExecuteServer = this.WhenAnyValue(x => x.IsStartServer, 

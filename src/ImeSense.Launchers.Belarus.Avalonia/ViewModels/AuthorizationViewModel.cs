@@ -12,6 +12,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
@@ -55,8 +56,9 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _launcherViewModel = launcherViewModel;
     }
 
-#if DEBUG
     public AuthorizationViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(AuthorizationViewModel)}");
+
         _logger = null!;
         _launcherStorage = null!;
         _localeManager = null!;
@@ -65,7 +67,6 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _authenticationViewModelValidator = null!;
         _launcherViewModel = null!;
     }
-#endif
 
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel) {
         var username = Username.Trim();

@@ -1,6 +1,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
@@ -19,10 +20,10 @@ public class NewsViewModel : ReactiveObject {
         Description = newsContent.Description;
     }
 
-#if DEBUG
     public NewsViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(NewsViewModel)}");
+
         Title = null!;
         Description = null!;
     }
-#endif
 }

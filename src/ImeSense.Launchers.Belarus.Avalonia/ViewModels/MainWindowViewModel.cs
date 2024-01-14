@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
@@ -39,19 +40,20 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         Initialization = InitializeAsync();
     }
 
-#if DEBUG
 
     public MainWindowViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(MainWindowViewModel)}");
+
         _logger = null!;
         _authorizationViewModel = null!;
         _startGameViewModel = null!;
         _launcherViewModel = null!;
         _initializerManager = null!;
         _updaterService = null!;
+
         Initialization = null!;
     }
 
-#endif
 
     public async Task InitializeAsync() {
         try {

@@ -9,6 +9,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Core.Manager;
 
@@ -52,8 +53,9 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         SetupCommands();
     }
 
-#if DEBUG
     public StartGameViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(StartGameViewModel)}");
+
         _logger = null!;
         _userManager = null!;
         _windowManager = null!;
@@ -62,7 +64,6 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
 
         IpAddress = null!;
     }
-#endif
 
     private void SetupCommands() {
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
@@ -30,14 +31,14 @@ public class LinkViewModel : ReactiveObject {
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
     }
 
-#if DEBUG
     public LinkViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LinkViewModel)}");
+
         _websiteLauncher = null!;
         OpenUrlCommand = null!;
         _logger = null!;
         _launcherStorage = null!;
     }
-#endif
 
     public void Init() {
         if (_launcherStorage.WebResources != null) {

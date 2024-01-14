@@ -1,11 +1,13 @@
+using System.Reactive;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Validators;
-using System.Reactive;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
@@ -51,8 +53,9 @@ public class LauncherViewModel : ReactiveObject {
         OpenOrganizationUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.LauncherUri.AbsoluteUri));
     }
 
-#if DEBUG
     public LauncherViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LauncherViewModel)}");
+
         _logger = null!;
         _downloadMenuViewModel = null!;
         _gameMenuViewModel = null!;
@@ -67,7 +70,6 @@ public class LauncherViewModel : ReactiveObject {
         OpenMainRepositoryUriCommand = null!;
         OpenOrganizationUriCommand = null!;
     }
-#endif
 
     private void OpenUrl(string uri) => _websiteLauncher.OpenWebsite(uri);
 

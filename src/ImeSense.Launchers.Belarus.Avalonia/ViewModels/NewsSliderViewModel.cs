@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
@@ -31,13 +32,13 @@ public class NewsSliderViewModel : ReactiveObject {
         SetupCommands();
     }
 
-#if DEBUG
     public NewsSliderViewModel() {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(NewsSliderViewModel)}");
+
         _logger = null!;
 
         LinkViewModel = null!;
     }
-#endif
 
     private void SetupCommands() {
         var canExecuteBack = this.WhenAnyValue(x => x.NumPage,
