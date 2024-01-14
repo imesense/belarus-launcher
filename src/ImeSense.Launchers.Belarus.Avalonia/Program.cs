@@ -8,21 +8,38 @@ using ImeSense.Launchers.Belarus.Core.Logger;
 namespace ImeSense.Launchers.Belarus.Avalonia;
 
 class Program {
+    private const string MutexName = "Belarus.Launcher.Avalonia";
+
+    private static Mutex? _mutex;
+
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args) {
-#if DEBUG
-        StartApp(args);
-#else
+        var isMutexCreated = false;
         try {
-            StartApp(args);
-        } catch (Exception exception) {
-            Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
-            throw;
+            _mutex = new Mutex(initiallyOwned: false, MutexName, out isMutexCreated);
+        } catch {
         }
+        if (!isMutexCreated) {
+            return;
+        }
+
+        try {
+#if DEBUG
+            StartApp(args);
+#else
+            try {
+                StartApp(args);
+            } catch (Exception exception) {
+                Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
+                throw;
+            }
 #endif
+        } finally {
+            _mutex?.Dispose();
+        }
     }
 
     private static void StartApp(string[] args) {
