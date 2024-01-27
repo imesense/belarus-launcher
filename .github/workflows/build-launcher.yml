@@ -72,51 +72,6 @@ jobs:
         name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
 
-  build-launcher-wpf:
-    name: 'Build launcher WPF'
-
-    strategy:
-      matrix:
-        system:
-        - windows-2022
-        config:
-        - Debug
-        - Release
-        framework:
-        - net7.0
-
-    runs-on: ${{ matrix.system }}
-
-    env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '7.0.x'
-
-    - name: Restore dependencies
-      run: |
-        dotnet restore $env:LauncherProject
-
-    - name: Build launcher
-      run: |
-        dotnet build $env:LauncherProject `
-          --configuration ${{ matrix.config }} `
-          --no-restore
-
-    - name: Upload launcher
-      uses: actions/upload-artifact@v4
-      with:
-        name: launcher-wpf-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/
-
   build-updater-cli:
     name: 'Build updater CLI'
 
@@ -211,57 +166,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
-
-  publish-launcher-wpf:
-    name: 'Publish launcher WPF'
-
-    needs: build-launcher-wpf
-
-    strategy:
-      matrix:
-        system:
-        - windows-2022
-        config:
-        - Release
-        runtime:
-        - win-x86
-        - win-x64
-        framework:
-        - net7.0
-
-    runs-on: ${{ matrix.system }}
-
-    env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '7.0.x'
-
-    - name: Publish launcher
-      run: |
-        dotnet publish $env:LauncherProject `
-          --configuration ${{ matrix.config }} `
-          --runtime ${{ matrix.runtime }} `
-          --self-contained true `
-          -p:PublishSingleFile=true `
-          -p:IncludeAllContentForSelfExtract=true `
-          -p:EnableCompressionInSingleFile=true `
-          -p:DebugSymbols=false `
-          -p:DebugType=None
-
-    - name: Upload launcher
-      uses: actions/upload-artifact@v4
-      with:
-        name: launcher-wpf-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
   publish-updater-cli:
