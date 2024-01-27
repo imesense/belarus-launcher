@@ -66,7 +66,7 @@ jobs:
           --configuration ${{ matrix.config }} `
           --no-restore
 
-    - name: Upload binaries
+    - name: Upload launcher
       uses: actions/upload-artifact@v4
       with:
         name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
@@ -111,7 +111,7 @@ jobs:
           --configuration ${{ matrix.config }} `
           --no-restore
 
-    - name: Upload binaries
+    - name: Upload launcher
       uses: actions/upload-artifact@v4
       with:
         name: launcher-wpf-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
@@ -150,17 +150,170 @@ jobs:
       run: |
         dotnet restore $env:UpdaterProject
 
-    - name: Build launcher
+    - name: Build updater
       run: |
         dotnet build $env:UpdaterProject `
           --configuration ${{ matrix.config }} `
           --no-restore
 
-    - name: Upload binaries
+    - name: Upload updater
       uses: actions/upload-artifact@v4
       with:
         name: updater-cli-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
+
+  publish-launcher-avalonia:
+    name: 'Publish launcher Avalonia'
+
+    needs: build-launcher-avalonia
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Release
+        runtime:
+        - win-x86
+        - win-x64
+        framework:
+        - net7.0
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      LauncherProject: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Publish launcher
+      run: |
+        dotnet publish $env:LauncherProject `
+          --configuration ${{ matrix.config }} `
+          --runtime ${{ matrix.runtime }} `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:DebugSymbols=false `
+          -p:DebugType=None
+
+    - name: Upload launcher
+      uses: actions/upload-artifact@v4
+      with:
+        name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+
+  publish-launcher-wpf:
+    name: 'Publish launcher WPF'
+
+    needs: build-launcher-wpf
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Release
+        runtime:
+        - win-x86
+        - win-x64
+        framework:
+        - net7.0
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Publish launcher
+      run: |
+        dotnet publish $env:LauncherProject `
+          --configuration ${{ matrix.config }} `
+          --runtime ${{ matrix.runtime }} `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:DebugSymbols=false `
+          -p:DebugType=None
+
+    - name: Upload launcher
+      uses: actions/upload-artifact@v4
+      with:
+        name: launcher-wpf-${{ matrix.framework }}-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+
+  publish-updater-cli:
+    name: 'Publish updater CLI'
+
+    needs: build-updater-cli
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Release
+        runtime:
+        - win-x86
+        - win-x64
+        framework:
+        - net7.0
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Publish updater
+      run: |
+        dotnet publish $env:UpdaterProject `
+          --configuration ${{ matrix.config }} `
+          --runtime ${{ matrix.runtime }} `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:DebugSymbols=false `
+          -p:DebugType=None
+
+    - name: Upload updater
+      uses: actions/upload-artifact@v4
+      with:
+        name: updater-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
   publish:
     name: 'Publish'
