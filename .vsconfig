@@ -1,8 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/vsconfig.json",
   "version": "1.0",
   "components": [
     "Microsoft.VisualStudio.Component.CoreEditor",
     "Microsoft.VisualStudio.Workload.CoreEditor",
+    "Microsoft.Net.Component.4.8.SDK",
+    "Microsoft.Net.Component.4.7.2.TargetingPack",
     "Microsoft.Net.ComponentGroup.DevelopmentPrerequisites",
     "Microsoft.VisualStudio.Component.Roslyn.Compiler",
     "Microsoft.Component.MSBuild",
@@ -12,7 +15,7 @@
     "Microsoft.VisualStudio.Component.SQL.CLR",
     "Microsoft.Component.ClickOnce",
     "Microsoft.VisualStudio.Component.ManagedDesktop.Core",
-    "Microsoft.NetCore.Component.Runtime.7.0",
+    "Microsoft.NetCore.Component.Runtime.8.0",
     "Microsoft.NetCore.Component.SDK",
     "Microsoft.VisualStudio.Component.FSharp",
     "Microsoft.ComponentGroup.ClickOnce.Publish",
