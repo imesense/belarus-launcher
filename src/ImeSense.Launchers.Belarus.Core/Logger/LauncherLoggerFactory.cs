@@ -6,7 +6,7 @@ namespace ImeSense.Launchers.Belarus.Core.Logger;
 
 public static class LauncherLoggerFactory {
     public static void CreateLogger() {
-        var pathLog = Path.Combine(FileLocations.LogsDirectory, FileNamesStorage.Log);
+        var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
         if (File.Exists(pathLog)) {
             File.Delete(pathLog);
         }

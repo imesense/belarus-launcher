@@ -59,8 +59,8 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         try {
             var isLauncherReleaseCurrent = await _initializerManager.IsLauncherReleaseCurrentAsync();
             if (!isLauncherReleaseCurrent) {
-                var pathLauncherUpdater = Path.Combine(FileLocations.BaseDirectory,
-                    FileNamesStorage.SBLauncherUpdater);
+                var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
+                    FileNameStorage.SBLauncherUpdater);
                 await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
 
                 var updater = Launcher.Launch(pathLauncherUpdater);
@@ -88,7 +88,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
 
         var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
 
-        if (File.Exists(FileLocations.UserSettingPath)) {
+        if (File.Exists(PathStorage.LauncherSetting)) {
             try {
                 if (!isCurrentRelease) {
                     PageViewModel = _launcherViewModel;
@@ -100,7 +100,7 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
             }
         }
 
-        if (File.Exists(FileLocations.UserSettingPath)) {
+        if (File.Exists(PathStorage.LauncherSetting)) {
             ShowLauncherImpl();
         } else {
             ShowAuthorizationImpl();

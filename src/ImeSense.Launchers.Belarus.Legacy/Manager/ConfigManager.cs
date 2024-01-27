@@ -1,4 +1,4 @@
-﻿using System.Text.Encodings.Web;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 
@@ -16,11 +16,11 @@ public static class ConfigManager {
             throw new Exception("Username not specified");
         }
 
-        if (!Directory.Exists(FileLocations.UserDirectory)) {
-            Directory.CreateDirectory(FileLocations.UserDirectory);
+        if (!Directory.Exists(DirectoryStorage.User)) {
+            Directory.CreateDirectory(DirectoryStorage.User);
         }
 
-        using var fileStream = new FileStream(FileLocations.UserSettingPath,
+        using var fileStream = new FileStream(PathStorage.LauncherSetting,
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);
 
@@ -34,12 +34,12 @@ public static class ConfigManager {
     }
 
     public static UserSettings LoadSettings() {
-        if (!File.Exists(FileLocations.UserSettingPath)) {
+        if (!File.Exists(PathStorage.LauncherSetting)) {
             return new UserSettings();
         }
 
         try {
-            var json = File.ReadAllText(FileLocations.UserSettingPath);
+            var json = File.ReadAllText(PathStorage.LauncherSetting);
             return JsonSerializer.Deserialize<UserSettings>(json)!;
         } catch {
             return new UserSettings();

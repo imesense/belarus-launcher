@@ -19,7 +19,7 @@ public class MainViewModel : ViewModelBase, IScreen {
         _authorizationViewModel.HostScreen = this;
         _launcherViewModel.HostScreen = this;
 
-        if (!File.Exists(FileLocations.UserSettingPath) ||
+        if (!File.Exists(PathStorage.LauncherSetting) ||
             string.IsNullOrEmpty(userSettings.Username)) {
             ShowAuthorization();
         } else {

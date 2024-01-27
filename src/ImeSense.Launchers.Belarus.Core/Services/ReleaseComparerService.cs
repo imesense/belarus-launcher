@@ -9,7 +9,7 @@ namespace ImeSense.Launchers.Belarus.Core.Services;
 public class ReleaseComparerService : IReleaseComparerService<GitHubRelease> {
     public async Task<bool> IsComparerAsync(GitHubRelease gitStorageRelease) {
         var gitStorageReleaseStream = await SerializationHelper.SerializeToStreamAsync(gitStorageRelease);
-        var localRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(FileLocations.CurrentRelease);
+        var localRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease);
         var localReleaseStream = await SerializationHelper.SerializeToStreamAsync(localRelease);
 
         using var md5 = MD5.Create();

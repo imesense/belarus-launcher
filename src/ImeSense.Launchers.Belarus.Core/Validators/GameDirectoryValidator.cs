@@ -19,24 +19,24 @@ public class GameDirectoryValidator {
     /// </summary>
     public bool IsDirectoryValid() {
         // Check if the Binaries directory exists
-        if (!Directory.Exists(FileLocations.BinariesDirectory)) {
+        if (!Directory.Exists(DirectoryStorage.Binaries)) {
             return false;
         }
 
         // Check if the "xrEngine.exe" file exists in the "BinariesDirectory" path
         // If it exists, the directory is not valid
-        if (!File.Exists(Path.Combine(FileLocations.BinariesDirectory, "xrEngine.exe"))) {
+        if (!File.Exists(Path.Combine(DirectoryStorage.Binaries, "xrEngine.exe"))) {
             return false;
         }
 
         // Check if the Resources directory exists
-        if (!Directory.Exists(FileLocations.ResourcesDirectory)) {
+        if (!Directory.Exists(DirectoryStorage.Resources)) {
             return false;
         }
 
         // Check if the number of files in the "ResourcesDirectory" path is greater than or equal to 11
         // If there are at least 11 files, the directory is valid
-        return CountFilesInDirectory(FileLocations.ResourcesDirectory) >= 11;
+        return CountFilesInDirectory(DirectoryStorage.Resources) >= 11;
     }
 
     /// <summary>

@@ -42,7 +42,7 @@ public class InitializerManager {
 
             _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
             Task<IEnumerable<LangNewsContent>?> taskLoadNews;
-            IsUserAuthorized = File.Exists(FileLocations.UserSettingPath);
+            IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
             if (IsUserAuthorized) {
                 var locale = _userManager?.UserSettings?.Locale;
                 taskLoadNews = LoadNewsAsync(locale);
@@ -93,10 +93,10 @@ public class InitializerManager {
     private async Task<bool> IsGameReleaseCurrentAsync() {
         var gitStorageRelease = _launcherStorage.GitHubRelease;
 
-        if (File.Exists(FileLocations.CurrentRelease)) {
+        if (File.Exists(PathStorage.CurrentRelease)) {
             var releaseComparer = gitStorageRelease != null && await _releaseComparerService.IsComparerAsync(gitStorageRelease);
             if (!releaseComparer) {
-                await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, FileLocations.CurrentRelease);
+                await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease);
                 _logger.LogInformation("The releases don't match. Update required!");
                 return false;
             } else {
@@ -104,7 +104,7 @@ public class InitializerManager {
                 return true;
             }
         } else {
-            await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, FileLocations.CurrentRelease);
+            await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease);
             _logger.LogInformation("The release configuration has not been previously saved");
             return false;
         }
@@ -128,7 +128,7 @@ public class InitializerManager {
     private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync() {
         try {
             var contents = await _gitStorageApiService
-                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNamesStorage.WebResources, UriStorage.BelarusApiUri);
+                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNameStorage.WebResources, UriStorage.BelarusApiUri);
             var webResources = new List<WebResource>();
 
             if (contents != null) {

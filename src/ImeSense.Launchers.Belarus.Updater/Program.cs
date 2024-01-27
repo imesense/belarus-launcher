@@ -14,7 +14,7 @@ try {
     }
 
     Console.WriteLine($"Start update");
-    var fileSavePath = Path.Combine(FileLocations.BaseDirectory, FileNamesStorage.SBLauncher);
+    var fileSavePath = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncher);
 
     using var httpClient = new HttpClient();
     httpClient.BaseAddress = UriStorage.LauncherApiUri;

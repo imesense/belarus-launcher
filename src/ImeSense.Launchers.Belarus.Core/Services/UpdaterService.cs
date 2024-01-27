@@ -28,7 +28,7 @@ public class UpdaterService : IUpdaterService {
             Console.WriteLine($"{appName} is {percentage}% downloaded");
         });
 
-        var pathDownloadFolder = Path.Combine(FileLocations.BaseDirectory, "temp");
+        var pathDownloadFolder = Path.Combine(DirectoryStorage.Base, "temp");
         var fileDownloadPath = Path.Combine(pathDownloadFolder, fullAppName);
 
         if (!Directory.Exists(pathDownloadFolder)) {

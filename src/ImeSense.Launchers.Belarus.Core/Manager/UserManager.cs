@@ -22,14 +22,14 @@ public class UserManager {
     }
 
     private void Load() {
-        if (!File.Exists(FileLocations.UserSettingPath)) {
+        if (!File.Exists(PathStorage.LauncherSetting)) {
             UserSettings = new UserSettings();
 
             return;
         }
 
         try {
-            var json = File.ReadAllText(FileLocations.UserSettingPath);
+            var json = File.ReadAllText(PathStorage.LauncherSetting);
             var user = JsonSerializer.Deserialize<UserSettings>(json)!;
             if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress)) {
                 user.IpAddress = string.Empty;
@@ -55,11 +55,11 @@ public class UserManager {
             throw new Exception("Username not specified");
         }
 
-        if (!Directory.Exists(FileLocations.UserDirectory)) {
-            Directory.CreateDirectory(FileLocations.UserDirectory);
+        if (!Directory.Exists(DirectoryStorage.User)) {
+            Directory.CreateDirectory(DirectoryStorage.User);
         }
 
-        using var fileStream = new FileStream(FileLocations.UserSettingPath,
+        using var fileStream = new FileStream(PathStorage.LauncherSetting,
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);
 

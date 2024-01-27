@@ -6,9 +6,9 @@ using ImeSense.Launchers.Belarus.Core.FileHashVerification;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
-using static ImeSense.Launchers.Belarus.Core.Storage.FileLocations;
+using static ImeSense.Launchers.Belarus.Core.Storage.DirectoryStorage;
 IEnumerable<string> GetDirectories() {
-    return new[] { BinariesDirectory, ResourcesDirectory, PatchesDirectory };
+    return new[] { Binaries, Resources, Patches };
 }
 
 try {
@@ -37,11 +37,11 @@ try {
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
         WriteIndented = true
     };
-    await using var fs = new FileStream(FileNamesStorage.HashResources, FileMode.OpenOrCreate);
+    await using var fs = new FileStream(FileNameStorage.HashResources, FileMode.OpenOrCreate);
     await JsonSerializer.SerializeAsync(fs, gameResources, options);
     fs.Close();
 
-    Console.WriteLine(File.ReadAllText(FileNamesStorage.HashResources));
+    Console.WriteLine(File.ReadAllText(FileNameStorage.HashResources));
 } catch (Exception ex) {
     Console.WriteLine(ex.Message);
     Console.WriteLine(ex.StackTrace);

@@ -33,7 +33,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
     public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress) {
         var filesRes = new ConcurrentDictionary<string, Uri>();
         _hashResources ??= await _gitStorageApiService
-            .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusApiUri);
+            .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri);
 
         var release = _launcherStorage.GitHubRelease;
         if (release is null) {
@@ -66,7 +66,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 return;
             }
 
-            var path = Path.Combine(FileLocations.BaseDirectory, assetFile.Directory, assetFile.Title);
+            var path = Path.Combine(DirectoryStorage.Base, assetFile.Directory, assetFile.Title);
             if (!File.Exists(path)) {
                 var result = filesRes.TryAdd(path, asset.BrowserDownloadUrl);
             } else {
@@ -99,7 +99,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 }
 
                 _hashResources ??= await _gitStorageApiService
-                    .DownloadJsonAsync<IList<GameResource>>(FileNamesStorage.HashResources, UriStorage.BelarusApiUri);
+                    .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri);
 
                 var verifyFile = false;
                 do {
