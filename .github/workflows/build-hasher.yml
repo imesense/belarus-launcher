@@ -120,5 +120,5 @@ jobs:
     - name: Upload hasher
       uses: actions/upload-artifact@v4
       with:
-        name: hasher-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
+        name: hasher-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
