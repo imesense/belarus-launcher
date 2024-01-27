@@ -27,8 +27,8 @@ defaults:
     shell: pwsh
 
 jobs:
-  build-hasher-cli:
-    name: 'Build hasher CLI'
+  build-hasher:
+    name: 'Build hasher'
 
     strategy:
       matrix:
@@ -69,13 +69,13 @@ jobs:
     - name: Upload hasher
       uses: actions/upload-artifact@v4
       with:
-        name: hasher-cli-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+        name: hasher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
 
-  publish-hasher-cli:
-    name: 'Publish hasher CLI'
+  publish-hasher:
+    name: 'Publish hasher'
 
-    needs: build-hasher-cli
+    needs: build-hasher
 
     strategy:
       matrix:
@@ -120,5 +120,5 @@ jobs:
     - name: Upload hasher
       uses: actions/upload-artifact@v4
       with:
-        name: hasher-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+        name: hasher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/

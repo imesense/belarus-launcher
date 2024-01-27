@@ -27,8 +27,8 @@ defaults:
     shell: pwsh
 
 jobs:
-  build-launcher-wpf:
-    name: 'Build launcher WPF'
+  build-launcher:
+    name: 'Build launcher'
 
     strategy:
       matrix:
@@ -69,13 +69,13 @@ jobs:
     - name: Upload launcher
       uses: actions/upload-artifact@v4
       with:
-        name: launcher-wpf-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+        name: launcher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
 
-  publish-launcher-wpf:
-    name: 'Publish launcher WPF'
+  publish-launcher:
+    name: 'Publish launcher'
 
-    needs: build-launcher-wpf
+    needs: build-launcher
 
     strategy:
       matrix:
@@ -120,5 +120,5 @@ jobs:
     - name: Upload launcher
       uses: actions/upload-artifact@v4
       with:
-        name: launcher-wpf-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+        name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/

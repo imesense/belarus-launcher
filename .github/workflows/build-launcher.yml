@@ -27,8 +27,8 @@ defaults:
     shell: pwsh
 
 jobs:
-  build-launcher-avalonia:
-    name: 'Build launcher Avalonia'
+  build-launcher:
+    name: 'Build launcher'
 
     strategy:
       matrix:
@@ -69,11 +69,11 @@ jobs:
     - name: Upload launcher
       uses: actions/upload-artifact@v4
       with:
-        name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+        name: launcher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
 
-  build-updater-cli:
-    name: 'Build updater CLI'
+  build-updater:
+    name: 'Build updater'
 
     strategy:
       matrix:
@@ -114,13 +114,13 @@ jobs:
     - name: Upload updater
       uses: actions/upload-artifact@v4
       with:
-        name: updater-cli-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+        name: updater-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
 
-  publish-launcher-avalonia:
-    name: 'Publish launcher Avalonia'
+  publish-launcher:
+    name: 'Publish launcher'
 
-    needs: build-launcher-avalonia
+    needs: build-launcher
 
     strategy:
       matrix:
@@ -165,13 +165,13 @@ jobs:
     - name: Upload launcher
       uses: actions/upload-artifact@v4
       with:
-        name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+        name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
-  publish-updater-cli:
-    name: 'Publish updater CLI'
+  publish-updater:
+    name: 'Publish updater'
 
-    needs: build-updater-cli
+    needs: build-updater
 
     strategy:
       matrix:
@@ -216,15 +216,15 @@ jobs:
     - name: Upload updater
       uses: actions/upload-artifact@v4
       with:
-        name: updater-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+        name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
   pack-installer:
     name: 'Pack installer'
 
     needs:
-    - publish-launcher-avalonia
-    - publish-updater-cli
+    - publish-launcher
+    - publish-updater
 
     strategy:
       matrix:
@@ -248,13 +248,13 @@ jobs:
     - name: Get launcher
       uses: actions/download-artifact@v4
       with:
-        name: launcher-avalonia-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+        name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
     - name: Get updater
       uses: actions/download-artifact@v4
       with:
-        name: updater-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+        name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
     - name: Publish installer
