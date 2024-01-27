@@ -8,7 +8,9 @@ on:
     - '.github/workflows/**'
     - 'src/**'
     - '*.sln'
+    - '*.config'
     - '*.props'
+    - '*.targets'
   pull_request:
     branches:
     - '**'
@@ -16,13 +18,187 @@ on:
     - '.github/workflows/**'
     - 'src/**'
     - '*.sln'
+    - '*.config'
     - '*.props'
+    - '*.targets'
 
 defaults:
   run:
     shell: pwsh
 
 jobs:
+  build-launcher-avalonia:
+    name: 'Build launcher Avalonia'
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Debug
+        - Release
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      LauncherProject: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3.0.3
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Restore dependencies
+      run: |
+        dotnet restore $env:LauncherProject
+
+    - name: Build launcher
+      run: |
+        dotnet build $env:LauncherProject `
+          --configuration ${{ matrix.config }} `
+          --no-restore
+
+    - name: Upload binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: launcher-avalonia-net7.0-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/
+
+  build-launcher-wpf:
+    name: 'Build launcher WPF'
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Debug
+        - Release
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3.0.3
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Restore dependencies
+      run: |
+        dotnet restore $env:LauncherProject
+
+    - name: Build launcher
+      run: |
+        dotnet build $env:LauncherProject `
+          --configuration ${{ matrix.config }} `
+          --no-restore
+
+    - name: Upload binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: launcher-wpf-net7.0-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/
+
+  build-hasher-cli:
+    name: 'Build hasher CLI'
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Debug
+        - Release
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3.0.3
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Restore dependencies
+      run: |
+        dotnet restore $env:HasherProject
+
+    - name: Build launcher
+      run: |
+        dotnet build $env:HasherProject `
+          --configuration ${{ matrix.config }} `
+          --no-restore
+
+    - name: Upload binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: hasher-cli-net7.0-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/
+
+  build-updater-cli:
+    name: 'Build updater CLI'
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Debug
+        - Release
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3.0.3
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Restore dependencies
+      run: |
+        dotnet restore $env:UpdaterProject
+
+    - name: Build launcher
+      run: |
+        dotnet build $env:UpdaterProject `
+          --configuration ${{ matrix.config }} `
+          --no-restore
+
+    - name: Upload binaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: updater-cli-net7.0-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/
+
   publish:
     name: 'Publish'
 
@@ -30,9 +206,9 @@ jobs:
       matrix:
         system:
         - windows-2022
-        config: 
+        config:
         - Release
-        runtime: 
+        runtime:
         - win-x86
         - win-x64
 
