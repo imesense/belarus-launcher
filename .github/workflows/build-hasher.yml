@@ -37,6 +37,8 @@ jobs:
         config:
         - Debug
         - Release
+        framework:
+        - net7.0
 
     runs-on: ${{ matrix.system }}
 
@@ -67,7 +69,7 @@ jobs:
     - name: Upload hasher
       uses: actions/upload-artifact@v4
       with:
-        name: hasher-cli-net7.0-${{ matrix.config }}-${{ github.sha }}
+        name: hasher-cli-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/
 
   publish-hasher-cli:
@@ -84,6 +86,8 @@ jobs:
         runtime:
         - win-x86
         - win-x64
+        framework:
+        - net7.0
 
     runs-on: ${{ matrix.system }}
 
@@ -116,5 +120,5 @@ jobs:
     - name: Upload hasher
       uses: actions/upload-artifact@v4
       with:
-        name: hasher-cli-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
+        name: hasher-cli-${{ matrix.framework }}-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
         path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
