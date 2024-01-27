@@ -1,0 +1,120 @@
+name: 'Build hasher'
+
+on:
+  push:
+    branches:
+    - '**'
+    paths:
+    - '.github/workflows/**'
+    - 'src/**'
+    - '*.sln'
+    - '*.config'
+    - '*.props'
+    - '*.targets'
+  pull_request:
+    branches:
+    - '**'
+    paths:
+    - '.github/workflows/**'
+    - 'src/**'
+    - '*.sln'
+    - '*.config'
+    - '*.props'
+    - '*.targets'
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build-hasher-cli:
+    name: 'Build hasher CLI'
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Debug
+        - Release
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Restore dependencies
+      run: |
+        dotnet restore $env:HasherProject
+
+    - name: Build hasher
+      run: |
+        dotnet build $env:HasherProject `
+          --configuration ${{ matrix.config }} `
+          --no-restore
+
+    - name: Upload hasher
+      uses: actions/upload-artifact@v4
+      with:
+        name: hasher-cli-net7.0-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/
+
+  publish-hasher-cli:
+    name: 'Publish hasher CLI'
+
+    needs: build-hasher-cli
+
+    strategy:
+      matrix:
+        system:
+        - windows-2022
+        config:
+        - Release
+        runtime:
+        - win-x86
+        - win-x64
+
+    runs-on: ${{ matrix.system }}
+
+    env:
+      HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x'
+
+    - name: Publish hasher
+      run: |
+        dotnet publish $env:HasherProject `
+          --configuration ${{ matrix.config }} `
+          --runtime ${{ matrix.runtime }} `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:DebugSymbols=false `
+          -p:DebugType=None
+
+    - name: Upload hasher
+      uses: actions/upload-artifact@v4
+      with:
+        name: hasher-cli-${{ matrix.runtime }}-${{ matrix.config }}-${{ github.sha }}
+        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
