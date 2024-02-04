@@ -17,8 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.vsconfig = .vsconfig
 		Directory.Build.props = Directory.Build.props
 		NuGet.config = NuGet.config
+		publish-hasher.bat = publish-hasher.bat
+		publish-installer.bat = publish-installer.bat
 		publish-launcher.bat = publish-launcher.bat
+		publish-updater.bat = publish-updater.bat
 		README.md = README.md
+		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Core", "src\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj", "{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}"
