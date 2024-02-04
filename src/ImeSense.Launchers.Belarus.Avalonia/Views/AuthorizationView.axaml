@@ -1,86 +1,87 @@
 <UserControl
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
     x:Class="ImeSense.Launchers.Belarus.Avalonia.Views.AuthorizationView"
     x:DataType="vm:AuthorizationViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vm="using:ImeSense.Launchers.Belarus.Avalonia.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Design.DataContext>
         <vm:AuthorizationViewModel />
     </Design.DataContext>
 
     <Border
-        Classes="styled"
-        HorizontalAlignment="Center"
         Padding="10,30,20,0"
-        VerticalAlignment="Center">
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Classes="styled">
         <StackPanel>
-            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+            <Grid
+                ColumnDefinitions="Auto,*"
+                RowDefinitions="Auto,Auto,Auto,Auto">
                 <TextBlock
-                    Classes="styled"
-                    FontSize="20"
                     Grid.Column="0"
                     Grid.Row="0"
-                    HorizontalAlignment="Right"
-                    Margin="10,5"
                     Text="{DynamicResource LocalizedStrings.Language}"
-                    VerticalAlignment="Center" />
+                    Margin="10,5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Classes="styled"
+                    FontSize="20" />
                 <ComboBox
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Width="200"
+                    Margin="0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
                     DisplayMemberBinding="{Binding Title}"
                     FontSize="16"
-                    Grid.Column="1"
-                    Grid.Row="0"
-                    HorizontalAlignment="Center"
                     ItemsSource="{Binding Languages}"
-                    Margin="0,5"
-                    SelectedValue="{Binding SelectedLanguage}"
-                    VerticalAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Width="200" />
+                    SelectedValue="{Binding SelectedLanguage}" />
                 <TextBlock
-                    Classes="styled"
-                    FontSize="20"
                     Grid.Column="0"
                     Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    Margin="10,5"
                     Text="{DynamicResource LocalizedStrings.Nickname}"
-                    VerticalAlignment="Center" />
+                    Margin="10,5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Classes="styled"
+                    FontSize="20" />
                 <TextBox
-                    FontSize="16"
                     Grid.Column="1"
                     Grid.Row="1"
-                    HorizontalAlignment="Center"
-                    Margin="0,5"
                     Text="{Binding Username}"
+                    Width="200"
+                    Margin="0,5"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Watermark="Vasyan"
-                    Width="200" />
+                    FontSize="16"
+                    Watermark="Vasyan" />
             </Grid>
 
             <StackPanel
-                HorizontalAlignment="Center"
                 Margin="20"
+                HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
-                    Classes="styled"
+                    Content="{DynamicResource LocalizedStrings.Next}"
                     Command="{Binding ShowLauncher}"
                     CommandParameter="{Binding $parent[Window].DataContext}"
-                    Content="{DynamicResource LocalizedStrings.Next}"
-                    FontSize="20"
-                    Margin="10,0" />
-                <Button
+                    Margin="10,0"
                     Classes="styled"
-                    Command="{Binding Close}"
+                    FontSize="20" />
+                <Button
                     Content="{DynamicResource LocalizedStrings.Close}"
-                    FontSize="20"
-                    Margin="10,0" />
+                    Command="{Binding Close}"
+                    Margin="10,0"
+                    Classes="styled"
+                    FontSize="20" />
             </StackPanel>
         </StackPanel>
     </Border>

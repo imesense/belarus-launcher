@@ -1,21 +1,20 @@
 <Window
     x:Class="ImeSense.Launchers.Belarus.Avalonia.Views.MainWindow"
+    x:DataType="vm:MainWindowViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vm="using:ImeSense.Launchers.Belarus.Avalonia.ViewModels"
     Title="S.T.A.L.K.E.R. Belarus Launcher"
     Width="1135"
     Height="760"
-    x:DataType="vm:MainWindowViewModel"
     CanResize="False"
     ExtendClientAreaToDecorationsHint="True"
     Icon="/Assets/Icons/stalker_cs.ico"
     SystemDecorations="None"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-
     <Window.Background>
         <ImageBrush Source="../Assets/Images/background.png" />
     </Window.Background>
@@ -24,7 +23,8 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <ContentControl Content="{Binding PageViewModel}"
-                    BorderBrush="Gray"
-                    BorderThickness="1" />
+    <ContentControl
+        Content="{Binding PageViewModel}"
+        BorderBrush="Gray"
+        BorderThickness="1" />
 </Window>

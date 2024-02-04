@@ -1,21 +1,28 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
         <Border Padding="20">
-            <Border Margin="5"
-                    Classes="styled">
+            <Border
+                Margin="5"
+                Classes="styled">
                 <Button Content="Button" />
             </Border>
         </Border>
     </Design.PreviewWith>
 
-    <SolidColorBrush x:Key="StyledBorderBrush" Color="Black" Opacity="0.75" />
+    <SolidColorBrush
+        x:Key="StyledBorderBrush"
+        Color="Black"
+        Opacity="0.75" />
 
-    <ControlTheme x:Key="{x:Type Border}" TargetType="Border">
+    <ControlTheme
+        x:Key="{x:Type Border}"
+        TargetType="Border">
         <Style Selector="^.styled">
             <Setter Property="Background" Value="{DynamicResource StyledBorderBrush}" />
             <Setter Property="BorderBrush" Value="Gray" />
             <Setter Property="BorderThickness" Value="1" />
-        </Style> 
+        </Style>
     </ControlTheme>
 </ResourceDictionary>

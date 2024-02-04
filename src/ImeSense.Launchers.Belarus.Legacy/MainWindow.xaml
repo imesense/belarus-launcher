@@ -2,9 +2,9 @@
     x:Class="ImeSense.Launchers.Belarus.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ImeSense.Launchers.Belarus"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:ImeSense.Launchers.Belarus"
     xmlns:rx="http://reactiveui.net"
     xmlns:vm="clr-namespace:ImeSense.Launchers.Belarus.ViewModels"
     Title="Belarus Launcher"
@@ -25,20 +25,21 @@
         <Border.Background>
             <ImageBrush ImageSource="pack://application:,,,/Assets/Images/vinetka.png" />
         </Border.Background>
+
         <Grid>
+            <rx:RoutedViewHost
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Router="{Binding Router}" />
+
             <Image
-                Grid.Row="0"
                 Grid.Column="0"
+                Grid.Row="0"
                 Width="290"
                 Margin="10,15"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="pack://application:,,,/Assets/Images/logo.png" />
-
-            <rx:RoutedViewHost
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Router="{Binding Router}" />
         </Grid>
     </Border>
 </Window>

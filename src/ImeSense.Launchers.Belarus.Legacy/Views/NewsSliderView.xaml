@@ -2,17 +2,21 @@
     x:Class="ImeSense.Launchers.Belarus.Views.NewsSliderView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ImeSense.Launchers.Belarus.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:ImeSense.Launchers.Belarus.Views"
     xmlns:view="clr-namespace:ImeSense.Launchers.Belarus.Views"
     xmlns:vm="clr-namespace:ImeSense.Launchers.Belarus.ViewModels;assembly=ImeSense.Launchers.Belarus.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Border BorderBrush="Gray" BorderThickness="1">
+    <Border
+        BorderBrush="Gray"
+        BorderThickness="1">
         <Border.Background>
-            <SolidColorBrush Opacity=".75" Color="Black" />
+            <SolidColorBrush
+                Color="Black"
+                Opacity=".75" />
         </Border.Background>
 
         <StackPanel>
@@ -20,29 +24,46 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
                 DataContext="{Binding SelectedNewsViewModel}" />
+
             <Grid Margin="10,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
 
-                    <Button Command="{Binding GoVk}" Content="VK" />
-                    <Button Command="{Binding GoTg}" Content="Tg" />
-                    <Button Command="{Binding GoApPro}" Content="Ap-Pro" />
+                <StackPanel
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <Button
+                        Content="VK"
+                        Command="{Binding GoVk}" />
+                    <Button
+                        Content="Tg"
+                        Command="{Binding GoTg}" />
+                    <Button
+                        Content="Ap-Pro"
+                        Command="{Binding GoApPro}" />
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
                     <Button
+                        Command="{Binding GoBack}"
                         Height="20"
-                        Padding="0"
-                        Command="{Binding GoBack}">
-                        <Image Opacity="0.6" Source="pack://application:,,,/Assets/Icons/chevron-double-left.png" />
+                        Padding="0">
+                        <Image
+                            Opacity="0.6"
+                            Source="pack://application:,,,/Assets/Icons/chevron-double-left.png" />
                     </Button>
+
                     <Button
+                        Command="{Binding GoNext}"
                         Height="20"
-                        Padding="0"
-                        Command="{Binding GoNext}">
-                        <Image Opacity="0.6" Source="pack://application:,,,/Assets/Icons/chevron-double-right.png" />
+                        Padding="0">
+                        <Image
+                            Opacity="0.6"
+                            Source="pack://application:,,,/Assets/Icons/chevron-double-right.png" />
                     </Button>
                 </StackPanel>
             </Grid>

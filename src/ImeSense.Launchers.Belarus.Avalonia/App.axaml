@@ -2,10 +2,10 @@
     x:Class="ImeSense.Launchers.Belarus.Avalonia.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ImeSense.Launchers.Belarus.Avalonia"
+    xmlns:l="using:ImeSense.Launchers.Belarus.Avalonia"
     RequestedThemeVariant="Dark">
     <Application.DataTemplates>
-        <local:ViewLocator />
+        <l:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Resources>

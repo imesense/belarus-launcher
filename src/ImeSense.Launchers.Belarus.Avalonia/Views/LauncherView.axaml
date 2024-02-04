@@ -1,47 +1,56 @@
 <UserControl
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
     x:Class="ImeSense.Launchers.Belarus.Avalonia.Views.LauncherView"
     x:DataType="vm:LauncherViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vm="using:ImeSense.Launchers.Belarus.Avalonia.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Design.DataContext>
         <vm:LauncherViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="*,auto" RowDefinitions="*">
+    <Grid
+        ColumnDefinitions="*,auto"
+        RowDefinitions="*">
         <Grid
             Grid.Column="0"
-            HorizontalAlignment="Left"
+            Width="330"
             Margin="40"
-            VerticalAlignment="Top"
-            Width="330">
-            <!--  NewsSliderView  -->
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
+            <!-- NewsSliderView -->
             <ContentControl Content="{Binding NewsSliderViewModel}" />
         </Grid>
 
         <Border
-            BorderThickness="1,0,0,0"
-            Classes="styled"
             Grid.Column="1"
-            Width="350">
+            Width="350"
+            BorderThickness="1,0,0,0"
+            Classes="styled">
             <DockPanel LastChildFill="True">
                 <StackPanel
-                    DockPanel.Dock="Bottom"
-                    HorizontalAlignment="Right"
                     Margin="10"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Bottom">
-                    <Button FontSize="16" Padding="0" Command="{Binding OpenMainRepositoryUriCommand}" Content="{Binding AppVersion}" />
-                    <Button FontSize="16" Padding="0" Command="{Binding OpenOrganizationUriCommand}" Content="{Binding CompanyName}" />
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    DockPanel.Dock="Bottom"
+                    Orientation="Horizontal">
+                    <Button
+                        Content="{Binding AppVersion}"
+                        Command="{Binding OpenMainRepositoryUriCommand}"
+                        Padding="0"
+                        FontSize="16" />
+                    <Button
+                        Content="{Binding CompanyName}"
+                        Command="{Binding OpenOrganizationUriCommand}"
+                        Padding="0"
+                        FontSize="16" />
                 </StackPanel>
 
-                <!--  PageMenuView  -->
+                <!-- PageMenuView -->
                 <ContentControl
                     Content="{Binding PageMenuViewModel}"
                     HorizontalAlignment="Stretch"

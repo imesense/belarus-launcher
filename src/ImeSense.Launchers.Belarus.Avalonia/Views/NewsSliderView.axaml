@@ -1,49 +1,53 @@
 <UserControl
     x:Class="ImeSense.Launchers.Belarus.Avalonia.Views.NewsSliderView"
+    x:DataType="vm:NewsSliderViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vm="using:ImeSense.Launchers.Belarus.Avalonia.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:DataType="vm:NewsSliderViewModel"
     mc:Ignorable="d">
-
     <Design.DataContext>
         <vm:NewsSliderViewModel />
     </Design.DataContext>
 
     <Border Classes="styled">
         <DockPanel>
-            <!--  SelectedNewsView  -->
+            <!-- SelectedNewsView -->
             <ContentControl
-                HorizontalAlignment="Stretch"
                 Content="{Binding SelectedNewsViewModel}"
+                HorizontalAlignment="Stretch"
                 DockPanel.Dock="Top" />
-            <!--  LinkView  -->
+
+            <!-- LinkView -->
             <ContentControl
-                HorizontalAlignment="Left"
                 Content="{Binding LinkViewModel}"
+                HorizontalAlignment="Left"
                 DockPanel.Dock="Left" />
             <StackPanel
                 HorizontalAlignment="Right"
                 DockPanel.Dock="Right"
                 Orientation="Horizontal">
-                <!--  Back  -->
+                <!-- Back -->
                 <Button
+                    Command="{Binding GoBack}"
                     Height="20"
-                    Padding="0"
-                    Command="{Binding GoBack}">
-                    <Image Opacity="0.6" Source="/Assets/Icons/chevron-double-left.png" />
+                    Padding="0">
+                    <Image
+                        Opacity="0.6"
+                        Source="/Assets/Icons/chevron-double-left.png" />
                 </Button>
 
-                <!--  Next  -->
+                <!-- Next -->
                 <Button
+                    Command="{Binding GoNext}"
                     Height="20"
-                    Padding="0"
-                    Command="{Binding GoNext}">
-                    <Image Opacity="0.6" Source="/Assets/Icons/chevron-double-right.png" />
+                    Padding="0">
+                    <Image
+                        Opacity="0.6"
+                        Source="/Assets/Icons/chevron-double-right.png" />
                 </Button>
             </StackPanel>
         </DockPanel>

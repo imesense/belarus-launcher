@@ -1,15 +1,25 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
         <Border Padding="20">
             <StackPanel Orientation="Vertical">
                 <Button Content="Button" />
-                <Button Classes="styled" Content="Styled Button" />
+
+                <Button
+                    Content="Styled Button"
+                    Classes="styled" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
 
-    <SolidColorBrush Color="Transparent" x:Key="TransparentBrush" />
-    <ControlTheme TargetType="Button" x:Key="{x:Type Button}">
+    <SolidColorBrush
+        x:Key="TransparentBrush"
+        Color="Transparent" />
+
+    <ControlTheme
+        x:Key="{x:Type Button}"
+        TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource TransparentBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
@@ -23,17 +33,17 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <ContentPresenter
+                    x:Name="PART_ContentPresenter"
+                    Content="{TemplateBinding Content}"
+                    Padding="{TemplateBinding Padding}"
+                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                     Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
-                    Content="{TemplateBinding Content}"
                     ContentTemplate="{TemplateBinding ContentTemplate}"
                     CornerRadius="{TemplateBinding CornerRadius}"
-                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                    Padding="{TemplateBinding Padding}"
-                    RecognizesAccessKey="True"
-                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                    x:Name="PART_ContentPresenter" />
+                    RecognizesAccessKey="True" />
             </ControlTemplate>
         </Setter>
 
@@ -45,8 +55,8 @@
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect
-                        BlurRadius="10"
                         Color="White"
+                        BlurRadius="10"
                         OffsetX="0"
                         OffsetY="0"
                         Opacity="0.9" />
