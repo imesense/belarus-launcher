@@ -56,6 +56,16 @@ jobs:
       with:
         dotnet-version: '7.0.x'
 
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        key: Launcher-NuGet-${{ hashFiles('**/*.nupkg') }}
+        restore-keys: |
+          Launcher-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Launcher-NuGet-
+        path: |
+          ~/.nuget/packages
+
     - name: Restore dependencies
       run: |
         dotnet restore $env:LauncherProject
@@ -100,6 +110,16 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '7.0.x'
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        key: Updater-NuGet-${{ hashFiles('**/*.nupkg') }}
+        restore-keys: |
+          Updater-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Updater-NuGet-
+        path: |
+          ~/.nuget/packages
 
     - name: Restore dependencies
       run: |
@@ -149,6 +169,16 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '7.0.x'
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        key: Launcher-NuGet-${{ hashFiles('**/*.nupkg') }}
+        restore-keys: |
+          Launcher-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Launcher-NuGet-
+        path: |
+          ~/.nuget/packages
 
     - name: Publish launcher
       run: |
@@ -200,6 +230,16 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '7.0.x'
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        key: Updater-NuGet-${{ hashFiles('**/*.nupkg') }}
+        restore-keys: |
+          Updater-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Updater-NuGet-
+        path: |
+          ~/.nuget/packages
 
     - name: Publish updater
       run: |
