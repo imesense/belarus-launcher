@@ -59,9 +59,9 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
-        key: Legacy-NuGet-${{ hashFiles('**/*.nupkg') }}
+        key: Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          Legacy-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
           Legacy-NuGet-
         path: |
           ~/.nuget/packages
@@ -119,9 +119,9 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
-        key: Legacy-NuGet-${{ hashFiles('**/*.nupkg') }}
+        key: Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          Legacy-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
           Legacy-NuGet-
         path: |
           ~/.nuget/packages

@@ -59,9 +59,9 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
-        key: Hasher-NuGet-${{ hashFiles('**/*.nupkg') }}
+        key: Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          Hasher-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
           Hasher-NuGet-
         path: |
           ~/.nuget/packages
@@ -119,9 +119,9 @@ jobs:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
-        key: Hasher-NuGet-${{ hashFiles('**/*.nupkg') }}
+        key: Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          Hasher-NuGet-${{ hashFiles('**/*.nupkg') }}
+          Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
           Hasher-NuGet-
         path: |
           ~/.nuget/packages
