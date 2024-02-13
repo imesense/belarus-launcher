@@ -3,12 +3,14 @@ using System.Reactive.Linq;
 using ReactiveUI.Fody.Helpers;
 
 using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Models;
+using ImeSense.Launchers.Belarus.Legacy.Manager;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
 public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
     private readonly IWindowManager _windowManager;
-    private readonly UserManager _userManager;
+    private readonly UserSettings _userSettings;
 
     [Reactive] public string IpAddress { get; set; } = string.Empty;
 
@@ -19,11 +21,11 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
 
     public IScreen HostScreen { get; set; } = null!;
 
-    public StartGameViewModel(IWindowManager windowManager, UserManager userManager) {
+    public StartGameViewModel(IWindowManager windowManager, UserSettings userSettings) {
         _windowManager = windowManager;
-        _userManager = userManager;
+        _userSettings = userSettings;
 
-        IpAddress = _userManager.UserSettings?.IpAddress ?? "";
+        IpAddress = _userSettings.IpAddress ?? "";
 
         SetupBinding();
     }
@@ -39,23 +41,20 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
     }
 
     private void StartGameImpl() {
-        if (_userManager is null) {
+        if (_userSettings is null) {
             throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
         }
 
         if (string.IsNullOrWhiteSpace(IpAddress)) {
             throw new Exception("Ip-адрес не введен!");
         }
 
-        _userManager.UserSettings.IpAddress = IpAddress;
-        _userManager.Save();
+        _userSettings.IpAddress = IpAddress;
+        ConfigManager.SaveSettings(_userSettings);
 
         Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
         arguments: new List<string> {
-            @$"-start -center_screen -silent_error_mode client({_userManager.UserSettings.IpAddress}/name={_userManager.UserSettings.Username})"
+            @$"-start -center_screen -silent_error_mode client({_userSettings.IpAddress}/name={_userSettings.Username})"
         });
         BackImpl();
 

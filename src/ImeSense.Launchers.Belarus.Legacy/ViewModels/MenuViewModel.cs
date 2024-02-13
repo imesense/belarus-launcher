@@ -7,7 +7,7 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 
 public class MenuViewModel : ViewModelBase {
     private readonly IWindowManager _windowManager;
-    private readonly UserManager _userManager;
+    private readonly UserSettings _userSettings;
     private readonly DownloadManager _downloadService;
 
     public LauncherViewModel? LauncherViewModel { get; set; }
@@ -25,10 +25,10 @@ public class MenuViewModel : ViewModelBase {
     public ReactiveCommand<Unit, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartDownload { get; private set; } = null!;
 
-    public MenuViewModel(IWindowManager windowManager, UserManager userManager, DownloadManager downloadService) {
+    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings, DownloadManager downloadService) {
         _downloadService = downloadService;
         _windowManager = windowManager;
-        _userManager = userManager;
+        _userSettings = userSettings;
 
         SetupCommands();
     }
@@ -82,17 +82,14 @@ public class MenuViewModel : ViewModelBase {
     }
 
     private void PlayGameImpl() {
-        if (_userManager is null) {
+        if (_userSettings is null) {
             throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
         }
 
         if (_isStartServer) {
             Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: new List<string> {
-                @$"-start client(localhost/name={_userManager.UserSettings.Username})"
+                @$"-start client(localhost/name={_userSettings.Username})"
             });
             _windowManager.Close();
             return;
