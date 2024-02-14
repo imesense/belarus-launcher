@@ -68,21 +68,21 @@
       },
       "ReactiveUI.Fody": {
         "type": "Direct",
-        "requested": "[19.5.39, )",
-        "resolved": "19.5.39",
-        "contentHash": "oWm9z2WiiZ+IKKiGZ2oQjcdtZOuo2hBKELNwExX+FRmXw1vJ0cVBzDhavnqaW7R4+GmByBHw/cMhVijJ2omLdA==",
+        "requested": "[19.5.41, )",
+        "resolved": "19.5.41",
+        "contentHash": "bh6OH1WsSHf/ryUVaPnI6LWl1+lrCvq4L/AoHpzPXCKxtR4p0ogPVONnkq0jYgSQ55x7YNCVkthBKeb6uUSbpg==",
         "dependencies": {
           "Fody": "6.8.0",
-          "ReactiveUI": "19.5.39"
+          "ReactiveUI": "19.5.41"
         }
       },
       "ReactiveUI.WPF": {
         "type": "Direct",
-        "requested": "[19.5.39, )",
-        "resolved": "19.5.39",
-        "contentHash": "fOx6xuSUHHxxzSqsqsC9nV/2xzl5jRTPwr1dNLP30BK5FnTdyqY6d+y3q4CkfclPJw8xNhyBtd3OCrrmVxCjMQ==",
+        "requested": "[19.5.41, )",
+        "resolved": "19.5.41",
+        "contentHash": "KC/zYb7ZUYSh7amgiK6OKvydzYNNrS+u6AhKRrM3j0uVzc+GD25mZYEBJmEa8ZfqdF7WOaTZ5j7DE5fQn1/jVw==",
         "dependencies": {
-          "ReactiveUI": "19.5.39"
+          "ReactiveUI": "19.5.41"
         }
       },
       "Splat.Microsoft.Extensions.DependencyInjection": {
@@ -343,8 +343,8 @@
       },
       "ReactiveUI": {
         "type": "Transitive",
-        "resolved": "19.5.39",
-        "contentHash": "Kxy0Key0oon45MZI/Nj817gelfWahqhhLvQpC/8oqDqcwXxbgulvggTMYW81fdCI4IttClmK/b0GZhBymPjEgA==",
+        "resolved": "19.5.41",
+        "contentHash": "qusIoJHhzNFm/Ei52wwesy15le/NAMWm40UOz2boaWcBntqOJJPR6YucDUibHNo5v9opNP7ZCAMa+w3rzX6AIw==",
         "dependencies": {
           "DynamicData": "8.3.27",
           "Splat": "14.8.12",
