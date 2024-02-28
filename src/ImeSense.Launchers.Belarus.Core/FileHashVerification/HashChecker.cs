@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.FileHashVerification;
 
@@ -15,7 +15,7 @@ public class HashChecker {
         CancellationToken cancellationToken = default) {
         await using var stream = File.OpenRead(filePath);
         var actualHash = await _hashProvider.CalculateHashAsync(stream, cancellationToken);
-        _logger?.LogInformation("File {FileName} ({HashBytes})", Path.GetFileName(filePath), actualHash);
+        _logger?.LogInformation("File {FileName} {Length} Kb ({HashBytes})", Path.GetFileName(filePath), stream.Length / 1000.0f, actualHash);
         return actualHash == expectedHash;
     }
 }
