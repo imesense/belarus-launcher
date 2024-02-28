@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -7,30 +8,29 @@ using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
 using static ImeSense.Launchers.Belarus.Core.Storage.DirectoryStorage;
+
 IEnumerable<string> GetDirectories() {
     return new[] { Binaries, Resources, Patches };
 }
+var hashing = new Md5HashProvider(null);
 
 try {
-    var hashing = new Md5HashProvider(null);
+    var stopwatch = new Stopwatch();
+    stopwatch.Start();
+
     var folders = GetDirectories();
-    var gameResources = new List<GameResource>();
+    var gameResourceTasks = new List<Task<GameResource>>();
 
     foreach (var folderPath in folders) {
         var files = Directory.GetFiles(folderPath);
         foreach (var filePath in files) {
-            
-            var fileInfo = new FileInfo(filePath);
-            Console.WriteLine($"Calculating hash for file {fileInfo.Name}");
-            await using var stream = File.OpenRead(filePath);
-            var file = new GameResource {
-                Title = fileInfo.Name,
-                Directory = fileInfo.Directory!.Name,
-                Hash = await hashing.CalculateHashAsync(stream)
-            };
-            gameResources.Add(file);
+            gameResourceTasks.Add(AddGameResource(new FileInfo(filePath)));
         }
     }
+
+    var gameResources = await Task.WhenAll(gameResourceTasks);
+    stopwatch.Stop();
+    Console.WriteLine($"Hash calculation time: {stopwatch.ElapsedMilliseconds}");
 
     var options = new JsonSerializerOptions {
         AllowTrailingCommas = true,
@@ -49,4 +49,12 @@ try {
     Console.ReadLine();
 }
 
-
+async Task<GameResource> AddGameResource(FileInfo fileInfo) {
+    Console.WriteLine($"Calculating hash file: {fileInfo.Name} {fileInfo.Length / 1000.0f} Kb");
+    await using var stream = File.OpenRead(fileInfo.FullName);
+    return new GameResource {
+        Title = fileInfo.Name,
+        Directory = fileInfo.Directory!.Name,
+        Hash = await hashing.CalculateHashAsync(stream)
+    };
+}
