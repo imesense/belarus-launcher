@@ -4,11 +4,12 @@ using Avalonia.ReactiveUI;
 using Serilog;
 
 using ImeSense.Launchers.Belarus.Core.Logger;
+using ImeSense.Launchers.Belarus.Core.Storage;
 
 namespace ImeSense.Launchers.Belarus.Avalonia;
 
 class Program {
-    private const string MutexName = "Belarus.Launcher.Avalonia";
+    private const string _mutexName = "Belarus.Launcher.Avalonia";
 
     private static Mutex? _mutex;
 
@@ -19,7 +20,7 @@ class Program {
     public static void Main(string[] args) {
         var isMutexCreated = false;
         try {
-            _mutex = new Mutex(initiallyOwned: false, MutexName, out isMutexCreated);
+            _mutex = new Mutex(initiallyOwned: false, _mutexName, out isMutexCreated);
         } catch {
         }
         if (!isMutexCreated) {
@@ -38,12 +39,14 @@ class Program {
             }
 #endif
         } finally {
+            Log.CloseAndFlush();
             _mutex?.Dispose();
         }
     }
 
     private static void StartApp(string[] args) {
-        LauncherLoggerFactory.CreateLogger();
+        var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
+        Log.Logger = LogManager.CreateLogger(pathLog, true);
         Log.Information("Start launcher");
 
         PrintOsInfo();
@@ -57,10 +60,13 @@ class Program {
             Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"));
         Log.Information("User / PC: {UserName} / {MachineName}", Environment.UserName,
             Environment.MachineName);
+        Log.Information("System directory: {0} {NewLine}", Environment.SystemDirectory, Environment.NewLine);
         Log.Information(".NET: {0}", Environment.Version);
         Log.Information("ProcessId: {0}", Environment.ProcessId);
         Log.Information("Processor count: {0}", Environment.ProcessorCount);
         Log.Information("Process path: {0}", Environment.ProcessPath);
+        Log.Information("Current directory: {0}", Environment.CurrentDirectory);
+        Log.Information("Base directory: {0} {NewLine}", AppDomain.CurrentDomain.BaseDirectory, Environment.NewLine);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
