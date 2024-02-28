@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    "net7.0": {
+    "net8.0": {
       "Avalonia": {
         "type": "Direct",
         "requested": "[11.0.9, )",

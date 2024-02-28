@@ -1,6 +1,7 @@
 {
   "version": 1,
   "dependencies": {
+    "net8.0": {
       "Microsoft.Extensions.Logging": {
         "type": "Direct",
         "requested": "[8.0.0, )",
