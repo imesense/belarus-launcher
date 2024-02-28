@@ -4,15 +4,26 @@ using System.Text.Json;
 using System.Text.Unicode;
 
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
+using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
+
+using Microsoft.Extensions.Logging;
+
+using Serilog;
 
 using static ImeSense.Launchers.Belarus.Core.Storage.DirectoryStorage;
 
 IEnumerable<string> GetDirectories() {
     return new[] { Binaries, Resources, Patches };
 }
-var hashing = new Md5HashProvider(null);
+
+var pathLog = Path.Combine(UserLogs, "CryptoHasherReport.log");
+using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog, true)));
+var logger = factory.CreateLogger<Md5HashProvider>();
+logger.LogInformation("Start CryptoHasher application");
+
+var hashing = new Md5HashProvider(logger);
 
 try {
     var stopwatch = new Stopwatch();
@@ -30,7 +41,7 @@ try {
 
     var gameResources = await Task.WhenAll(gameResourceTasks);
     stopwatch.Stop();
-    Console.WriteLine($"Hash calculation time: {stopwatch.ElapsedMilliseconds}");
+    logger.LogInformation($"Hash calculation time: {stopwatch.ElapsedMilliseconds}");
 
     var options = new JsonSerializerOptions {
         AllowTrailingCommas = true,
@@ -41,17 +52,19 @@ try {
     await JsonSerializer.SerializeAsync(fs, gameResources, options);
     fs.Close();
 
-    Console.WriteLine(File.ReadAllText(FileNameStorage.HashResources));
+    logger.LogInformation(File.ReadAllText(FileNameStorage.HashResources));
 } catch (Exception ex) {
-    Console.WriteLine(ex.Message);
-    Console.WriteLine(ex.StackTrace);
+    logger.LogInformation(ex.Message);
+    logger.LogInformation(ex.StackTrace);
 
     Console.ReadLine();
 }
 
 async Task<GameResource> AddGameResource(FileInfo fileInfo) {
-    Console.WriteLine($"Calculating hash file: {fileInfo.Name} {fileInfo.Length / 1000.0f} Kb");
     await using var stream = File.OpenRead(fileInfo.FullName);
+    var hashFile = await hashing.CalculateHashAsync(stream);
+    logger.LogInformation("File {FileName} {Length} Kb ({HashBytes})", fileInfo.Name, stream.Length / 1000.0f, hashFile);
+
     return new GameResource {
         Title = fileInfo.Name,
         Directory = fileInfo.Directory!.Name,
