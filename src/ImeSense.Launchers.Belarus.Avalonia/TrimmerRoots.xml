@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <linker>
+    <assembly fullname="ImeSense.Launchers.Belarus.Themes.Avalonia">
+        <type fullname="CompiledAvaloniaXaml.!AvaloniaResources" />
+        <type fullname="CompiledAvaloniaXaml.!IndexerAccessorFactoryClosure" />
+        <type fullname="CompiledAvaloniaXaml.!XamlLoader" />
+        <type fullname="CompiledAvaloniaXaml.XamlIlContext" />
+        <type fullname="CompiledAvaloniaXaml.XamlIlContext/ParentStackEnumerable/Enumerator" />
+        <type fullname="CompiledAvaloniaXaml.XamlIlHelpers" />
+        <type fullname="CompiledAvaloniaXaml.XamlIlTrampolines" />
+    </assembly>
+
     <assembly fullname="SBLauncher">
         <type fullname="CompiledAvaloniaXaml.!AvaloniaResources" />
         <type fullname="CompiledAvaloniaXaml.!IndexerAccessorFactoryClosure" />
