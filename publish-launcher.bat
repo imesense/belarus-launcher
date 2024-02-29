@@ -3,4 +3,6 @@ dotnet publish src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belaru
     --runtime win-x64 ^
     -p:PublishAot=true ^
     -p:InvariantGlobalization=true ^
-    -p:IsAotCompatible=true
+    -p:IsAotCompatible=true ^
+    -p:DebugSymbols=false ^
+    -p:DebugType=None
