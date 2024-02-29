@@ -19,30 +19,30 @@ public class GitHubApiService : IGitStorageApiService {
         _launcherStorage = launcherStorage;
     }
 
-    public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename, 
-        Uri? uriRepository = null) where T : class
-    {
-        if (uriRepository == null) {
-            if (_httpClient.BaseAddress == null) {
-                throw new NullReferenceException("No base address for HttpClient");
-            }
-            uriRepository = _httpClient.BaseAddress;
-        }
+    //public async IAsyncEnumerable<T?> DownloadJsonArrayAsync<T>(string filename, 
+    //    Uri? uriRepository = null) where T : class
+    //{
+    //    if (uriRepository == null) {
+    //        if (_httpClient.BaseAddress == null) {
+    //            throw new NullReferenceException("No base address for HttpClient");
+    //        }
+    //        uriRepository = _httpClient.BaseAddress;
+    //    }
 
-        GitHubRelease? release;
-        if (_launcherStorage == null) {
-            release = await GetLastReleaseAsync();
-        } else {
-            release = _launcherStorage.GitHubRelease;
-        }
+    //    GitHubRelease? release;
+    //    if (_launcherStorage == null) {
+    //        release = await GetLastReleaseAsync();
+    //    } else {
+    //        release = _launcherStorage.GitHubRelease;
+    //    }
 
-        var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
-        await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
-        var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
-        await foreach (var content in contents) {
-            yield return content;
-        }
-    }
+    //    var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
+    //    await using var assetStream = await _httpClient.GetStreamAsync(asset?.BrowserDownloadUrl);
+    //    var contents = JsonSerializer.DeserializeAsyncEnumerable<T>(assetStream);
+    //    await foreach (var content in contents) {
+    //        yield return content;
+    //    }
+    //}
 
     /// <summary>
     /// Downloads a JSON file from a GitHub release and deserializes it into the specified object type
@@ -68,7 +68,7 @@ public class GitHubApiService : IGitStorageApiService {
         // Find the asset with the specified filename
         var asset = release?.Assets?.FirstOrDefault(n => n.Name.Equals(filename));
         // Download the asset
-        return await _httpClient.GetFromJsonAsync<T>(asset?.BrowserDownloadUrl);
+        return await _httpClient.GetFromJsonAsync(asset?.BrowserDownloadUrl, typeof(T), SourceGenerationContext.Default) as T;
     }
 
     public async Task<GitHubRelease?> GetLastReleaseAsync(Uri? uriRepository = null) {
@@ -79,7 +79,7 @@ public class GitHubApiService : IGitStorageApiService {
             uriRepository = _httpClient.BaseAddress;
         }
 
-        return await _httpClient.GetFromJsonAsync<GitHubRelease>(new Uri(uriRepository, "releases/latest"));
+        return await _httpClient.GetFromJsonAsync(new Uri(uriRepository, "releases/latest"), SourceGenerationContext.Default.GitHubRelease);
     }
 
     public async Task<GitHubRelease?> GetReleaseAsync(string tag, Uri? uriRepository = null) {
@@ -90,7 +90,7 @@ public class GitHubApiService : IGitStorageApiService {
             uriRepository = _httpClient.BaseAddress;
         }
 
-        var json = await _httpClient.GetFromJsonAsync<IList<GitHubRelease>>(new Uri(uriRepository, $"releases"));
+        var json = await _httpClient.GetFromJsonAsync(new Uri(uriRepository, $"releases"), SourceGenerationContext.Default.GitHubReleaseArray);
         return json?.FirstOrDefault(t => t.TagName.Equals(tag));
     }
 
@@ -103,7 +103,7 @@ public class GitHubApiService : IGitStorageApiService {
         }
 
         await using var tagsStream = await _httpClient.GetStreamAsync(new Uri(uriRepository, "tags"));
-        var tags = JsonSerializer.Deserialize<IEnumerable<Tag>>(tagsStream);
+        var tags = JsonSerializer.Deserialize(tagsStream, SourceGenerationContext.Default.IEnumerableTag);
 
         if (tags is not null) {
             return tags;

@@ -1,12 +1,11 @@
 using System.Diagnostics;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Core;
 
 using Microsoft.Extensions.Logging;
 
@@ -14,9 +13,7 @@ using Serilog;
 
 using static ImeSense.Launchers.Belarus.Core.Storage.DirectoryStorage;
 
-IEnumerable<string> GetDirectories() {
-    return new[] { Binaries, Resources, Patches };
-}
+IEnumerable<string> GetDirectories() => [Binaries, Resources, Patches];
 
 var pathLog = Path.Combine(UserLogs, "CryptoHasherReport.log");
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog, true)));
@@ -41,21 +38,16 @@ try {
 
     var gameResources = await Task.WhenAll(gameResourceTasks);
     stopwatch.Stop();
-    logger.LogInformation($"Hash calculation time: {stopwatch.ElapsedMilliseconds}");
+    logger.LogInformation("Hash calculation time: {time}", stopwatch.ElapsedMilliseconds);
 
-    var options = new JsonSerializerOptions {
-        AllowTrailingCommas = true,
-        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-        WriteIndented = true
-    };
     await using var fs = new FileStream(FileNameStorage.HashResources, FileMode.OpenOrCreate);
-    await JsonSerializer.SerializeAsync(fs, gameResources, options);
+    await JsonSerializer.SerializeAsync(fs, gameResources, SourceGenerationContext.Default.GameResourceArray);
     fs.Close();
 
-    logger.LogInformation(File.ReadAllText(FileNameStorage.HashResources));
+    logger.LogInformation("{json}", File.ReadAllText(FileNameStorage.HashResources));
 } catch (Exception ex) {
-    logger.LogInformation(ex.Message);
-    logger.LogInformation(ex.StackTrace);
+    logger.LogInformation("{Message}", ex.Message);
+    logger.LogInformation("{StackTrace}", ex.StackTrace);
 
     Console.ReadLine();
 }

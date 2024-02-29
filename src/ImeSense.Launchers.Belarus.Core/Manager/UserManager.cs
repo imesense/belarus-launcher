@@ -1,6 +1,4 @@
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
@@ -29,8 +27,9 @@ public class UserManager {
         }
 
         try {
-            var json = File.ReadAllText(PathStorage.LauncherSetting);
-            var user = JsonSerializer.Deserialize<UserSettings>(json)!;
+            using var json = File.OpenRead(PathStorage.LauncherSetting);
+            var user = JsonSerializer.Deserialize(json, SourceGenerationContext.Default.UserSettings)!;
+
             if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress)) {
                 user.IpAddress = string.Empty;
             }
@@ -63,12 +62,7 @@ public class UserManager {
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);
 
-        var options = new JsonSerializerOptions {
-            AllowTrailingCommas = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-            WriteIndented = true
-        };
-        var json = JsonSerializer.Serialize(UserSettings, options);
+        var json = JsonSerializer.Serialize(UserSettings, typeof(UserSettings), SourceGenerationContext.Default);
         writer.Write(json);
     }
 }
