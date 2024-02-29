@@ -37,6 +37,14 @@ public partial class App : Application {
             loggingBuilder.AddSerilog(dispose: true));
 
         services.AddSingleton<IWindowManager, WindowManager>();
+        services.AddSingleton<AuthorizationView>();
+        services.AddSingleton<DownloadMenuView>();
+        services.AddSingleton<GameMenuView>();
+        services.AddSingleton<LauncherView>();
+        services.AddSingleton<LinkView>();
+        services.AddSingleton<NewsSliderView>();
+        services.AddTransient<NewsView>();
+        services.AddSingleton<StartGameView>();
 
         services.AddTransient<GameDirectoryValidator>();
 
