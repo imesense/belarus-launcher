@@ -2,10 +2,11 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        
         <AssemblyName>SBLauncherUpdater</AssemblyName>
-        <AssemblyVersion>2.1</AssemblyVersion>
-        <Company>ImeSense</Company>
-        <Authors>Drombeys</Authors>
         <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
     </PropertyGroup>
 

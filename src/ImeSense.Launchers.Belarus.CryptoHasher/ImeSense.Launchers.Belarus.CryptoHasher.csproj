@@ -3,13 +3,9 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
-    </PropertyGroup>
 
-    <PropertyGroup>
-        <AssemblyName>CryptoHasher</AssemblyName>
-        <Company>ImeSense</Company>
-        <Authors>Drombeys</Authors>
-        <AssemblyVersion>2.1</AssemblyVersion>
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
     <ItemGroup>
