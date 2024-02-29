@@ -1,13 +1,17 @@
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
+using Microsoft.Extensions.Logging;
+
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
 public class UpdaterService : IUpdaterService {
+    private readonly ILogger<UpdaterService> _logger;
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
 
-    public UpdaterService(IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager) {
+    public UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager) {
+        _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
     }
@@ -25,7 +29,7 @@ public class UpdaterService : IUpdaterService {
             throw new NullReferenceException("Browser download url is null!");
         }
         var progress = new Progress<int>(percentage => {
-            Console.WriteLine($"{appName} is {percentage}% downloaded");
+            _logger.LogInformation("{appName} is {percentage}% downloaded", appName, percentage);
         });
 
         var pathDownloadFolder = Path.Combine(DirectoryStorage.Base, "temp");

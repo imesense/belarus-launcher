@@ -11,16 +11,16 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-using static ImeSense.Launchers.Belarus.Core.Storage.DirectoryStorage;
+System.Console.Title = "Belarus CryptoHasher";
 
-IEnumerable<string> GetDirectories() => [Binaries, Resources, Patches];
+IEnumerable<string> GetDirectories() => [DirectoryStorage.Binaries, DirectoryStorage.Resources, DirectoryStorage.Patches];
 
-var pathLog = Path.Combine(UserLogs, "CryptoHasherReport.log");
+var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.CryptoHasherLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog, true)));
-var logger = factory.CreateLogger<Md5HashProvider>();
+var logger = factory.CreateLogger<Program>();
 logger.LogInformation("Start CryptoHasher application");
 
-var hashing = new Md5HashProvider(logger);
+var hashing = new Md5HashProvider(factory.CreateLogger<Md5HashProvider>());
 
 try {
     var stopwatch = new Stopwatch();
@@ -50,6 +50,8 @@ try {
     logger.LogInformation("{StackTrace}", ex.StackTrace);
 
     Console.ReadLine();
+} finally {
+    Log.CloseAndFlush();
 }
 
 async Task<GameResource> AddGameResource(FileInfo fileInfo) {
