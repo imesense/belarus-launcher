@@ -1,15 +1,11 @@
-using System;
-
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
 using ReactiveUI;
 
-using ImeSense.Launchers.Belarus.Avalonia.ViewModels;
+namespace ImeSense.Launchers.Belarus.Avalonia.Services;
 
-namespace ImeSense.Launchers.Belarus.Avalonia;
-
-public class ViewLocator : IDataTemplate {
+public class DataTemplateLocator : IDataTemplate {
     public Control Build(object? data) {
         var name = $"{data!.GetType().FullName!.Replace("ViewModel", "View")}";
         var type = Type.GetType(name);
