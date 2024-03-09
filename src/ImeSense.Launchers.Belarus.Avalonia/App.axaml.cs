@@ -19,6 +19,7 @@ using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
 using ImeSense.Launchers.Belarus.Core.Validators;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
 
 namespace ImeSense.Launchers.Belarus.Avalonia;
 
@@ -76,6 +77,8 @@ public partial class App : Application {
         services.AddTransient<AuthorizationViewModel>();
         services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
+        
+        services.AddSingleton<ViewModelLocator>();
 
         return services;
     }
