@@ -9,11 +9,13 @@ using ReactiveUI.Fody.Helpers;
 
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class NewsSliderViewModel : ReactiveObject {
     private readonly ILogger<NewsSliderViewModel> _logger;
+    private readonly ViewModelLocator _viewModelLocator;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
@@ -23,11 +25,12 @@ public class NewsSliderViewModel : ReactiveObject {
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
 
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, LinkViewModel linkViewModel) {
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator) {
         logger.LogInformation("NewsSliderViewModel CTOR");
         _logger = logger;
+        _viewModelLocator = viewModelLocator;
 
-        LinkViewModel = linkViewModel;
+        LinkViewModel = viewModelLocator.LinkViewModel;
         SetupBinding();
         SetupCommands();
     }
@@ -38,6 +41,7 @@ public class NewsSliderViewModel : ReactiveObject {
         _logger = null!;
 
         LinkViewModel = null!;
+        _viewModelLocator = null!;
     }
 
     private void SetupCommands() {
