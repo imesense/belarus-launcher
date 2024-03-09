@@ -8,6 +8,7 @@ namespace ImeSense.Launchers.Belarus.Core;
 [JsonSerializable(typeof(Asset))]
 [JsonSerializable(typeof(Commit))]
 [JsonSerializable(typeof(GameResource))]
+[JsonSerializable(typeof(IList<GameResource>))]
 [JsonSerializable(typeof(GameResource[]))]
 [JsonSerializable(typeof(GitHubRelease))]
 [JsonSerializable(typeof(GitHubRelease[]))]
