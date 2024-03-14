@@ -50,7 +50,7 @@ public class LauncherViewModel : ReactiveObject {
 
     private void SetupCommands() {
         OpenMainRepositoryUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.LauncherUri.AbsoluteUri));
-        OpenOrganizationUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.LauncherUri.AbsoluteUri));
+        OpenOrganizationUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.ImeSenseUri.AbsoluteUri));
     }
 
     public LauncherViewModel() {
