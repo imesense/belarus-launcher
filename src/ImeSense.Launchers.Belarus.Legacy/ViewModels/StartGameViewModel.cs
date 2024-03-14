@@ -52,10 +52,10 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
         _userSettings.IpAddress = IpAddress;
         ConfigManager.SaveSettings(_userSettings);
 
-        Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
-        arguments: new List<string> {
+        var gameProcess = Core.Launcher.Launch(path: @"binaries\xrEngine.exe", arguments: [
             @$"-start -center_screen -silent_error_mode client({_userSettings.IpAddress}/name={_userSettings.Username})"
-        });
+        ]);
+        gameProcess?.Start();
         BackImpl();
 
         return;

@@ -72,12 +72,12 @@ public class MenuViewModel : ViewModelBase {
     }
 
     private void StartServerImpl() {
-        Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
-            arguments: new List<string> {
+        var serverProcess = Core.Launcher.Launch(path: @"binaries\xrEngine.exe", arguments: [
                 "-dedicated",
                 "-i",
                 @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
-            });
+            ]);
+        serverProcess?.Start();
         _isStartServer = true;
     }
 
@@ -87,10 +87,10 @@ public class MenuViewModel : ViewModelBase {
         }
 
         if (_isStartServer) {
-            Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
-                arguments: new List<string> {
+            var gameProcess = Core.Launcher.Launch(path: @"binaries\xrEngine.exe", arguments: [
                 @$"-start client(localhost/name={_userSettings.Username})"
-            });
+            ]);
+            gameProcess?.Start();
             _windowManager.Close();
             return;
         }

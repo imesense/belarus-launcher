@@ -18,10 +18,13 @@ class Program {
     // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args) {
+        var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
+        Log.Logger = LogManager.CreateLogger(pathLog, true);
         var isMutexCreated = false;
         try {
             _mutex = new Mutex(initiallyOwned: false, _mutexName, out isMutexCreated);
-        } catch {
+        } catch (Exception exception) {
+            Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
         }
         if (!isMutexCreated) {
             return;
@@ -45,8 +48,6 @@ class Program {
     }
 
     private static void StartApp(string[] args) {
-        var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
-        Log.Logger = LogManager.CreateLogger(pathLog, true);
         Log.Information("Start launcher");
 
         PrintOsInfo();

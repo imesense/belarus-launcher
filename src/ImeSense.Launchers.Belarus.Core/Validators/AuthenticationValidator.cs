@@ -3,9 +3,7 @@
 namespace ImeSense.Launchers.Belarus.Core.Validators;
 
 public partial class AuthenticationValidator : IAuthenticationValidator {
-    public bool IsUsernameNotEmpty(string username) =>
-        !string.IsNullOrWhiteSpace(username) &&
-        !string.IsNullOrEmpty(username);
+    public bool IsUsernameNotEmpty(string username) => !string.IsNullOrWhiteSpace(username);
 
     public bool IsUsernameCorrectLength(string username) =>
         username is { Length: <= 22 };

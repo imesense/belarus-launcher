@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 
 using ImeSense.Launchers.Belarus.Core.Models;
+using System.Diagnostics;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
@@ -98,7 +99,8 @@ public class DownloadManager : IDisposable {
                     writer.WriteString(Path.GetFileName(file).ToLower(), MD5Hash);
                     DebugOutput("Hash " + Path.GetFileName(file) + " - " + MD5Hash);
                 }
-            } catch {
+            } catch(Exception ex) {
+                Debug.WriteLine(ex.Message);
             }
 
             writer.WriteEndObject();
@@ -121,7 +123,8 @@ public class DownloadManager : IDisposable {
 
             Client.DownloadFile(Adress, FilePath + FileName);
             DebugOutput("Adress " + Adress);
-        } catch {
+        }  catch(Exception ex) {
+            Debug.WriteLine(ex.Message);
         }
     }
 
@@ -173,7 +176,8 @@ public class DownloadManager : IDisposable {
                 Writer.WriteEndObject();
             }
             return Encoding.UTF8.GetString(Stream.ToArray());
-        } catch {
+        }  catch(Exception ex) {
+            Debug.WriteLine(ex.Message);
         }
 
         return "{}";
@@ -186,7 +190,8 @@ public class DownloadManager : IDisposable {
             var element = FindFileByName("hash.json");
             return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
                 .Result;
-        } catch {
+        } catch(Exception ex) {
+            Debug.WriteLine(ex.Message);
         }
         return "{}";
     }

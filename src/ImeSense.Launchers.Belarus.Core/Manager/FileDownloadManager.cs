@@ -63,7 +63,7 @@ public class FileDownloadManager : IFileDownloadManager {
             await using var fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.None);
 
             // Get the content length (file size) that will be downloaded
-            var contentLength = currentPosition + response.Content.Headers.ContentLength ?? 0;
+            var contentLength = currentPosition + (response.Content.Headers.ContentLength ?? 0);
             var progress = -1;
             var buffer = new byte[bufferLength];
             int bytesReceived;

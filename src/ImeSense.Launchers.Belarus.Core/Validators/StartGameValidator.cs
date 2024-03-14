@@ -4,8 +4,7 @@ namespace ImeSense.Launchers.Belarus.Core.Validators;
 
 public sealed partial class StartGameValidator : IStartGameValidator {
 
-    public bool IsIpAddressNotEmpty(string serverAddress) =>
-        !string.IsNullOrWhiteSpace(serverAddress) && !string.IsNullOrEmpty(serverAddress);
+    public bool IsIpAddressNotEmpty(string serverAddress) => !string.IsNullOrWhiteSpace(serverAddress);
 
     public bool IsValidIpAddressOrUrl(string serverAddress) =>
         string.IsNullOrEmpty(serverAddress) ||
