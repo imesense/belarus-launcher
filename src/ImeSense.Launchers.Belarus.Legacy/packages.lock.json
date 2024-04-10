@@ -72,11 +72,15 @@
       },
       "ReactiveUI.WPF": {
         "type": "Direct",
-        "requested": "[19.5.41, )",
-        "resolved": "19.5.41",
-        "contentHash": "KC/zYb7ZUYSh7amgiK6OKvydzYNNrS+u6AhKRrM3j0uVzc+GD25mZYEBJmEa8ZfqdF7WOaTZ5j7DE5fQn1/jVw==",
+        "requested": "[19.6.1, )",
+        "resolved": "19.6.1",
+        "contentHash": "4FB9WgVtCae4IG8DxNm8DrVP7T9ivnuVR8s86iuHAro/EiY+9PBGNjdp+/L7shhvSO5o8MKBW5aiubN76HBOtg==",
         "dependencies": {
-          "ReactiveUI": "19.5.41"
+          "DynamicData": "8.3.27",
+          "ReactiveUI": "19.6.1",
+          "Splat": "14.8.12",
+          "System.ComponentModel.Annotations": "5.0.0",
+          "System.Text.Json": "8.0.3"
         }
       },
       "Splat.Microsoft.Extensions.DependencyInjection": {
@@ -337,13 +341,13 @@
       },
       "ReactiveUI": {
         "type": "Transitive",
-        "resolved": "19.5.41",
-        "contentHash": "qusIoJHhzNFm/Ei52wwesy15le/NAMWm40UOz2boaWcBntqOJJPR6YucDUibHNo5v9opNP7ZCAMa+w3rzX6AIw==",
+        "resolved": "19.6.1",
+        "contentHash": "F7SSjALY+cFgfJbK/zygE7vA6kA0/JpGRMMmVrhgILMaC/guKFDCb8jBJmd0tYJNTesKJ1YLrHaH9taaH8IzgQ==",
         "dependencies": {
           "DynamicData": "8.3.27",
           "Splat": "14.8.12",
           "System.ComponentModel.Annotations": "5.0.0",
-          "System.Text.Json": "8.0.0"
+          "System.Text.Json": "8.0.3"
         }
       },
       "Serilog": {
@@ -407,8 +411,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "OdrZO2WjkiEG6ajEFRABTRCi/wuXQPxeV6g8xvUJqdxMvvuCCEk86zPla8UiIQJz3durtUEbNyY/3lIhS0yZvQ==",
+        "resolved": "8.0.3",
+        "contentHash": "hpagS9joOwv6efWfrMmV9MjQXpiXZH72PgN067Ysfr6AWMSD1/1hEcvh/U5mUpPLezEWsOJSuVrmqDIVD958iA==",
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
