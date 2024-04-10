@@ -19,9 +19,7 @@ public class DownloadMenuViewModel : ReactiveObject {
     private readonly IWindowManager _windowManager;
     private readonly IDownloadResourcesService _downloadResourcesService;
     private readonly UserManager _userManager;
-
-    // The cancellation token is used to interrupt the loader at any time
-    private readonly CancellationTokenSource? _tokenSource = null;
+    private CancellationTokenSource _tokenSource = new();
 
     public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
@@ -74,7 +72,9 @@ public class DownloadMenuViewModel : ReactiveObject {
     }
 
     private void CloseImpl() {
-        _tokenSource?.Cancel();
+        _tokenSource.Cancel();
+        _tokenSource.Dispose();
+
         _windowManager.Close();
     }
 
@@ -102,12 +102,25 @@ public class DownloadMenuViewModel : ReactiveObject {
             var countFiles = filesDownload.Count;
             var numberFile = 0;
             IsDownload = true;
-            foreach (var file in filesDownload) {
-                numberFile++;
-                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userManager.UserSettings.Locale.Key) +
-                                 $": {numberFile} / {countFiles}";
-                DownloadFileName = Path.GetFileName(file.Key);
-                await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource);
+            try {
+                foreach (var file in filesDownload) {
+                    numberFile++;
+                    StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userManager.UserSettings.Locale.Key) +
+                                     $": {numberFile} / {countFiles}";
+                    DownloadFileName = Path.GetFileName(file.Key);
+                    await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource.Token);
+                }
+            } catch (AggregateException ae) {
+                foreach (var e in ae.InnerExceptions) {
+                    if (e is TaskCanceledException) {
+                        
+                    } else {
+                        //Console.WriteLine(e.Message);
+                    }
+                }
+            } finally {
+                _tokenSource.Cancel();
+                _tokenSource.Dispose();
             }
         }
 
