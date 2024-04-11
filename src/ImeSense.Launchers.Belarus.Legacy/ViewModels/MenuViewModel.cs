@@ -1,11 +1,12 @@
-using ReactiveUI.Fody.Helpers;
-
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 
+using ReactiveUI.Fody.Helpers;
+
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class MenuViewModel : ViewModelBase {
+public class MenuViewModel : ViewModelBase
+{
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
     private readonly DownloadManager _downloadService;
@@ -25,7 +26,8 @@ public class MenuViewModel : ViewModelBase {
     public ReactiveCommand<Unit, Unit> CheckUpdates { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartDownload { get; private set; } = null!;
 
-    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings, DownloadManager downloadService) {
+    public MenuViewModel(IWindowManager windowManager, UserSettings userSettings, DownloadManager downloadService)
+    {
         _downloadService = downloadService;
         _windowManager = windowManager;
         _userSettings = userSettings;
@@ -33,9 +35,10 @@ public class MenuViewModel : ViewModelBase {
         SetupCommands();
     }
 
-    private void SetupCommands() {
+    private void SetupCommands()
+    {
         var result = _downloadService.CheckFiles();
-        if(result) {
+        if (result) {
             IsVisiblePlayGame = File.Exists(Directory.GetCurrentDirectory() + "binaries\\xrengine.exe");
             IsVisibleDownload = !IsVisiblePlayGame;
         } else {
@@ -50,7 +53,8 @@ public class MenuViewModel : ViewModelBase {
         StartDownload = ReactiveCommand.CreateFromTask(DownloadsImpl);
     }
 
-    private async Task DownloadsImpl() {
+    private async Task DownloadsImpl()
+    {
         IsVisibleDownload = false;
         IsVisiblePlayGame = false;
         IsDownloadStart = false;
@@ -71,7 +75,8 @@ public class MenuViewModel : ViewModelBase {
         });
     }
 
-    private void StartServerImpl() {
+    private void StartServerImpl()
+    {
         var serverProcess = Core.Launcher.Launch(path: @"binaries\xrEngine.exe", arguments: [
                 "-dedicated",
                 "-i",
@@ -81,7 +86,8 @@ public class MenuViewModel : ViewModelBase {
         _isStartServer = true;
     }
 
-    private void PlayGameImpl() {
+    private void PlayGameImpl()
+    {
         if (_userSettings is null) {
             throw new NullReferenceException("User manager object is null");
         }

@@ -6,13 +6,15 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 /// <summary>
 /// Main view model
 /// </summary>
-public class MainViewModel : ViewModelBase, IScreen {
+public class MainViewModel : ViewModelBase, IScreen
+{
     private readonly AuthorizationViewModel _authorizationViewModel;
     private readonly LauncherViewModel _launcherViewModel;
 
     public RoutingState Router { get; } = new();
 
-    public MainViewModel(AuthorizationViewModel authorizationViewModel, LauncherViewModel launcherViewModel, UserSettings userSettings) {
+    public MainViewModel(AuthorizationViewModel authorizationViewModel, LauncherViewModel launcherViewModel, UserSettings userSettings)
+    {
         _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel)); ;
 
@@ -27,11 +29,13 @@ public class MainViewModel : ViewModelBase, IScreen {
         }
     }
 
-    private void ShowLauncher() {
+    private void ShowLauncher()
+    {
         Router.Navigate.Execute(_launcherViewModel).Subscribe();
     }
 
-    private void ShowAuthorization() {
+    private void ShowAuthorization()
+    {
         Router.Navigate.Execute(_authorizationViewModel).Subscribe();
     }
 }

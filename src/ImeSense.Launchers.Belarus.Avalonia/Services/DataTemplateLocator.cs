@@ -5,8 +5,10 @@ using ReactiveUI;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.Services;
 
-public class DataTemplateLocator : IDataTemplate {
-    public Control Build(object? data) {
+public class DataTemplateLocator : IDataTemplate
+{
+    public Control Build(object? data)
+    {
         var name = $"{data!.GetType().FullName!.Replace("ViewModel", "View")}";
         var type = Type.GetType(name);
 
@@ -17,7 +19,8 @@ public class DataTemplateLocator : IDataTemplate {
         return new TextBlock { Text = "Not Found: " + name };
     }
 
-    public bool Match(object? data) {
+    public bool Match(object? data)
+    {
         return data is ReactiveObject;
     }
 }

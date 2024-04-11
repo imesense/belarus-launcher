@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using System.Text.Json;
 
+using ImeSense.Launchers.Belarus.Core;
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
-using ImeSense.Launchers.Belarus.Core;
 
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +25,7 @@ var hashing = new Md5HashProvider(factory.CreateLogger<Md5HashProvider>());
 try {
     var gameResourceTasks = new List<Task<GameResource>>();
     var gameResources = new List<GameResource>();
-    
+
     var stopwatch = new Stopwatch();
     stopwatch.Start();
     foreach (var folderPath in GetDirectories()) {
@@ -57,13 +57,14 @@ try {
     Log.CloseAndFlush();
 }
 
-async Task<GameResource> AddGameResourceAsync(FileInfo fileInfo) {
+async Task<GameResource> AddGameResourceAsync(FileInfo fileInfo)
+{
     var stopwatch = new Stopwatch();
     stopwatch.Start();
 
     await using var stream = File.OpenRead(fileInfo.FullName);
     var hashFile = await hashing.CalculateHashAsync(stream);
-    logger.LogInformation("File {FileName} {Length}Kb Time:{time}ms ({HashBytes}) ", 
+    logger.LogInformation("File {FileName} {Length}Kb Time:{time}ms ({HashBytes}) ",
         fileInfo.Name, stream.Length / 1000, stopwatch.ElapsedMilliseconds, hashFile);
     stopwatch.Stop();
 
@@ -74,13 +75,14 @@ async Task<GameResource> AddGameResourceAsync(FileInfo fileInfo) {
     };
 }
 
-GameResource AddGameResource(FileInfo fileInfo) {
+GameResource AddGameResource(FileInfo fileInfo)
+{
     var stopwatch = new Stopwatch();
     stopwatch.Start();
 
     using var stream = File.OpenRead(fileInfo.FullName);
     var hashFile = hashing.CalculateHash(stream);
-    logger.LogInformation("File {FileName} {Length}Kb Time:{time}ms ({HashBytes}) ", 
+    logger.LogInformation("File {FileName} {Length}Kb Time:{time}ms ({HashBytes}) ",
         fileInfo.Name, stream.Length / 1000, stopwatch.ElapsedMilliseconds, hashFile);
     stopwatch.Stop();
 

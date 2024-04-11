@@ -4,14 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class FileDownloadManager : IFileDownloadManager {
+public class FileDownloadManager : IFileDownloadManager
+{
     private readonly ILogger<FileDownloadManager>? _logger;
     private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    public FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClient httpClient) {
+    public FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClient httpClient)
+    {
         _logger = logger;
         _httpClient = httpClient;
     }
@@ -30,12 +32,13 @@ public class FileDownloadManager : IFileDownloadManager {
     /// If the server does not support resuming, the download will start from the beginning.
     /// </remarks>
     public async Task DownloadAsync(Uri url, string filePath, IProgress<int>? status,
-        CancellationToken token = default) {
+        CancellationToken token = default)
+    {
         try {
             _logger?.LogInformation("Url: {Url}", url);
 
             const int bufferLength = 8192;
-            
+
             // Determine the current position of the file for possible resuming (resume)
             var currentPosition = File.Exists(filePath) ? new FileInfo(filePath).Length : 0;
 

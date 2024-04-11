@@ -1,22 +1,24 @@
-using System.Text;
-using System.Text.Json;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 
 using ImeSense.Launchers.Belarus.Core.Models;
-using System.Diagnostics;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class DownloadManager : IDisposable {
+public class DownloadManager : IDisposable
+{
     private readonly string[] Folders = {
         "binaries", "resources", "patches"
     };
 
     private readonly JsonDocument? jsonDocument;
 
-    public DownloadManager() {
+    public DownloadManager()
+    {
         var response = "{}";
 
         try {
@@ -39,11 +41,13 @@ public class DownloadManager : IDisposable {
         jsonDocument = JsonDocument.Parse(response);
     }
 
-    public static void DebugOutput(string log) {
+    public static void DebugOutput(string log)
+    {
         Console.WriteLine(log);
     }
 
-    private string GetNewsFile() {
+    private string GetNewsFile()
+    {
         using var client = new HttpClient();
         var root = jsonDocument?.RootElement;
         var element = FindFileByName("news.json");
@@ -52,7 +56,8 @@ public class DownloadManager : IDisposable {
             .Result;
     }
 
-    public IList<NewsContent> GetNewsList() {
+    public IList<NewsContent> GetNewsList()
+    {
         var newsList = new List<NewsContent>();
 
         try {
@@ -71,7 +76,8 @@ public class DownloadManager : IDisposable {
         return newsList;
     }
 
-    private JsonElement FindFileByName(string name) {
+    private JsonElement FindFileByName(string name)
+    {
         var root = jsonDocument!.RootElement;
         var Assets = root.GetProperty("assets");
 
@@ -83,7 +89,8 @@ public class DownloadManager : IDisposable {
         return root;
     }
 
-    private static void CalculateMD5(string[] filepath, Utf8JsonWriter writer) {
+    private static void CalculateMD5(string[] filepath, Utf8JsonWriter writer)
+    {
         foreach (var folder in filepath) {
             writer.WriteStartObject(folder);
 
@@ -99,7 +106,7 @@ public class DownloadManager : IDisposable {
                     writer.WriteString(Path.GetFileName(file).ToLower(), MD5Hash);
                     DebugOutput("Hash " + Path.GetFileName(file) + " - " + MD5Hash);
                 }
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 Debug.WriteLine(ex.Message);
             }
 
@@ -107,7 +114,8 @@ public class DownloadManager : IDisposable {
         }
     }
 
-    private void LoadFile(string FilePath, string FileName) {
+    private void LoadFile(string FilePath, string FileName)
+    {
         try {
             DebugOutput("Load " + FilePath + FileName);
 
@@ -123,12 +131,13 @@ public class DownloadManager : IDisposable {
 
             Client.DownloadFile(Adress, FilePath + FileName);
             DebugOutput("Adress " + Adress);
-        }  catch(Exception ex) {
+        } catch (Exception ex) {
             Debug.WriteLine(ex.Message);
         }
     }
 
-    private void LoadMissedFiles(JsonElement local, JsonElement server) {
+    private void LoadMissedFiles(JsonElement local, JsonElement server)
+    {
         foreach (var folder in server.EnumerateObject()) {
             foreach (var file in folder.Value.EnumerateObject()) {
                 var Path = Directory.GetCurrentDirectory() + "\\" + folder.Name + "\\";
@@ -145,7 +154,8 @@ public class DownloadManager : IDisposable {
         }
     }
 
-    private static void DeleteExtraFiles(JsonElement local, JsonElement server) {
+    private static void DeleteExtraFiles(JsonElement local, JsonElement server)
+    {
         foreach (var folder in local.EnumerateObject()) {
             foreach (var file in folder.Value.EnumerateObject()) {
                 var Path = Directory.GetCurrentDirectory() + "\\" + folder.Name + "\\" +
@@ -164,7 +174,8 @@ public class DownloadManager : IDisposable {
         }
     }
 
-    public string GetLocalHash() {
+    public string GetLocalHash()
+    {
         try {
             var Options = new JsonWriterOptions {
                 Indented = true
@@ -176,27 +187,29 @@ public class DownloadManager : IDisposable {
                 Writer.WriteEndObject();
             }
             return Encoding.UTF8.GetString(Stream.ToArray());
-        }  catch(Exception ex) {
+        } catch (Exception ex) {
             Debug.WriteLine(ex.Message);
         }
 
         return "{}";
     }
 
-    private string GetServerHash() {
+    private string GetServerHash()
+    {
         try {
             using var client = new HttpClient();
             var root = jsonDocument?.RootElement;
             var element = FindFileByName("hash.json");
             return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
                 .Result;
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             Debug.WriteLine(ex.Message);
         }
         return "{}";
     }
 
-    public bool CheckFiles(bool update = false) {
+    public bool CheckFiles(bool update = false)
+    {
         try {
             var ServerHash = GetServerHash();
             var LocalHash = GetLocalHash();
@@ -226,7 +239,8 @@ public class DownloadManager : IDisposable {
         return false;
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         jsonDocument!.Dispose();
     }
 }

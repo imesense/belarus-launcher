@@ -1,19 +1,20 @@
 using System.Reactive;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Core.Helpers;
+using ImeSense.Launchers.Belarus.Core.Services;
+using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Core.Validators;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Core.Helpers;
-using ImeSense.Launchers.Belarus.Core.Validators;
-using ImeSense.Launchers.Belarus.Core.Services;
-using ImeSense.Launchers.Belarus.Core.Storage;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class LauncherViewModel : ReactiveObject {
+public class LauncherViewModel : ReactiveObject
+{
     private readonly ILogger<LauncherViewModel> _logger;
     private readonly DownloadMenuViewModel _downloadMenuViewModel;
     private readonly GameMenuViewModel _gameMenuViewModel;
@@ -29,10 +30,10 @@ public class LauncherViewModel : ReactiveObject {
     public ReactiveCommand<Unit, Unit>? OpenMainRepositoryUriCommand { get; set; }
     public ReactiveCommand<Unit, Unit>? OpenOrganizationUriCommand { get; set; }
 
-
-    public LauncherViewModel(ILogger<LauncherViewModel> logger, DownloadMenuViewModel downloadMenuViewModel, 
+    public LauncherViewModel(ILogger<LauncherViewModel> logger, DownloadMenuViewModel downloadMenuViewModel,
         GameMenuViewModel gameMenuViewModel, NewsSliderViewModel newsSliderViewModel,
-        GameDirectoryValidator directoryValidator, IWebsiteLauncher websiteLauncher) {
+        GameDirectoryValidator directoryValidator, IWebsiteLauncher websiteLauncher)
+    {
         _logger = logger;
 
         _logger.LogInformation("LauncherViewModel CTOR");
@@ -48,12 +49,14 @@ public class LauncherViewModel : ReactiveObject {
         SetupCommands();
     }
 
-    private void SetupCommands() {
+    private void SetupCommands()
+    {
         OpenMainRepositoryUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.LauncherUri.AbsoluteUri));
         OpenOrganizationUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.ImeSenseUri.AbsoluteUri));
     }
 
-    public LauncherViewModel() {
+    public LauncherViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LauncherViewModel)}");
 
         _logger = null!;
@@ -73,7 +76,8 @@ public class LauncherViewModel : ReactiveObject {
 
     private void OpenUrl(string uri) => _websiteLauncher.OpenWebsite(uri);
 
-    public void SelectMenu() {
+    public void SelectMenu()
+    {
         if (_directoryValidator.IsDirectoryValid()) {
             PageMenuViewModel = _gameMenuViewModel;
         } else {
@@ -81,7 +85,8 @@ public class LauncherViewModel : ReactiveObject {
         }
     }
 
-    public async Task SelectUpdateMenuAsync() {
+    public async Task SelectUpdateMenuAsync()
+    {
         PageMenuViewModel = _downloadMenuViewModel;
         await _downloadMenuViewModel.UpdateAsync(this);
     }

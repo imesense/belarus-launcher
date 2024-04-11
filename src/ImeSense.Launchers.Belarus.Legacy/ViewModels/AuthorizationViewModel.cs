@@ -1,18 +1,19 @@
 using System.Reactive.Linq;
 
-using ReactiveUI.Fody.Helpers;
-
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Legacy.Manager;
 
+using ReactiveUI.Fody.Helpers;
+
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel {
+public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
+{
     private readonly IWindowManager _windowManager;
     private readonly LauncherViewModel _launcherViewModel;
     private readonly UserSettings _userSettings;
-    
+
     [Reactive] public string UserName { get; set; } = string.Empty;
 
     public ReactiveCommand<Unit, Unit> Next { get; private set; } = null!;
@@ -22,7 +23,8 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel {
 
     public IScreen HostScreen { get; set; } = null!;
 
-    public AuthorizationViewModel(IWindowManager windowManager, LauncherViewModel launcherViewModel, UserSettings userSettings) {
+    public AuthorizationViewModel(IWindowManager windowManager, LauncherViewModel launcherViewModel, UserSettings userSettings)
+    {
         _windowManager = windowManager;
 
         if (launcherViewModel is null) {
@@ -37,7 +39,8 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel {
         SetupBinding();
     }
 
-    private void SetupBinding() {
+    private void SetupBinding()
+    {
         var canCreateUser = this.WhenAnyValue(x => x.UserName,
             (nickname) => !string.IsNullOrWhiteSpace(nickname) && nickname.Length <= 22)
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -47,7 +50,8 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel {
         Close = ReactiveCommand.Create(_windowManager.Close);
     }
 
-    private void NextImpl() {
+    private void NextImpl()
+    {
         if (HostScreen is null) {
             throw new ArgumentNullException(nameof(HostScreen));
         }

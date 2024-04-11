@@ -33,7 +33,7 @@ try {
     httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
 
     var updaterService = new UpdaterService(factory.CreateLogger<UpdaterService>(),
-        new GitHubApiService(factory.CreateLogger<GitHubApiService>(), httpClient, null), 
+        new GitHubApiService(factory.CreateLogger<GitHubApiService>(), httpClient, null),
         new FileDownloadManager(factory.CreateLogger<FileDownloadManager>(), httpClient));
     await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath);
 

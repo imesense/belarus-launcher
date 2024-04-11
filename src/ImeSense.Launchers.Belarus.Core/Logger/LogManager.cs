@@ -3,8 +3,10 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 namespace ImeSense.Launchers.Belarus.Core.Logger;
 
-public static class LogManager {
-    public static ILogger CreateLogger(string pathLog, bool isDeleteOldLog = true) {
+public static class LogManager
+{
+    public static ILogger CreateLogger(string pathLog, bool isDeleteOldLog = true)
+    {
         if (isDeleteOldLog && File.Exists(pathLog)) {
             File.Delete(pathLog);
         }
@@ -15,7 +17,8 @@ public static class LogManager {
             .CreateLogger();
     }
 
-    public static ILogger CreateLoggerConsole(string pathLog, bool isDeleteOldLog = true) {
+    public static ILogger CreateLoggerConsole(string pathLog, bool isDeleteOldLog = true)
+    {
         if (isDeleteOldLog && File.Exists(pathLog)) {
             File.Delete(pathLog);
         }

@@ -1,25 +1,27 @@
+using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Validators;
+
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Core.Models;
-using ImeSense.Launchers.Belarus.Core.Validators;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
 
-public sealed class AuthenticationViewModelValidator {
+public sealed class AuthenticationViewModelValidator
+{
     private readonly IAuthenticationValidator _validator;
     private readonly ILocaleManager _localeManager;
     private readonly UserManager _userManager;
 
     public AuthenticationViewModelValidator(IAuthenticationValidator validator, ILocaleManager localeManager,
-        UserManager userManager) {
+        UserManager userManager)
+    {
         _validator = validator;
         _localeManager = localeManager;
         _userManager = userManager;
     }
 
-    public ValidationHelper EnsureUsernameNotEmpty(AuthorizationViewModel authorizationViewModel) {
+    public ValidationHelper EnsureUsernameNotEmpty(AuthorizationViewModel authorizationViewModel)
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -35,7 +37,8 @@ public sealed class AuthenticationViewModelValidator {
             _localeManager.GetStringByKey("LocalizedStrings.EnterNickName", _userManager.UserSettings.Locale.Key));
     }
 
-    public ValidationHelper EnsureUsernameCorrectLength(AuthorizationViewModel authorizationViewModel) {
+    public ValidationHelper EnsureUsernameCorrectLength(AuthorizationViewModel authorizationViewModel)
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -51,7 +54,8 @@ public sealed class AuthenticationViewModelValidator {
             _localeManager.GetStringByKey("LocalizedStrings.TooLongNickname", _userManager.UserSettings.Locale.Key));
     }
 
-    public ValidationHelper EnsureUsernameCorrectCharacters(AuthorizationViewModel authorizationViewModel) {
+    public ValidationHelper EnsureUsernameCorrectCharacters(AuthorizationViewModel authorizationViewModel)
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }

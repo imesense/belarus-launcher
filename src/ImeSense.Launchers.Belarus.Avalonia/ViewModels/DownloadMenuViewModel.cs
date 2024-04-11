@@ -1,18 +1,19 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Services;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Core.Services;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class DownloadMenuViewModel : ReactiveObject {
+public class DownloadMenuViewModel : ReactiveObject
+{
     private readonly ILogger<DownloadMenuViewModel> _logger;
     private readonly ILocaleManager _localeManager;
 
@@ -27,8 +28,10 @@ public class DownloadMenuViewModel : ReactiveObject {
     [Reactive] public int DownloadProgress { get; set; } = 0;
     [Reactive] public string StatusProgress { get; set; } = string.Empty;
     [Reactive] public string DownloadFileName { get; set; } = string.Empty;
+
     // Overall progress status
     [Reactive] public bool IsProgress { get; set; }
+
     //Download status
     [Reactive] public bool IsDownload { get; set; }
 
@@ -36,7 +39,8 @@ public class DownloadMenuViewModel : ReactiveObject {
         ILocaleManager localeManager,
         IWindowManager windowManager,
         IDownloadResourcesService downloadResourcesService,
-        UserManager userManager) {
+        UserManager userManager)
+    {
         _logger = logger;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
@@ -48,7 +52,8 @@ public class DownloadMenuViewModel : ReactiveObject {
         SetupCommands();
     }
 
-    public DownloadMenuViewModel() {
+    public DownloadMenuViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(DownloadMenuViewModel)}");
 
         _logger = null!;
@@ -58,11 +63,13 @@ public class DownloadMenuViewModel : ReactiveObject {
         _userManager = null!;
     }
 
-    public async Task UpdateAsync(LauncherViewModel launcherViewModel) {
+    public async Task UpdateAsync(LauncherViewModel launcherViewModel)
+    {
         await StartDownload.Execute(launcherViewModel);
     }
 
-    private void SetupCommands() {
+    private void SetupCommands()
+    {
         StartDownload = ReactiveCommand.CreateFromTask<LauncherViewModel>(DownloadsImplAsync);
         Close = ReactiveCommand.Create(CloseImpl);
 
@@ -71,14 +78,16 @@ public class DownloadMenuViewModel : ReactiveObject {
             .Subscribe(OnCommandException);
     }
 
-    private void CloseImpl() {
+    private void CloseImpl()
+    {
         _tokenSource.Cancel();
         _tokenSource.Dispose();
 
         _windowManager.Close();
     }
 
-    private async Task DownloadsImplAsync(LauncherViewModel launcherViewModel) {
+    private async Task DownloadsImplAsync(LauncherViewModel launcherViewModel)
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -113,7 +122,6 @@ public class DownloadMenuViewModel : ReactiveObject {
             } catch (AggregateException ae) {
                 foreach (var e in ae.InnerExceptions) {
                     if (e is TaskCanceledException) {
-                        
                     } else {
                         //Console.WriteLine(e.Message);
                     }
@@ -129,6 +137,6 @@ public class DownloadMenuViewModel : ReactiveObject {
         launcherViewModel.SelectMenu();
     }
 
-    private void OnCommandException(Exception exception) 
+    private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
 }

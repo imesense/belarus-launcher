@@ -1,4 +1,5 @@
-namespace ImeSense.Launchers.Belarus.ViewModels; 
+namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class ViewModelBase : ReactiveObject {
+public class ViewModelBase : ReactiveObject
+{
 }

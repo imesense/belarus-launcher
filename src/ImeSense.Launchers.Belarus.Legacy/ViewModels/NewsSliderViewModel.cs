@@ -1,12 +1,13 @@
 using System.Collections.ObjectModel;
 
-using ReactiveUI.Fody.Helpers;
-
 using ImeSense.Launchers.Belarus.Core.Manager;
+
+using ReactiveUI.Fody.Helpers;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public partial class NewsSliderViewModel : ViewModelBase {
+public partial class NewsSliderViewModel : ViewModelBase
+{
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
     [Reactive] public int NumPage { get; private set; } = 0;
 
@@ -14,7 +15,8 @@ public partial class NewsSliderViewModel : ViewModelBase {
 
     public ObservableCollection<NewsViewModel> News { get; private set; } = new();
 
-    public NewsSliderViewModel(DownloadManager downloadService) {
+    public NewsSliderViewModel(DownloadManager downloadService)
+    {
         _downloadService = downloadService;
 
         LoadNews();
@@ -23,7 +25,8 @@ public partial class NewsSliderViewModel : ViewModelBase {
         SetupCommands();
     }
 
-    private void LoadNews() {
+    private void LoadNews()
+    {
         foreach (var content in _downloadService.GetNewsList()) {
             News.Add(new NewsViewModel(content.Title, content.Description));
         }

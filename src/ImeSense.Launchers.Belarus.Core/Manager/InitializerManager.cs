@@ -1,16 +1,16 @@
 using System.Diagnostics;
-using System.Net.Http.Headers;
-
-using Microsoft.Extensions.Logging;
 
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
+using Microsoft.Extensions.Logging;
+
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class InitializerManager {
+public class InitializerManager
+{
     private readonly ILogger<InitializerManager> _logger;
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly UserManager _userManager;
@@ -24,7 +24,8 @@ public class InitializerManager {
     public InitializerManager(ILogger<InitializerManager> logger,
         IGitStorageApiService gitStorageApiService, UserManager userManager,
         ILocaleManager localeManager, ILauncherStorage launcherStorage,
-        IReleaseComparerService<GitHubRelease> releaseComparerService) {
+        IReleaseComparerService<GitHubRelease> releaseComparerService)
+    {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _userManager = userManager;
@@ -33,7 +34,8 @@ public class InitializerManager {
         _releaseComparerService = releaseComparerService;
     }
 
-    public async Task InitializeAsync() {
+    public async Task InitializeAsync()
+    {
         SetLocale();
 
         try {
@@ -67,12 +69,13 @@ public class InitializerManager {
         }
     }
 
-    public async Task<bool> IsLauncherReleaseCurrentAsync() {
+    public async Task<bool> IsLauncherReleaseCurrentAsync()
+    {
         var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherApiUri);
         if (tags != null) {
             var currentVersion = $"{ApplicationHelper.GetAppVersion()}";
             if (currentVersion[0] != 'v') {
-                currentVersion = currentVersion.Insert(0, "v"); 
+                currentVersion = currentVersion.Insert(0, "v");
             }
 
             var countTag = tags.Count(x => x!.Name.Equals(currentVersion));
@@ -90,7 +93,8 @@ public class InitializerManager {
         return true;
     }
 
-    private async Task<bool> IsGameReleaseCurrentAsync() {
+    private async Task<bool> IsGameReleaseCurrentAsync()
+    {
         var gitStorageRelease = _launcherStorage.GitHubRelease;
 
         if (File.Exists(PathStorage.CurrentRelease)) {
@@ -110,7 +114,8 @@ public class InitializerManager {
         }
     }
 
-    private void SetLocale() {
+    private void SetLocale()
+    {
         var userSettings = _userManager.UserSettings ??
             throw new Exception("Error loading user config!");
         if (userSettings.Locale is null) {
@@ -125,7 +130,8 @@ public class InitializerManager {
         _localeManager.SetLocale(userSettings.Locale.Key);
     }
 
-    private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync() {
+    private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync()
+    {
         try {
             var contents = await _gitStorageApiService
                 .DownloadJsonAsync<IEnumerable<WebResource>>(FileNameStorage.WebResources, UriStorage.BelarusApiUri);
@@ -145,10 +151,10 @@ public class InitializerManager {
             _logger.LogError("{StackTrace}", ex.StackTrace);
             throw;
         }
-
     }
 
-    private async Task<IEnumerable<LangNewsContent>?> LoadNewsAsync(Locale? locale = null) {
+    private async Task<IEnumerable<LangNewsContent>?> LoadNewsAsync(Locale? locale = null)
+    {
         // News in all languages
         var allNews = new List<LangNewsContent>();
 
@@ -172,7 +178,8 @@ public class InitializerManager {
         return allNews;
     }
 
-    private void AddNews(Locale? locale, List<LangNewsContent> allNews, IEnumerable<NewsContent>? news) {
+    private void AddNews(Locale? locale, List<LangNewsContent> allNews, IEnumerable<NewsContent>? news)
+    {
         if (locale is null) {
             _logger.LogError("Failure to load locale!");
             return;

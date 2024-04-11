@@ -1,6 +1,8 @@
-﻿namespace ImeSense.Launchers.Belarus.Core.Validators;
+namespace ImeSense.Launchers.Belarus.Core.Validators;
 
-public interface IStartGameValidator {
+public interface IStartGameValidator
+{
     bool IsIpAddressNotEmpty(string serverAddress);
+
     bool IsValidIpAddressOrUrl(string serverAddress);
 }

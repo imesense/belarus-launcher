@@ -1,5 +1,6 @@
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public interface IWindowManager {
+public interface IWindowManager
+{
     void Close();
 }

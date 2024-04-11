@@ -3,18 +3,19 @@ using System.Reactive;
 
 using DynamicData;
 
-using Microsoft.Extensions.Logging;
-
-using ReactiveUI;
-
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
+using Microsoft.Extensions.Logging;
+
+using ReactiveUI;
+
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class LinkViewModel : ReactiveObject {
+public class LinkViewModel : ReactiveObject
+{
     private readonly ILogger<LinkViewModel> _logger;
     private readonly IWebsiteLauncher _websiteLauncher;
     private readonly ILauncherStorage _launcherStorage;
@@ -23,7 +24,8 @@ public class LinkViewModel : ReactiveObject {
     public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
 
     public LinkViewModel(ILogger<LinkViewModel> logger, IWebsiteLauncher websiteLauncher,
-        ILauncherStorage launcherStorage) {
+        ILauncherStorage launcherStorage)
+    {
         _logger = logger;
         _websiteLauncher = websiteLauncher;
         _launcherStorage = launcherStorage;
@@ -31,7 +33,8 @@ public class LinkViewModel : ReactiveObject {
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
     }
 
-    public LinkViewModel() {
+    public LinkViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LinkViewModel)}");
 
         _websiteLauncher = null!;
@@ -40,7 +43,8 @@ public class LinkViewModel : ReactiveObject {
         _launcherStorage = null!;
     }
 
-    public void Init() {
+    public void Init()
+    {
         if (_launcherStorage.WebResources != null) {
             _logger.LogInformation("Web resources are initialized");
             WebResources.AddRange(_launcherStorage.WebResources);

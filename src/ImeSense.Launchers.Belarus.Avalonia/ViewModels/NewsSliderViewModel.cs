@@ -2,30 +2,32 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
+using ImeSense.Launchers.Belarus.Core.Models;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Core.Models;
-using ImeSense.Launchers.Belarus.Avalonia.Services;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class NewsSliderViewModel : ReactiveObject {
+public class NewsSliderViewModel : ReactiveObject
+{
     private readonly ILogger<NewsSliderViewModel> _logger;
     private readonly ViewModelLocator _viewModelLocator;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
     [Reactive] public LinkViewModel LinkViewModel { get; set; }
-    [Reactive] public ObservableCollection<NewsViewModel>? News { get; set; } 
+    [Reactive] public ObservableCollection<NewsViewModel>? News { get; set; }
 
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
 
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator) {
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator)
+    {
         logger.LogInformation("NewsSliderViewModel CTOR");
         _logger = logger;
         _viewModelLocator = viewModelLocator;
@@ -35,7 +37,8 @@ public class NewsSliderViewModel : ReactiveObject {
         SetupCommands();
     }
 
-    public NewsSliderViewModel() {
+    public NewsSliderViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(NewsSliderViewModel)}");
 
         _logger = null!;
@@ -44,7 +47,8 @@ public class NewsSliderViewModel : ReactiveObject {
         _viewModelLocator = null!;
     }
 
-    private void SetupCommands() {
+    private void SetupCommands()
+    {
         var canExecuteBack = this.WhenAnyValue(x => x.NumPage,
                 (numPage) => numPage != 0)
             .ObserveOn(RxApp.MainThreadScheduler);
@@ -60,7 +64,8 @@ public class NewsSliderViewModel : ReactiveObject {
             .Subscribe(OnCommandException);
     }
 
-    private void SetupBinding() {
+    private void SetupBinding()
+    {
         this.WhenAnyValue(x => x.NumPage)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Where(x => News != null && x >= 0 && x < News.Count)
@@ -71,7 +76,8 @@ public class NewsSliderViewModel : ReactiveObject {
             });
     }
 
-    private void GoNextImpl() {
+    private void GoNextImpl()
+    {
         if (News is null) {
             return;
         }
@@ -80,13 +86,15 @@ public class NewsSliderViewModel : ReactiveObject {
         }
     }
 
-    private void GoBackImpl() {
+    private void GoBackImpl()
+    {
         if (NumPage > 0) {
             NumPage--;
         }
     }
 
-    public void SetNews(IEnumerable<NewsContent> newsContents) {
+    public void SetNews(IEnumerable<NewsContent> newsContents)
+    {
         News = new ObservableCollection<NewsViewModel>();
 
         foreach (var content in newsContents) {

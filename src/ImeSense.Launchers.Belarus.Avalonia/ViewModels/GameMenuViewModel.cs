@@ -1,18 +1,19 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Core.Helpers;
+using ImeSense.Launchers.Belarus.Core.Manager;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Core.Helpers;
-using ImeSense.Launchers.Belarus.Core.Manager;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class GameMenuViewModel : ReactiveObject {
+public class GameMenuViewModel : ReactiveObject
+{
     private readonly ILogger<GameMenuViewModel> _logger;
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
@@ -24,7 +25,8 @@ public class GameMenuViewModel : ReactiveObject {
 
     [Reactive] public bool IsStartServer { get; set; } = false;
 
-    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager) {
+    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userManager = userManager;
@@ -32,7 +34,8 @@ public class GameMenuViewModel : ReactiveObject {
         SetupCommands();
     }
 
-    public GameMenuViewModel() {
+    public GameMenuViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(GameMenuViewModel)}");
 
         _logger = null!;
@@ -40,26 +43,29 @@ public class GameMenuViewModel : ReactiveObject {
         _userManager = null!;
     }
 
-    private void SetupCommands() {
-        var canExecuteServer = this.WhenAnyValue(x => x.IsStartServer, 
+    private void SetupCommands()
+    {
+        var canExecuteServer = this.WhenAnyValue(x => x.IsStartServer,
                 startServer => startServer == false)
             .ObserveOn(RxApp.MainThreadScheduler);
-        
+
         PlayGame = ReactiveCommand.Create<MainWindowViewModel>(PlayGameImpl);
         StartServer = ReactiveCommand.Create(StartServerImpl, canExecuteServer);
         CheckUpdates = ReactiveCommand.CreateFromTask<LauncherViewModel>(CheckUpdatesImplAsync);
         Close = ReactiveCommand.Create(_windowManager.Close);
-        
+
         Observable.Merge(PlayGame.ThrownExceptions, StartServer.ThrownExceptions, Close.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
     }
 
-    private async Task CheckUpdatesImplAsync(LauncherViewModel launcherViewModel) {
+    private async Task CheckUpdatesImplAsync(LauncherViewModel launcherViewModel)
+    {
         await launcherViewModel.SelectUpdateMenuAsync();
     }
 
-    private void PlayGameImpl(MainWindowViewModel mainWindowViewModel) {
+    private void PlayGameImpl(MainWindowViewModel mainWindowViewModel)
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -83,11 +89,12 @@ public class GameMenuViewModel : ReactiveObject {
 
             _windowManager.Close();
         } else {
-            mainWindowViewModel.ShowStartGameImpl(); 
+            mainWindowViewModel.ShowStartGameImpl();
         }
     }
 
-    private void StartServerImpl() {
+    private void StartServerImpl()
+    {
         ProcessHelper.KillAllXrEngine();
 
         var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
@@ -107,10 +114,11 @@ public class GameMenuViewModel : ReactiveObject {
         IsStartServer = true;
     }
 
-    private  void LaunchOnExited(object? sender, EventArgs e) {
+    private void LaunchOnExited(object? sender, EventArgs e)
+    {
         IsStartServer = false;
     }
 
-    private void OnCommandException(Exception exception) 
+    private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
 }

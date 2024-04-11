@@ -1,6 +1,7 @@
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class LauncherViewModel : ViewModelBase, IRoutableViewModel {
+public class LauncherViewModel : ViewModelBase, IRoutableViewModel
+{
     private readonly StartGameViewModel _startGameViewModel;
 
     public string? UrlPathSegment => "LauncherViewModel";
@@ -10,7 +11,8 @@ public class LauncherViewModel : ViewModelBase, IRoutableViewModel {
     public MenuViewModel MenuViewModel { get; set; }
     public NewsSliderViewModel NewsSliderViewModel { get; set; }
 
-    public LauncherViewModel(MenuViewModel menuViewModel, StartGameViewModel startGameViewModel, NewsSliderViewModel newsSliderViewModel) {
+    public LauncherViewModel(MenuViewModel menuViewModel, StartGameViewModel startGameViewModel, NewsSliderViewModel newsSliderViewModel)
+    {
         if (menuViewModel is null) {
             throw new ArgumentNullException(nameof(menuViewModel));
         }
@@ -23,7 +25,8 @@ public class LauncherViewModel : ViewModelBase, IRoutableViewModel {
         _startGameViewModel.HostScreen = HostScreen;
     }
 
-    public void StartGame() {
+    public void StartGame()
+    {
         HostScreen.Router.Navigate.Execute(_startGameViewModel);
     }
 }

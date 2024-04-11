@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace ImeSense.Launchers.Belarus.Core.Validators;
 
-public partial class AuthenticationValidator : IAuthenticationValidator {
+public partial class AuthenticationValidator : IAuthenticationValidator
+{
     public bool IsUsernameNotEmpty(string username) => !string.IsNullOrWhiteSpace(username);
 
     public bool IsUsernameCorrectLength(string username) =>

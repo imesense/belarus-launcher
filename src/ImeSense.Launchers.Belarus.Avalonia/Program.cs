@@ -1,14 +1,15 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 
-using Serilog;
-
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
+using Serilog;
+
 namespace ImeSense.Launchers.Belarus.Avalonia;
 
-class Program {
+internal class Program
+{
     private const string _mutexName = "Belarus.Launcher.Avalonia";
 
     private static Mutex? _mutex;
@@ -17,7 +18,8 @@ class Program {
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) {
+    public static void Main(string[] args)
+    {
         var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
         Log.Logger = LogManager.CreateLogger(pathLog, true);
         var isMutexCreated = false;
@@ -47,7 +49,8 @@ class Program {
         }
     }
 
-    private static void StartApp(string[] args) {
+    private static void StartApp(string[] args)
+    {
         Log.Information("Start launcher");
 
         PrintOsInfo();
@@ -55,7 +58,8 @@ class Program {
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
-    private static void PrintOsInfo() {
+    private static void PrintOsInfo()
+    {
         Log.Information("OS: {0}", Environment.OSVersion);
         Log.Information("Processor architecture: {0}",
             Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"));

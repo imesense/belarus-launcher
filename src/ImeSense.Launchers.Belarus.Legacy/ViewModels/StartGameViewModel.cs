@@ -1,14 +1,15 @@
 using System.Reactive.Linq;
 
-using ReactiveUI.Fody.Helpers;
-
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Legacy.Manager;
 
+using ReactiveUI.Fody.Helpers;
+
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
+public class StartGameViewModel : ViewModelBase, IRoutableViewModel
+{
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
 
@@ -21,7 +22,8 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
 
     public IScreen HostScreen { get; set; } = null!;
 
-    public StartGameViewModel(IWindowManager windowManager, UserSettings userSettings) {
+    public StartGameViewModel(IWindowManager windowManager, UserSettings userSettings)
+    {
         _windowManager = windowManager;
         _userSettings = userSettings;
 
@@ -30,7 +32,8 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
         SetupBinding();
     }
 
-    private void SetupBinding() {
+    private void SetupBinding()
+    {
         var canStartGame = this.WhenAnyValue(x => x.IpAddress,
             (ip) => !string.IsNullOrWhiteSpace(ip))
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -40,7 +43,8 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
         Back = ReactiveCommand.Create(BackImpl);
     }
 
-    private void StartGameImpl() {
+    private void StartGameImpl()
+    {
         if (_userSettings is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -61,7 +65,8 @@ public class StartGameViewModel : ViewModelBase, IRoutableViewModel {
         return;
     }
 
-    private void BackImpl() {
+    private void BackImpl()
+    {
         _windowManager.Close();
     }
 }

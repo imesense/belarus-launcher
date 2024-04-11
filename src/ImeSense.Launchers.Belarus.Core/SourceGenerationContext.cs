@@ -22,5 +22,6 @@ namespace ImeSense.Launchers.Belarus.Core;
 [JsonSerializable(typeof(WebResource))]
 [JsonSerializable(typeof(WebResource[]))]
 [JsonSerializable(typeof(IEnumerable<WebResource>))]
-public partial class SourceGenerationContext : JsonSerializerContext {
+public partial class SourceGenerationContext : JsonSerializerContext
+{
 }

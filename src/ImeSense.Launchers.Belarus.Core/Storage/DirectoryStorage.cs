@@ -1,6 +1,7 @@
 namespace ImeSense.Launchers.Belarus.Core.Storage;
 
-public static class DirectoryStorage {
+public static class DirectoryStorage
+{
     public static string Base => Path.GetDirectoryName(Environment.ProcessPath)!;
     public static string Binaries => Path.Combine(Base, "binaries");
     public static string Resources => Path.Combine(Base, "resources");

@@ -1,7 +1,10 @@
-﻿namespace ImeSense.Launchers.Belarus.Core.Validators;
+namespace ImeSense.Launchers.Belarus.Core.Validators;
 
-public interface IAuthenticationValidator {
+public interface IAuthenticationValidator
+{
     bool IsUsernameNotEmpty(string username);
+
     bool IsUsernameCorrectLength(string username);
+
     bool IsUsernameCorrectCharacters(string username);
 }

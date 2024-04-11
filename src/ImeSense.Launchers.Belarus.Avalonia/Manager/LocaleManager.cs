@@ -5,8 +5,10 @@ using ImeSense.Launchers.Belarus.Core.Manager;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.Manager;
 
-public class LocaleManager : ILocaleManager {
-    public void SetLocale(string locale) {
+public class LocaleManager : ILocaleManager
+{
+    public void SetLocale(string locale)
+    {
         App.Current?.Resources.Clear();
         var resource = new ResourceInclude(new Uri("avares://SBLauncher/Assets/Locales/")) {
             Source = new Uri($"avares://SBLauncher/Assets/Locales/{locale}.axaml"),
@@ -14,7 +16,8 @@ public class LocaleManager : ILocaleManager {
         App.Current?.Resources.MergedDictionaries.Add(resource);
     }
 
-    public string GetStringByKey(string key, string locale) {
+    public string GetStringByKey(string key, string locale)
+    {
         var resources = new ResourceInclude(new Uri("avares://SBLauncher/Assets/Locales/")) {
             Source = new Uri($"avares://SBLauncher/Assets/Locales/{locale}.axaml"),
         };

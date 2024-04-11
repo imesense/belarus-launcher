@@ -6,20 +6,23 @@ using ImeSense.Launchers.Belarus.Core.Validators;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class UserManager {
+public class UserManager
+{
     private readonly IAuthenticationValidator _authenticationValidator;
     private readonly IStartGameValidator _startGameValidator;
 
     public UserSettings? UserSettings { get; set; }
 
-    public UserManager(IAuthenticationValidator authenticationValidator, IStartGameValidator startGameValidator) {
+    public UserManager(IAuthenticationValidator authenticationValidator, IStartGameValidator startGameValidator)
+    {
         _authenticationValidator = authenticationValidator;
         _startGameValidator = startGameValidator;
 
         Load();
     }
 
-    private void Load() {
+    private void Load()
+    {
         if (!File.Exists(PathStorage.LauncherSetting)) {
             UserSettings = new UserSettings();
 
@@ -46,7 +49,8 @@ public class UserManager {
         }
     }
 
-    public void Save() {
+    public void Save()
+    {
         if (UserSettings is null) {
             throw new ArgumentNullException(nameof(UserSettings));
         }

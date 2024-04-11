@@ -1,23 +1,26 @@
-using Microsoft.Extensions.Logging;
-
 using ImeSense.Launchers.Belarus.Core.Storage;
+
+using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.Validators;
 
 /// <summary>
 /// Class for validating game directories
 /// </summary>
-public class GameDirectoryValidator {
+public class GameDirectoryValidator
+{
     private readonly ILogger<GameDirectoryValidator> _logger;
 
-    public GameDirectoryValidator(ILogger<GameDirectoryValidator> logger) {
+    public GameDirectoryValidator(ILogger<GameDirectoryValidator> logger)
+    {
         _logger = logger;
     }
 
     /// <summary>
     /// Check if the directory contains all the required files
     /// </summary>
-    public bool IsDirectoryValid() {
+    public bool IsDirectoryValid()
+    {
         // Check if the Binaries directory exists
         if (!Directory.Exists(DirectoryStorage.Binaries)) {
             return false;
@@ -44,7 +47,8 @@ public class GameDirectoryValidator {
     /// </summary>
     /// <param name="path">Directory path</param>
     /// <returns>Count files</returns>
-    private int CountFilesInDirectory(string path) {
+    private int CountFilesInDirectory(string path)
+    {
         try {
             // Get the list of files in the directory
             var files = Directory.GetFiles(path);
@@ -58,4 +62,3 @@ public class GameDirectoryValidator {
         }
     }
 }
-

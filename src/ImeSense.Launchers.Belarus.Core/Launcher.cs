@@ -2,9 +2,11 @@ using System.Diagnostics;
 
 namespace ImeSense.Launchers.Belarus.Core;
 
-public static class Launcher {
+public static class Launcher
+{
     public static Process? Launch(string? path, string? workingDirectory = null,
-        IList<string> arguments = null!) {
+        IList<string> arguments = null!)
+    {
         if (string.IsNullOrEmpty(path)) {
             return default;
         }

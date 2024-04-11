@@ -7,8 +7,10 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 
 namespace ImeSense.Launchers.Belarus.Legacy.Manager;
 
-public static class ConfigManager {
-    public static void SaveSettings(UserSettings settings) {
+public static class ConfigManager
+{
+    public static void SaveSettings(UserSettings settings)
+    {
         if (settings is null) {
             throw new ArgumentNullException(nameof(settings));
         }
@@ -33,7 +35,8 @@ public static class ConfigManager {
         writer.Write(json);
     }
 
-    public static UserSettings LoadSettings() {
+    public static UserSettings LoadSettings()
+    {
         if (!File.Exists(PathStorage.LauncherSetting)) {
             return new UserSettings();
         }

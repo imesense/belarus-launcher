@@ -1,6 +1,7 @@
 namespace ImeSense.Launchers.Belarus.Core.Storage;
 
-public static class FileNameStorage {
+public static class FileNameStorage
+{
     public static string HashResources => "HashGameResources.json";
     public static string LauncherLog => "LauncherReport.log";
     public static string LauncherUpdaterLog => "LauncherUpdaterReport.log";

@@ -2,6 +2,10 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
+using ImeSense.Launchers.Belarus.Core.Manager;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -9,13 +13,10 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
-using ImeSense.Launchers.Belarus.Core.Manager;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class StartGameViewModel : ReactiveValidationObject, IDisposable {
+public class StartGameViewModel : ReactiveValidationObject, IDisposable
+{
     private readonly ILogger<StartGameViewModel> _logger;
     private readonly UserManager _userManager;
     private readonly ILocaleManager _localeManager;
@@ -28,10 +29,11 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
 
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
-    
+
     public StartGameViewModel(ILogger<StartGameViewModel> logger, UserManager userManager,
         IWindowManager windowManager, ILocaleManager localeManager,
-        StartGameViewModelValidator startGameViewModelValidator) {
+        StartGameViewModelValidator startGameViewModelValidator)
+    {
         _logger = logger;
         _logger.LogInformation("StartGameViewModel ctor");
 
@@ -53,7 +55,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         SetupCommands();
     }
 
-    public StartGameViewModel() {
+    public StartGameViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(StartGameViewModel)}");
 
         _logger = null!;
@@ -65,7 +68,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         IpAddress = null!;
     }
 
-    private void SetupCommands() {
+    private void SetupCommands()
+    {
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());
         Back = ReactiveCommand.Create<MainWindowViewModel>(BackImpl);
 
@@ -74,7 +78,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
             .Subscribe(OnCommandException);
     }
 
-    public void SetupValidation() {
+    public void SetupValidation()
+    {
         _logger.LogInformation("StartGameViewModel SetupValidation");
         _disposables?.Dispose();
         _disposables = new CompositeDisposable {
@@ -83,7 +88,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         };
     }
 
-    private void StartGameImpl() {
+    private void StartGameImpl()
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -111,14 +117,16 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         _windowManager.Close();
     }
 
-    private void BackImpl(MainWindowViewModel mainWindowViewModel) {
+    private void BackImpl(MainWindowViewModel mainWindowViewModel)
+    {
         mainWindowViewModel.ShowLauncherImpl();
     }
 
     private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
 
-    protected virtual void Dispose(bool disposing) {
+    protected virtual void Dispose(bool disposing)
+    {
         if (disposing) {
             if (_disposables is not null) {
                 _disposables?.Dispose();
@@ -127,9 +135,9 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable {
         }
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
 }
-

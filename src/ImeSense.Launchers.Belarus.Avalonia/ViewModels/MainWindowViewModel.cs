@@ -1,20 +1,21 @@
 using System.Diagnostics;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Core;
+using ImeSense.Launchers.Belarus.Core.Helpers;
+using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Services;
+using ImeSense.Launchers.Belarus.Core.Storage;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Core;
-using ImeSense.Launchers.Belarus.Core.Helpers;
-using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Core.Storage;
-using ImeSense.Launchers.Belarus.Core.Services;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
+public class MainWindowViewModel : ReactiveObject, IAsyncInitialization
+{
     private readonly ILogger<MainWindowViewModel> _logger;
 
     private readonly InitializerManager _initializerManager;
@@ -24,12 +25,13 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
     private readonly LauncherViewModel _launcherViewModel;
 
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
-    
+
     public Task Initialization { get; private set; }
 
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, InitializerManager initializerManager,
         IUpdaterService updaterService, LauncherViewModel launcherViewModel,
-        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel) {
+        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel)
+    {
         _logger = logger;
         _initializerManager = initializerManager;
         _updaterService = updaterService;
@@ -40,8 +42,8 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         Initialization = InitializeAsync();
     }
 
-
-    public MainWindowViewModel() {
+    public MainWindowViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(MainWindowViewModel)}");
 
         _logger = null!;
@@ -54,8 +56,8 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         Initialization = null!;
     }
 
-
-    public async Task InitializeAsync() {
+    public async Task InitializeAsync()
+    {
         try {
             var isLauncherReleaseCurrent = await _initializerManager.IsLauncherReleaseCurrentAsync();
             if (!isLauncherReleaseCurrent) {
@@ -110,16 +112,19 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization {
         _logger.LogInformation("MainWindowViewModel Initialize: {Time}", stopwatch.ElapsedMilliseconds);
     }
 
-    public void ShowLauncherImpl() {
+    public void ShowLauncherImpl()
+    {
         _launcherViewModel.SelectMenu();
         PageViewModel = _launcherViewModel;
     }
 
-    public void ShowAuthorizationImpl() {
+    public void ShowAuthorizationImpl()
+    {
         PageViewModel = _authorizationViewModel;
     }
 
-    public void ShowStartGameImpl() {
+    public void ShowStartGameImpl()
+    {
         // Update locale
         _startGameViewModel.SetupValidation();
         PageViewModel = _startGameViewModel;

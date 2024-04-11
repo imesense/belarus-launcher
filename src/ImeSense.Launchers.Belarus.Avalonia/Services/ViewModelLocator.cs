@@ -4,7 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.Services;
 
-public class ViewModelLocator(IServiceProvider serviceProvider) {
+public class ViewModelLocator(IServiceProvider serviceProvider)
+{
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
     public MainWindowViewModel MainWindowViewModel => _serviceProvider.GetRequiredService<MainWindowViewModel>();

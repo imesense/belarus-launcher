@@ -1,16 +1,17 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
-using Microsoft.Extensions.Logging;
-
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
+using Microsoft.Extensions.Logging;
+
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
-public class DownloadResourcesService : IDownloadResourcesService {
+public class DownloadResourcesService : IDownloadResourcesService
+{
     private readonly ILogger<DownloadResourcesService> _logger;
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
@@ -18,11 +19,12 @@ public class DownloadResourcesService : IDownloadResourcesService {
     private readonly HashChecker _hashChecker;
 
     private IList<GameResource>? _hashResources;
-    
+
     public DownloadResourcesService(ILogger<DownloadResourcesService> logger,
         IGitStorageApiService gitStorageApiService,
         IFileDownloadManager fileDownloadManager,
-        ILauncherStorage launcherStorage, HashChecker hashChecker) {
+        ILauncherStorage launcherStorage, HashChecker hashChecker)
+    {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
@@ -30,7 +32,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
         _hashChecker = hashChecker;
     }
 
-    public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress, 
+    public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress,
         CancellationToken token = default)
     {
         var filesRes = new ConcurrentDictionary<string, Uri>();
@@ -95,7 +97,6 @@ public class DownloadResourcesService : IDownloadResourcesService {
 
                         CalcProgress(ref completedTasks, progress, totalTasks);
                     }, token));
-
                 } else {
                     var verifyFile = _hashChecker.VerifyFileHash(fileStream, assetFile.Hash);
                     if (!verifyFile) {
@@ -108,7 +109,7 @@ public class DownloadResourcesService : IDownloadResourcesService {
         }
 
         await Task.WhenAll(gameResourceTasks);
-        
+
         stopwatch.Stop();
         _logger.LogInformation("Hash calculation time: {Time}", stopwatch.ElapsedMilliseconds);
         progress.Report(0);
@@ -116,14 +117,15 @@ public class DownloadResourcesService : IDownloadResourcesService {
         return filesRes;
     }
 
-    private void CalcProgress(ref int completedTasks, IProgress<int> progress, int totalTasks) {
+    private void CalcProgress(ref int completedTasks, IProgress<int> progress, int totalTasks)
+    {
         Interlocked.Increment(ref completedTasks);
         var progressPercentage = (int) ((float) completedTasks / totalTasks * 100);
         progress.Report(progressPercentage);
         _logger.LogInformation("Progress: {Num}%", progressPercentage);
     }
 
-    public async Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken token = default) 
+    public async Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken token = default)
     {
         try {
             var dirInfo = new DirectoryInfo(Path.GetDirectoryName(path)!);
@@ -146,9 +148,9 @@ public class DownloadResourcesService : IDownloadResourcesService {
                 } catch (HttpRequestException ex) when (ex.Message.Contains("416")) {
                     _logger.LogInformation("Unsuccessful attempt to download the file! The file will be deleted and downloaded again");
                     File.Delete(path);
-                } 
+                }
             } while (!verifyFile);
-            
+
             progress.Report(0);
         } catch (OperationCanceledException ex) {
             _logger.LogInformation("{Message}", ex.Message);

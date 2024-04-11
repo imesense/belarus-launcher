@@ -4,12 +4,8 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
-using Serilog;
-
 using ImeSense.Launchers.Belarus.Avalonia.Manager;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Avalonia.Views;
@@ -19,19 +15,26 @@ using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
 using ImeSense.Launchers.Belarus.Core.Validators;
-using ImeSense.Launchers.Belarus.Avalonia.Services;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+using Serilog;
 
 namespace ImeSense.Launchers.Belarus.Avalonia;
 
-public partial class App : Application {
+public partial class App : Application
+{
     private readonly IServiceProvider _serviceProvider;
 
-    public App() {
+    public App()
+    {
         _serviceProvider = ConfigureServices()
                 .BuildServiceProvider();
     }
-    
-    private IServiceCollection ConfigureServices() {
+
+    private IServiceCollection ConfigureServices()
+    {
         var services = new ServiceCollection();
 
         services.AddLogging(loggingBuilder =>
@@ -77,20 +80,22 @@ public partial class App : Application {
         services.AddTransient<AuthorizationViewModel>();
         services.AddSingleton<StartGameViewModel>();
         services.AddSingleton<MainWindowViewModel>();
-        
+
         services.AddSingleton<ViewModelLocator>();
 
         return services;
     }
 
-    private static void ConfigureClient(HttpClient httpClient) {
+    private static void ConfigureClient(HttpClient httpClient)
+    {
         httpClient.BaseAddress = UriStorage.BelarusApiUri;
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
         httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
     }
 
-    public override void Initialize() {
+    public override void Initialize()
+    {
         var logger = _serviceProvider.GetRequiredService<ILogger<App>>();
 
         try {
@@ -101,7 +106,8 @@ public partial class App : Application {
         }
     }
 
-    public override void OnFrameworkInitializationCompleted() {
+    public override void OnFrameworkInitializationCompleted()
+    {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             desktop.MainWindow = new MainWindow() {
                 DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()

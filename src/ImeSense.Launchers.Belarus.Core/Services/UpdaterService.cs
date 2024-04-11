@@ -5,18 +5,21 @@ using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
-public class UpdaterService : IUpdaterService {
+public class UpdaterService : IUpdaterService
+{
     private readonly ILogger<UpdaterService> _logger;
     private readonly IGitStorageApiService _gitStorageApiService;
     private readonly IFileDownloadManager _fileDownloadManager;
 
-    public UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager) {
+    public UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager)
+    {
         _logger = logger;
         _gitStorageApiService = gitStorageApiService;
         _fileDownloadManager = fileDownloadManager;
     }
 
-    public async Task UpdaterAsync(Uri uri, string fileSavePath) {
+    public async Task UpdaterAsync(Uri uri, string fileSavePath)
+    {
         var appName = Path.GetFileNameWithoutExtension(fileSavePath);
         var fullAppName = Path.GetFileName(fileSavePath);
 

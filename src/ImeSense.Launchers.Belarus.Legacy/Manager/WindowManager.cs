@@ -3,8 +3,10 @@ using ImeSense.Launchers.Belarus.Helpers;
 
 namespace ImeSense.Launchers.Belarus.Manager;
 
-public class WindowManager : IWindowManager {
-    public void Close() {
+public class WindowManager : IWindowManager
+{
+    public void Close()
+    {
         ApplicationHelper.Close();
     }
 }

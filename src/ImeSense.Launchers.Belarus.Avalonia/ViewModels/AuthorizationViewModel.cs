@@ -5,6 +5,12 @@ using System.Reactive.Linq;
 
 using DynamicData;
 
+using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
+using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Models;
+using ImeSense.Launchers.Belarus.Core.Storage;
+
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
@@ -12,15 +18,10 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
-using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Core.Models;
-using ImeSense.Launchers.Belarus.Core.Storage;
-
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
+public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
+{
     private readonly ILogger<AuthorizationViewModel> _logger;
     private readonly ILauncherStorage _launcherStorage;
     private readonly ILocaleManager _localeManager;
@@ -46,7 +47,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         ILauncherStorage launcherStorage, ILocaleManager localeManager,
         IWindowManager windowManager, UserManager userManager,
         AuthenticationViewModelValidator authenticationViewModelValidator,
-        LauncherViewModel launcherViewModel) {
+        LauncherViewModel launcherViewModel)
+    {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _launcherStorage = launcherStorage;
         _localeManager = localeManager;
@@ -56,7 +58,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _launcherViewModel = launcherViewModel;
     }
 
-    public AuthorizationViewModel() {
+    public AuthorizationViewModel()
+    {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(AuthorizationViewModel)}");
 
         _logger = null!;
@@ -68,7 +71,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         _launcherViewModel = null!;
     }
 
-    public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel) {
+    public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel)
+    {
         var username = Username.Trim();
         if (string.IsNullOrWhiteSpace(username)) {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered",
@@ -97,7 +101,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         mainWindowViewModel.ShowLauncherImpl();
     }
 
-    public void UpdateNews() {
+    public void UpdateNews()
+    {
         _logger.LogInformation("Update News");
 
         if (_userManager is null) {
@@ -118,7 +123,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         }
     }
 
-    public void SetupBinding() {
+    public void SetupBinding()
+    {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }
@@ -157,7 +163,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
             .Subscribe(OnCommandException);
     }
 
-    private void SetupValidation() {
+    private void SetupValidation()
+    {
         _disposables = new CompositeDisposable {
             _authenticationViewModelValidator.EnsureUsernameNotEmpty(this),
             _authenticationViewModelValidator.EnsureUsernameCorrectLength(this),
@@ -168,7 +175,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
     private void OnCommandException(Exception exception)
         => _logger.LogError("{Message}", exception.Message);
 
-    protected virtual void Dispose(bool disposing) {
+    protected virtual void Dispose(bool disposing)
+    {
         if (disposing) {
             if (_disposables is not null) {
                 _disposables?.Dispose();
@@ -177,7 +185,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable {
         }
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
