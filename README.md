@@ -30,6 +30,10 @@ Specialized launcher for Belarus modification for downloading and updating modif
 
 ![Launcher](./doc/launcher.png)
 
+## Quick Start
+
+You can get the latest release of the app [in the releases page](https://github.com/imesense/belarus-launcher/releases).
+
 ## Features
 
 - **Downloading** modification with updates: the launcher allows to download modification easily, quickly and automatically check for updates
@@ -42,7 +46,7 @@ Launcher provides ease of use and easy access to the necessary functions so that
 
 - Visual Studio 2022, Visual Studio Code or Rider
   - Avalonia plugin
-- .NET 7 SDK
+- .NET 8 SDK
 - Git
 - Inno Setup
 
