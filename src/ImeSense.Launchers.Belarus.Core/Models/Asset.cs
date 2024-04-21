@@ -26,7 +26,7 @@ public class Asset
     public string State { get; set; } = null!;
 
     [JsonPropertyName("size")]
-    public int Size { get; set; }
+    public long Size { get; set; }
 
     //[JsonPropertyName("download_count")]
     //public int DownloadCount { get; set; }

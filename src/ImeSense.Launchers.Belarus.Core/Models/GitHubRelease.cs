@@ -44,7 +44,7 @@ public class GitHubRelease
     public DateTime PublishedAt { get; set; }
 
     [JsonPropertyName("assets")]
-    public IEnumerable<Asset>? Assets { get; set; }
+    public IReadOnlyCollection<Asset>? Assets { get; set; }
 
     [JsonPropertyName("tarball_url")]
     public Uri? TarballUrl { get; set; }

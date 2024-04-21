@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 
 using ImeSense.Launchers.Belarus.Core.Models;
+using ImeSense.Launchers.Belarus.Core.Storage;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
@@ -50,7 +51,7 @@ public class DownloadManager : IDisposable
     {
         using var client = new HttpClient();
         var root = jsonDocument?.RootElement;
-        var element = FindFileByName("news.json");
+        var element = FindFileByName(FileNameStorage.LegacyNews);
 
         return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
             .Result;
