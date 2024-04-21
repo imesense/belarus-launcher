@@ -106,12 +106,18 @@ public partial class App : Application
         }
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            desktop.MainWindow = new MainWindow() {
-                DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()
-            };
+            desktop.MainWindow = new MainWindow();
+
+            var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
+            await initializerManager.InitializeAsync();
+
+            var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+            await mainViewModel.InitializeAsync();
+
+            desktop.MainWindow.DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         }
 
         base.OnFrameworkInitializationCompleted();

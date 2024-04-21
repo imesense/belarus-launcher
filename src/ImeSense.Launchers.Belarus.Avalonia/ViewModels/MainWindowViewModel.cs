@@ -14,7 +14,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject, IAsyncInitialization
+public class MainWindowViewModel : ReactiveObject
 {
     private readonly ILogger<MainWindowViewModel> _logger;
 
@@ -26,8 +26,6 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization
 
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
 
-    public Task Initialization { get; private set; }
-
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, InitializerManager initializerManager,
         IUpdaterService updaterService, LauncherViewModel launcherViewModel,
         AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel)
@@ -38,8 +36,6 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization
         _authorizationViewModel = authorizationViewModel;
         _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
         _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
-
-        Initialization = InitializeAsync();
     }
 
     public MainWindowViewModel()
@@ -52,8 +48,6 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization
         _launcherViewModel = null!;
         _initializerManager = null!;
         _updaterService = null!;
-
-        Initialization = null!;
     }
 
     public async Task InitializeAsync()
@@ -79,8 +73,6 @@ public class MainWindowViewModel : ReactiveObject, IAsyncInitialization
         stopwatch.Start();
 
         ProcessHelper.KillAllXrEngine();
-
-        await _initializerManager.InitializeAsync();
 
         if (!_initializerManager.IsUserAuthorized) {
             _authorizationViewModel.SetupBinding();
