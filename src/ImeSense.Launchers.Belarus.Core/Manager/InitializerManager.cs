@@ -36,44 +36,43 @@ public class InitializerManager(
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync();
+            _logger.LogInformation("Check GitHub connection time: {Time}", stopwatch.ElapsedMilliseconds);
+
             var locale = _userManager?.UserSettings?.Locale;
-
             if (_launcherStorage.IsCheckGitHubConnection) {
-                try {
-                    var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync();
-                    if (!isLauncherReleaseCurrent) {
-                        var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
-                            FileNameStorage.SBLauncherUpdater);
-                        await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
+                var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync();
+                _logger.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
+                if (!isLauncherReleaseCurrent) {
+                    var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
+                        FileNameStorage.SBLauncherUpdater);
+                    await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
 
-                        var updater = Launcher.Launch(pathLauncherUpdater);
-                        updater?.Start();
+                    var updater = Launcher.Launch(pathLauncherUpdater);
+                    updater?.Start();
 
-                        return;
-                    }
-                } catch (Exception ex) {
-                    _logger.LogError("{Message}", ex.Message);
-                    _logger.LogError("{StackTrace}", ex.StackTrace);
+                    return;
                 }
 
                 _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
+                _logger.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
+
                 IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
                 IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
                 if (IsUserAuthorized) {
-                    _launcherStorage.NewsContents = new(await LoadNewsAsync(locale) ?? []);
+                    await Task.Factory.StartNew(() => LoadNewsAsync(locale));
                 } else {
-                    _launcherStorage.NewsContents = new(await LoadNewsAsync() ?? []);
+                    await Task.Factory.StartNew(() => LoadNewsAsync());
                 }
-                var task = new Task(async () => await LoadWebResourcesAsync());
-                task.Start();
+                await Task.Factory.StartNew(() => LoadWebResourcesAsync());
             } else {
                 if (IsUserAuthorized) {
                     _launcherStorage.NewsContents = new(LoadErrorNews(locale) ?? []);
                 } else {
                     _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
                 }
-                
+
+                _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease);
             }
 
             stopwatch.Stop();
@@ -207,7 +206,7 @@ public class InitializerManager(
         }
     }
 
-    private async Task<IList<LangNewsContent>?> LoadNewsAsync(Locale? locale = null)
+    private async Task LoadNewsAsync(Locale? locale = null)
     {
         // News in all languages
         var allNews = new List<LangNewsContent>();
@@ -229,7 +228,7 @@ public class InitializerManager(
             _logger.LogError("{StackTrace}", ex.StackTrace);
         }
 
-        return allNews;
+        _launcherStorage.NewsContents = new(allNews);
     }
 
     private void AddNews(Locale? locale, List<LangNewsContent> allNews, IEnumerable<NewsContent>? news)

@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -49,18 +48,26 @@ public class NewsSliderViewModel : ReactiveObject
         UserManager = userManager;
         _launcherStorage = launcherStorage;
         LinkViewModel = viewModelLocator.LinkViewModel;
+
         SetupBinding();
         SetupCommands();
 
+        var canLoadNews = this.WhenAnyValue(x => x._launcherStorage.NewsContents)
+            .Any(news => news != null && news.Any());
+
+        var reloadNewsCommand = ReactiveCommand.Create<Locale?>((lang) => {
+            _logger.LogInformation("Language has been changed!");
+            ReloadNews(lang);
+        }, canLoadNews);
         this.WhenAnyValue(x => x.UserManager.UserSettings!.Locale)
-            .Subscribe(ReloadNews);
+            .InvokeCommand(reloadNewsCommand);
 
         this.WhenAnyValue(x => x._launcherStorage.NewsContents)
-            .Select(news => news != null && news.Any())
-            .Subscribe((n) => _logger.LogInformation("NewsContents --------------------------------------------------"));
-
-        this.WhenAnyValue(x => x._launcherStorage.NewsContents[0])
-            .Subscribe((n) => _logger.LogInformation("NewsContents[0] --------------------------------------------------"));
+            .Where(news => news != null && news.Any())
+            .Subscribe((n) => {
+                var locale = UserManager.UserSettings!.Locale;
+                ReloadNews(locale);
+            });
     }
 
     private void ReloadNews(Locale? locale)
