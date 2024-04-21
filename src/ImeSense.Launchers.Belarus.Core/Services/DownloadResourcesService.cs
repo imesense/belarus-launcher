@@ -72,18 +72,22 @@ public class DownloadResourcesService : IDownloadResourcesService
                 continue;
             }
 
+        #if !DEBUG
             if (assetFile.Directory.Equals("resources")) {
                 continue;
             }
+        #endif
             var filePath = Path.Combine(DirectoryStorage.Base, assetFile.Directory, assetFile.Title);
 
             if (!File.Exists(filePath)) {
                 filesRes.TryAdd(filePath, asset.BrowserDownloadUrl);
                 CalcProgress(ref completedTasks, progress, totalTasks);
             } else {
+            #if !DEBUG
                 if (assetFile.Directory.Equals("resources")) {
                     continue;
                 }
+            #endif
 
                 await using var fileStream = File.OpenRead(filePath);
                 if (fileStream.Length > 100000000) {
