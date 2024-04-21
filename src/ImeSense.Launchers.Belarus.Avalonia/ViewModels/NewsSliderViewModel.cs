@@ -4,7 +4,9 @@ using System.Reactive.Linq;
 
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Avalonia.Services;
+using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
+using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Microsoft.Extensions.Logging;
 
@@ -17,6 +19,7 @@ public class NewsSliderViewModel : ReactiveObject
 {
     private readonly ILogger<NewsSliderViewModel> _logger;
     private readonly ViewModelLocator _viewModelLocator;
+    private readonly ILauncherStorage _launcherStorage;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
@@ -25,16 +28,40 @@ public class NewsSliderViewModel : ReactiveObject
 
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
+    public UserManager UserManager { get; set; }
 
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator)
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator,
+        UserManager userManager, ILauncherStorage launcherStorage)
     {
         logger.LogInformation("NewsSliderViewModel CTOR");
         _logger = logger;
         _viewModelLocator = viewModelLocator;
-
+        UserManager = userManager;
+        _launcherStorage = launcherStorage;
         LinkViewModel = viewModelLocator.LinkViewModel;
         SetupBinding();
         SetupCommands();
+
+        this.WhenAnyValue(x => x.UserManager.UserSettings!.Locale)
+            .Subscribe(ReloadNews);
+    }
+
+    private void ReloadNews(Locale? locale)
+    {
+        _logger.LogInformation("Call ReloadNews() method");
+
+        if (_launcherStorage.NewsContents is null) {
+            _logger.LogError("News content is null");
+            return;
+        }
+
+        var news = _launcherStorage.NewsContents
+            .FirstOrDefault(x => x.Locale != null && locale != null && x.Locale.Key.Equals(locale.Key));
+        if (news is not null) {
+            SetNews(news.NewsContents!);
+        } else {
+            _logger.LogError("News collection is empty");
+        }
     }
 
     public NewsSliderViewModel()
@@ -45,6 +72,8 @@ public class NewsSliderViewModel : ReactiveObject
 
         LinkViewModel = null!;
         _viewModelLocator = null!;
+        UserManager = null!;
+        _launcherStorage = null!;
     }
 
     private void SetupCommands()
@@ -95,7 +124,7 @@ public class NewsSliderViewModel : ReactiveObject
 
     public void SetNews(IEnumerable<NewsContent> newsContents)
     {
-        News = new ObservableCollection<NewsViewModel>();
+        News = [];
 
         foreach (var content in newsContents) {
             News.Add(new NewsViewModel(content!.Title, content.Description));

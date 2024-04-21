@@ -76,16 +76,30 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
         StartGame.ThrownExceptions.Merge(Back.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
+
+        if (_userManager is null) {
+            return;
+        }
+        if (_userManager.UserSettings is null) {
+            return;
+        }
+
+        this.WhenAnyValue(x => x._userManager.UserSettings!.Locale)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(x => {
+                _disposables?.Dispose();
+                SetupValidation();
+            });
     }
 
-    public void SetupValidation()
+    private void SetupValidation()
     {
         _logger.LogInformation("StartGameViewModel SetupValidation");
-        _disposables?.Dispose();
-        _disposables = new CompositeDisposable {
+        
+        _disposables = [
             _startGameViewModelValidator.EnsureIpAddressNotEmpty(this),
             _startGameViewModelValidator.EnsureValidIpAddressOrUrl(this)
-        };
+        ];
     }
 
     private void StartGameImpl()

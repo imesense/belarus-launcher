@@ -56,9 +56,7 @@ public class MainWindowViewModel : ReactiveObject
 
         ProcessHelper.KillAllXrEngine();
 
-        if (_initializerManager.IsUserAuthorized) {
-            _authorizationViewModel.UpdateNews();
-        } else {
+        if (!_initializerManager.IsUserAuthorized) {
             _authorizationViewModel.SetupBinding();
         }
         var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
@@ -98,8 +96,6 @@ public class MainWindowViewModel : ReactiveObject
 
     public void ShowStartGameImpl()
     {
-        // Update locale
-        _startGameViewModel.SetupValidation();
         PageViewModel = _startGameViewModel;
     }
 }

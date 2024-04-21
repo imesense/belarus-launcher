@@ -4,13 +4,17 @@ using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
 using ImeSense.Launchers.Belarus.Core.Validators;
 
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class UserManager
+public class UserManager : ReactiveObject
 {
     private readonly IAuthenticationValidator _authenticationValidator;
     private readonly IStartGameValidator _startGameValidator;
 
+    [Reactive]
     public UserSettings? UserSettings { get; set; }
 
     public UserManager(IAuthenticationValidator authenticationValidator, IStartGameValidator startGameValidator)

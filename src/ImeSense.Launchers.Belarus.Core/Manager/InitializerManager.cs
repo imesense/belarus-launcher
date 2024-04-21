@@ -178,9 +178,8 @@ public class InitializerManager(
     {
         var userSettings = _userManager.UserSettings ??
             throw new Exception("Error loading user config!");
-        if (userSettings.Locale is null) {
-            throw new NullReferenceException("User settings locale object is null");
-        }
+
+        userSettings.Locale = new();
 
         if (userSettings.Locale.Key == string.Empty) {
             var defaultLocale = _launcherStorage.Locales[0];
