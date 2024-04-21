@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Microsoft.Extensions.Logging;
 
@@ -17,6 +18,7 @@ public class GameMenuViewModel : ReactiveObject
     private readonly ILogger<GameMenuViewModel> _logger;
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
+    private readonly ILauncherStorage _launcherStorage;
 
     public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
@@ -25,11 +27,12 @@ public class GameMenuViewModel : ReactiveObject
 
     [Reactive] public bool IsStartServer { get; set; } = false;
 
-    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager)
+    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager, ILauncherStorage launcherStorage)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userManager = userManager;
+        _launcherStorage = launcherStorage;
 
         SetupCommands();
     }
@@ -41,6 +44,7 @@ public class GameMenuViewModel : ReactiveObject
         _logger = null!;
         _windowManager = null!;
         _userManager = null!;
+        _launcherStorage = null!;
     }
 
     private void SetupCommands()
@@ -48,10 +52,11 @@ public class GameMenuViewModel : ReactiveObject
         var canExecuteServer = this.WhenAnyValue(x => x.IsStartServer,
                 startServer => startServer == false)
             .ObserveOn(RxApp.MainThreadScheduler);
+        var isGitHubConnection = this.WhenAnyValue(x => x._launcherStorage.IsCheckGitHubConnection);
 
         PlayGame = ReactiveCommand.Create<MainWindowViewModel>(PlayGameImpl);
         StartServer = ReactiveCommand.Create(StartServerImpl, canExecuteServer);
-        CheckUpdates = ReactiveCommand.CreateFromTask<LauncherViewModel>(CheckUpdatesImplAsync);
+        CheckUpdates = ReactiveCommand.CreateFromTask<LauncherViewModel>(CheckUpdatesImplAsync, isGitHubConnection);
         Close = ReactiveCommand.Create(_windowManager.Close);
 
         Observable.Merge(PlayGame.ThrownExceptions, StartServer.ThrownExceptions, Close.ThrownExceptions)

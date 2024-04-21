@@ -23,4 +23,6 @@
     <s:String x:Key="LocalizedStrings.InvalidCharacters">Invalid characters!</s:String>
     <s:String x:Key="LocalizedStrings.IpAddressNotEntered">Enter IP address</s:String>
     <s:String x:Key="LocalizedStrings.InvalidIpAddress">Invalid IP address or URL format!</s:String>
+    <s:String x:Key="LocalizedStrings.ErrorTitle">Error</s:String>
+    <s:String x:Key="LocalizedStrings.ErrorInternetDescription">Unable to connect to the server!</s:String>
 </ResourceDictionary>

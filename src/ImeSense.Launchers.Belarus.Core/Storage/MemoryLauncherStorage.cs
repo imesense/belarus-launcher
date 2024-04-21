@@ -1,8 +1,11 @@
 using ImeSense.Launchers.Belarus.Core.Models;
 
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+
 namespace ImeSense.Launchers.Belarus.Core.Storage;
 
-public class MemoryLauncherStorage : ILauncherStorage
+public class MemoryLauncherStorage : ReactiveObject, ILauncherStorage
 {
     public GitHubRelease? GitHubRelease { get; set; }
 
@@ -12,7 +15,9 @@ public class MemoryLauncherStorage : ILauncherStorage
             new() { Key = "eng", Title = "English", },
         };
 
-    public IEnumerable<LangNewsContent>? NewsContents { get; set; }
+    public IList<LangNewsContent>? NewsContents { get; set; }
 
     public IEnumerable<WebResource>? WebResources { get; set; }
+    [Reactive]
+    public bool IsCheckGitHubConnection { get; set; }
 }

@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
+using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Microsoft.Extensions.Logging;
 
@@ -20,6 +21,7 @@ public class DownloadMenuViewModel : ReactiveObject
     private readonly IWindowManager _windowManager;
     private readonly IDownloadResourcesService _downloadResourcesService;
     private readonly UserManager _userManager;
+    private readonly ILauncherStorage _launcherStorage;
     private CancellationTokenSource _tokenSource = new();
 
     public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; } = null!;
@@ -39,14 +41,15 @@ public class DownloadMenuViewModel : ReactiveObject
         ILocaleManager localeManager,
         IWindowManager windowManager,
         IDownloadResourcesService downloadResourcesService,
-        UserManager userManager)
+        UserManager userManager,
+        ILauncherStorage launcherStorage)
     {
         _logger = logger;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _downloadResourcesService = downloadResourcesService ?? throw new ArgumentNullException(nameof(downloadResourcesService));
         _userManager = userManager;
-
+        _launcherStorage = launcherStorage;
         IsDownload = false;
 
         SetupCommands();
@@ -61,6 +64,7 @@ public class DownloadMenuViewModel : ReactiveObject
         _windowManager = null!;
         _downloadResourcesService = null!;
         _userManager = null!;
+        _launcherStorage = null!;
     }
 
     public async Task UpdateAsync(LauncherViewModel launcherViewModel)
@@ -70,7 +74,9 @@ public class DownloadMenuViewModel : ReactiveObject
 
     private void SetupCommands()
     {
-        StartDownload = ReactiveCommand.CreateFromTask<LauncherViewModel>(DownloadsImplAsync);
+        var isGitHubConnection = this.WhenAnyValue(x => x._launcherStorage.IsCheckGitHubConnection);
+
+        StartDownload = ReactiveCommand.CreateFromTask<LauncherViewModel>(DownloadsImplAsync, isGitHubConnection);
         Close = ReactiveCommand.Create(CloseImpl);
 
         StartDownload.ThrownExceptions.Merge(Close.ThrownExceptions)

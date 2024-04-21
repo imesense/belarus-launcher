@@ -51,23 +51,6 @@ public class MainWindowViewModel : ReactiveObject
 
     public async Task InitializeAsync()
     {
-        try {
-            var isLauncherReleaseCurrent = await _initializerManager.IsLauncherReleaseCurrentAsync();
-            if (!isLauncherReleaseCurrent) {
-                var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
-                    FileNameStorage.SBLauncherUpdater);
-                await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
-
-                var updater = Launcher.Launch(pathLauncherUpdater);
-                updater?.Start();
-
-                return;
-            }
-        } catch (Exception ex) {
-            _logger.LogError("{Message}", ex.Message);
-            _logger.LogError("{StackTrace}", ex.StackTrace);
-        }
-
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 

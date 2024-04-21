@@ -1,5 +1,3 @@
-using System;
-
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
@@ -36,9 +34,11 @@ public class GameDirectoryValidator(ILogger<GameDirectoryValidator> logger, ILau
             return false;
         }
 
-        //Check the size of folders and files
-        if (!CompareFileSizes()) {
-            return false;
+        if (_launcherStorage.IsCheckGitHubConnection) {
+            //Check the size of folders and files
+            if (!CompareFileSizes()) {
+                return false;
+            }
         }
 
         // Check if the number of files in the "ResourcesDirectory" path is greater than or equal to 11

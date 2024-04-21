@@ -9,30 +9,23 @@ using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class InitializerManager
+public class InitializerManager(
+    ILogger<InitializerManager> logger,
+    IGitStorageApiService gitStorageApiService, UserManager userManager,
+    ILocaleManager localeManager, ILauncherStorage launcherStorage,
+    IReleaseComparerService<GitHubRelease> releaseComparerService,
+    IUpdaterService updaterService)
 {
-    private readonly ILogger<InitializerManager> _logger;
-    private readonly IGitStorageApiService _gitStorageApiService;
-    private readonly UserManager _userManager;
-    private readonly ILocaleManager _localeManager;
-    private readonly ILauncherStorage _launcherStorage;
-    private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService;
+    private readonly ILogger<InitializerManager> _logger = logger;
+    private readonly IGitStorageApiService _gitStorageApiService = gitStorageApiService;
+    private readonly UserManager _userManager = userManager;
+    private readonly ILocaleManager _localeManager = localeManager;
+    private readonly ILauncherStorage _launcherStorage = launcherStorage;
+    private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService = releaseComparerService;
+    private readonly IUpdaterService _updaterService = updaterService;
 
-    public bool IsGameReleaseCurrent { get; private set; }
+    public bool IsGameReleaseCurrent { get; private set; } = true;
     public bool IsUserAuthorized { get; private set; }
-
-    public InitializerManager(ILogger<InitializerManager> logger,
-        IGitStorageApiService gitStorageApiService, UserManager userManager,
-        ILocaleManager localeManager, ILauncherStorage launcherStorage,
-        IReleaseComparerService<GitHubRelease> releaseComparerService)
-    {
-        _logger = logger;
-        _gitStorageApiService = gitStorageApiService;
-        _userManager = userManager;
-        _localeManager = localeManager;
-        _launcherStorage = launcherStorage;
-        _releaseComparerService = releaseComparerService;
-    }
 
     public async Task InitializeAsync()
     {
@@ -41,18 +34,45 @@ public class InitializerManager
         try {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
+            _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync();
+            var locale = _userManager?.UserSettings?.Locale;
 
-            _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
-            IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
-            IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
+            if (_launcherStorage.IsCheckGitHubConnection) {
+                try {
+                    var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync();
+                    if (!isLauncherReleaseCurrent) {
+                        var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
+                            FileNameStorage.SBLauncherUpdater);
+                        await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
 
-            if (IsUserAuthorized) {
-                var locale = _userManager?.UserSettings?.Locale;
-                _launcherStorage.NewsContents = await LoadNewsAsync(locale);
+                        var updater = Launcher.Launch(pathLauncherUpdater);
+                        updater?.Start();
+
+                        return;
+                    }
+                } catch (Exception ex) {
+                    _logger.LogError("{Message}", ex.Message);
+                    _logger.LogError("{StackTrace}", ex.StackTrace);
+                }
+
+                _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
+                IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
+                IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
+
+                if (IsUserAuthorized) {
+                    _launcherStorage.NewsContents = await LoadNewsAsync(locale);
+                } else {
+                    _launcherStorage.NewsContents = await LoadNewsAsync();
+                }
+                _launcherStorage.WebResources = await LoadWebResourcesAsync();
             } else {
-                _launcherStorage.NewsContents = await LoadNewsAsync();
+                if (IsUserAuthorized) {
+                    _launcherStorage.NewsContents = LoadErrorNews(locale);
+                } else {
+                    _launcherStorage.NewsContents = LoadErrorNews();
+                }
+                
             }
-            _launcherStorage.WebResources = await LoadWebResourcesAsync();
 
             stopwatch.Stop();
             _logger.LogInformation("Parsing time: {Time}", stopwatch.ElapsedMilliseconds);
@@ -62,7 +82,54 @@ public class InitializerManager
         }
     }
 
-    public async Task<bool> IsLauncherReleaseCurrentAsync()
+    private IList<LangNewsContent>? LoadErrorNews(Locale? locale = null)
+    {
+        // News in all languages
+        var allNews = new List<LangNewsContent>();
+        locale ??= _launcherStorage.Locales[0];
+
+        try {
+            allNews.Add(new LangNewsContent(locale, [new NewsContent(
+                _localeManager.GetStringByKey("LocalizedStrings.ErrorTitle", locale.Key),
+                _localeManager.GetStringByKey("LocalizedStrings.ErrorInternetDescription", locale.Key)
+            )]));
+        } catch (Exception ex) {
+            _logger.LogError("{Message}", ex.Message);
+            _logger.LogError("{StackTrace}", ex.StackTrace);
+        }
+
+        return allNews;
+    }
+
+
+    /// <summary>
+    /// Checks the connection to github.com.
+    /// </summary>
+    /// <returns>True if the connection is established successfully, otherwise false.</returns>
+    private async Task<bool> CheckGitHubConnectionAsync()
+    {
+        try {
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("https://github.com");
+
+            if (response.IsSuccessStatusCode) {
+                _logger.LogInformation("Connection to github.com established");
+                return true;
+            } else {
+                _logger.LogInformation("Failed to establish connection to github.com. Response code: {StatusCode}", response.StatusCode);
+                return false;
+            }
+        } catch (HttpRequestException ex) {
+            _logger.LogInformation("Failed to establish connection to github.com");
+
+            _logger.LogError("{Message}", ex.Message);
+            _logger.LogError("{StackTrace}", ex.StackTrace);
+            return false;
+        }
+    }
+
+
+    private async Task<bool> IsLauncherReleaseCurrentAsync()
     {
         var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherApiUri);
         if (tags != null) {
@@ -146,7 +213,7 @@ public class InitializerManager
         }
     }
 
-    private async Task<IEnumerable<LangNewsContent>?> LoadNewsAsync(Locale? locale = null)
+    private async Task<IList<LangNewsContent>?> LoadNewsAsync(Locale? locale = null)
     {
         // News in all languages
         var allNews = new List<LangNewsContent>();

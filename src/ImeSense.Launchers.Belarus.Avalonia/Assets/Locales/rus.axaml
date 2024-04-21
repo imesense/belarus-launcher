@@ -23,4 +23,6 @@
     <s:String x:Key="LocalizedStrings.InvalidCharacters">Запрещенные символы!</s:String>
     <s:String x:Key="LocalizedStrings.IpAddressNotEntered">Введите IP-адрес</s:String>
     <s:String x:Key="LocalizedStrings.InvalidIpAddress">Недопустимый формат IP-адреса или URL!</s:String>
+    <s:String x:Key="LocalizedStrings.ErrorTitle">Ошибка</s:String>
+    <s:String x:Key="LocalizedStrings.ErrorInternetDescription">Невозможно подключиться к серверу!</s:String>
 </ResourceDictionary>
