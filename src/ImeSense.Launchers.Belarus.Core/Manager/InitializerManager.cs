@@ -43,23 +43,16 @@ public class InitializerManager
             stopwatch.Start();
 
             _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
-            Task<IEnumerable<LangNewsContent>?> taskLoadNews;
+            IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
             IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
+
             if (IsUserAuthorized) {
                 var locale = _userManager?.UserSettings?.Locale;
-                taskLoadNews = LoadNewsAsync(locale);
+                _launcherStorage.NewsContents = await LoadNewsAsync(locale);
             } else {
-                taskLoadNews = LoadNewsAsync();
+                _launcherStorage.NewsContents = await LoadNewsAsync();
             }
-
-            var taskIsGameReleaseCurrent = IsGameReleaseCurrentAsync();
-            var taskLoadWebResources = LoadWebResourcesAsync();
-
-            await Task.WhenAll(taskIsGameReleaseCurrent, taskLoadWebResources, taskLoadNews);
-
-            IsGameReleaseCurrent = taskIsGameReleaseCurrent.Result;
-            _launcherStorage.WebResources = taskLoadWebResources.Result;
-            _launcherStorage.NewsContents = taskLoadNews.Result;
+            _launcherStorage.WebResources = await LoadWebResourcesAsync();
 
             stopwatch.Stop();
             _logger.LogInformation("Parsing time: {Time}", stopwatch.ElapsedMilliseconds);
