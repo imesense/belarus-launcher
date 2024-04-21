@@ -32,9 +32,18 @@ public class NewsSliderViewModel : ReactiveObject
     public UserManager UserManager { get; set; }
 
     public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator,
-        UserManager userManager, ILauncherStorage launcherStorage)
+        UserManager userManager, ILauncherStorage launcherStorage, ILocaleManager localeManager)
     {
         logger.LogInformation("NewsSliderViewModel CTOR");
+
+        if (userManager.UserSettings is not null) {
+            var locale = userManager.UserSettings.Locale;
+            if (locale is not null) {
+                News = [new(localeManager.GetStringByKey("LocalizedStrings.Warning", locale.Key),
+                            localeManager.GetStringByKey("LocalizedStrings.LoadNews", locale.Key))];
+            }
+        }
+
         _logger = logger;
         _viewModelLocator = viewModelLocator;
         UserManager = userManager;
