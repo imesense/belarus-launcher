@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -44,6 +45,13 @@ public class NewsSliderViewModel : ReactiveObject
 
         this.WhenAnyValue(x => x.UserManager.UserSettings!.Locale)
             .Subscribe(ReloadNews);
+
+        this.WhenAnyValue(x => x._launcherStorage.NewsContents)
+            .Select(news => news != null && news.Any())
+            .Subscribe((n) => _logger.LogInformation("NewsContents --------------------------------------------------"));
+
+        this.WhenAnyValue(x => x._launcherStorage.NewsContents[0])
+            .Subscribe((n) => _logger.LogInformation("NewsContents[0] --------------------------------------------------"));
     }
 
     private void ReloadNews(Locale? locale)
@@ -132,10 +140,6 @@ public class NewsSliderViewModel : ReactiveObject
 
         NumPage = News.Count - 1;
         SelectedNewsViewModel = News[NumPage];
-
-        if (LinkViewModel.WebResources.Count == 0) {
-            LinkViewModel.Init();
-        }
     }
 
     private void OnCommandException(Exception exception)

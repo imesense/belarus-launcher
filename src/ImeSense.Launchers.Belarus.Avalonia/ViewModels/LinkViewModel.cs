@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Reactive;
+using System.Reactive.Linq;
 
 using DynamicData;
 
@@ -31,6 +33,10 @@ public class LinkViewModel : ReactiveObject
         _launcherStorage = launcherStorage;
 
         OpenUrlCommand = ReactiveCommand.Create<string>(OpenUrl);
+
+        this.WhenAnyValue(x => x._launcherStorage.WebResources)
+            .Where(webRes => webRes != null && webRes.Any())
+            .Subscribe((n) => Init());
     }
 
     public LinkViewModel()
@@ -43,7 +49,7 @@ public class LinkViewModel : ReactiveObject
         _launcherStorage = null!;
     }
 
-    public void Init()
+    private void Init()
     {
         if (_launcherStorage.WebResources != null) {
             _logger.LogInformation("Web resources are initialized");

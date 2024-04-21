@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 using ImeSense.Launchers.Belarus.Core.Helpers;
@@ -60,16 +61,17 @@ public class InitializerManager(
                 IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
                 if (IsUserAuthorized) {
-                    _launcherStorage.NewsContents = await LoadNewsAsync(locale);
+                    _launcherStorage.NewsContents = new(await LoadNewsAsync(locale) ?? []);
                 } else {
-                    _launcherStorage.NewsContents = await LoadNewsAsync();
+                    _launcherStorage.NewsContents = new(await LoadNewsAsync() ?? []);
                 }
-                _launcherStorage.WebResources = await LoadWebResourcesAsync();
+                var task = new Task(async () => await LoadWebResourcesAsync());
+                task.Start();
             } else {
                 if (IsUserAuthorized) {
-                    _launcherStorage.NewsContents = LoadErrorNews(locale);
+                    _launcherStorage.NewsContents = new(LoadErrorNews(locale) ?? []);
                 } else {
-                    _launcherStorage.NewsContents = LoadErrorNews();
+                    _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
                 }
                 
             }
@@ -189,22 +191,15 @@ public class InitializerManager(
         _localeManager.SetLocale(userSettings.Locale.Key);
     }
 
-    private async Task<IEnumerable<WebResource>> LoadWebResourcesAsync()
+    private async Task LoadWebResourcesAsync()
     {
         try {
             var contents = await _gitStorageApiService
                 .DownloadJsonAsync<IEnumerable<WebResource>>(FileNameStorage.WebResources, UriStorage.BelarusApiUri);
-            var webResources = new List<WebResource>();
 
             if (contents != null) {
-                foreach (var content in contents) {
-                    if (content != null) {
-                        webResources.Add(content);
-                    }
-                }
+                _launcherStorage.WebResources = new(contents);
             }
-
-            return webResources;
         } catch (Exception ex) {
             _logger.LogError("{Message}", ex.Message);
             _logger.LogError("{StackTrace}", ex.StackTrace);

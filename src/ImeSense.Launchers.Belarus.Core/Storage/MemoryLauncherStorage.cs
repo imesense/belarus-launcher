@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 using ImeSense.Launchers.Belarus.Core.Models;
 
 using ReactiveUI;
@@ -15,9 +17,10 @@ public class MemoryLauncherStorage : ReactiveObject, ILauncherStorage
             new() { Key = "eng", Title = "English", },
         };
 
-    public IList<LangNewsContent>? NewsContents { get; set; }
-
-    public IEnumerable<WebResource>? WebResources { get; set; }
+    [Reactive]
+    public ObservableCollection<LangNewsContent>? NewsContents { get; set; }
+    [Reactive]
+    public ObservableCollection<WebResource>? WebResources { get; set; }
     [Reactive]
     public bool IsCheckGitHubConnection { get; set; }
 }
