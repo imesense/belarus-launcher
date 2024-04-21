@@ -1,7 +1,6 @@
 using System.Diagnostics;
 
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
-using ImeSense.Launchers.Belarus.Core;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
@@ -74,12 +73,11 @@ public class MainWindowViewModel : ReactiveObject
 
         ProcessHelper.KillAllXrEngine();
 
-        if (!_initializerManager.IsUserAuthorized) {
-            _authorizationViewModel.SetupBinding();
-        } else {
+        if (_initializerManager.IsUserAuthorized) {
             _authorizationViewModel.UpdateNews();
+        } else {
+            _authorizationViewModel.SetupBinding();
         }
-
         var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
 
         if (File.Exists(PathStorage.LauncherSetting)) {
@@ -95,6 +93,7 @@ public class MainWindowViewModel : ReactiveObject
         }
 
         if (File.Exists(PathStorage.LauncherSetting)) {
+            _launcherViewModel.SelectMenu();
             ShowLauncherImpl();
         } else {
             ShowAuthorizationImpl();
@@ -106,7 +105,6 @@ public class MainWindowViewModel : ReactiveObject
 
     public void ShowLauncherImpl()
     {
-        _launcherViewModel.SelectMenu();
         PageViewModel = _launcherViewModel;
     }
 

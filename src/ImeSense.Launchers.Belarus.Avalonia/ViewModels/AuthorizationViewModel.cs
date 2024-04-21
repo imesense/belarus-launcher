@@ -97,7 +97,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
             using var writer = new StreamWriter(PathStorage.GameUser, true);
             writer.WriteLine($"language {SelectedLanguage.Key}");
         }
-
+        _launcherViewModel.SelectMenu();
         mainWindowViewModel.ShowLauncherImpl();
     }
 
