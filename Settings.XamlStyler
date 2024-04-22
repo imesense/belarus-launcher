@@ -27,7 +27,7 @@
     "FirstLineAttributes": "",
     "OrderAttributesByName": true,
     "PutEndingBracketOnNewLine": false,
-    "RemoveEndingTagOfEmptyElement": true,
+    "RemoveEndingTagOfEmptyElement": false,
     "SpaceBeforeClosingSlash": true,
     "RootElementLineBreakRule": 0,
     "ReorderVSM": 2,
