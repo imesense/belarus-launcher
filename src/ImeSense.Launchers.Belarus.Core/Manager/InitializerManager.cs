@@ -30,8 +30,6 @@ public class InitializerManager(
 
     public async Task InitializeAsync()
     {
-        SetLocale();
-
         try {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -175,7 +173,7 @@ public class InitializerManager(
         }
     }
 
-    private void SetLocale()
+    public void InitializeLocale()
     {
         var userSettings = _userManager.UserSettings ??
             throw new Exception("Error loading user config!");

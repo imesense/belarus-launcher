@@ -27,4 +27,9 @@
     <s:String x:Key="LocalizedStrings.ErrorInternetDescription">Unable to connect to the server!</s:String>
     <s:String x:Key="LocalizedStrings.Warning">Warning</s:String>
     <s:String x:Key="LocalizedStrings.LoadNews">News is loading</s:String>
+    <s:String x:Key="LocalizedStrings.Message">Message</s:String>
+    <s:String x:Key="LocalizedStrings.Cancel">Cancel</s:String>
+    <s:String x:Key="LocalizedStrings.Loading">Loading</s:String>
+    <s:String x:Key="LocalizedStrings.AccessingRepository">Accessing the repository</s:String>
+    <s:String x:Key="LocalizedStrings.DataInitialization">Data initialization</s:String>
 </ResourceDictionary>

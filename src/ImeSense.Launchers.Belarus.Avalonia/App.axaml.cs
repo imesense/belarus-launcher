@@ -5,6 +5,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
 using ImeSense.Launchers.Belarus.Avalonia.Manager;
+using ImeSense.Launchers.Belarus.Avalonia.Models;
 using ImeSense.Launchers.Belarus.Avalonia.Services;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
@@ -48,6 +49,7 @@ public partial class App : Application
         services.AddSingleton<LinkView>();
         services.AddSingleton<NewsSliderView>();
         services.AddTransient<NewsView>();
+        services.AddTransient<SplashScreenView>();
         services.AddSingleton<StartGameView>();
 
         services.AddTransient<GameDirectoryValidator>();
@@ -71,6 +73,7 @@ public partial class App : Application
         services.AddSingleton<StartGameViewModelValidator>();
         services.AddSingleton<UserManager>();
         services.AddSingleton<InitializerManager>();
+        services.AddTransient<SplashScreenViewModel>();
         services.AddTransient<LinkViewModel>();
         services.AddTransient<NewsSliderViewModel>();
         services.AddSingleton<LauncherViewModel>();
@@ -109,15 +112,39 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            desktop.MainWindow = new MainWindow();
-
             var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
-            await initializerManager.InitializeAsync();
+            initializerManager.InitializeLocale();
 
+            var userManager = _serviceProvider.GetRequiredService<UserManager>();
+            var localeManager = _serviceProvider.GetRequiredService<ILocaleManager>();
+            var locale = userManager.UserSettings?.Locale?.Key;
+
+            var splashScreenViewModel = _serviceProvider.GetRequiredService<SplashScreenViewModel>();
             var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
-            await mainViewModel.InitializeAsync();
+            desktop.MainWindow = new MainWindow {
+                DataContext = mainViewModel
+            };
 
-            desktop.MainWindow.DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+            try {
+                mainViewModel.ShowSplashScreenImpl(splashScreenViewModel);
+                splashScreenViewModel.Progress++;
+                splashScreenViewModel.InformationMessage = new InformationMessage(
+                    localeManager.GetStringByKey("LocalizedStrings.Loading", locale),
+                    localeManager.GetStringByKey("LocalizedStrings.AccessingRepository", locale));
+                //await Task.Delay(2000, splashScreenViewModel.CancellationToken);
+                await initializerManager.InitializeAsync();
+                splashScreenViewModel.Progress++;
+                splashScreenViewModel.InformationMessage = new InformationMessage(
+                    localeManager.GetStringByKey("LocalizedStrings.Loading", locale),
+                    localeManager.GetStringByKey("LocalizedStrings.DataInitialization", locale));
+                //await Task.Delay(2000, splashScreenViewModel.CancellationToken);
+                await mainViewModel.InitializeAsync();
+                splashScreenViewModel.Progress++;
+            } catch (TaskCanceledException) {
+                desktop.Shutdown();
+                return;
+            }
+
         }
 
         base.OnFrameworkInitializationCompleted();

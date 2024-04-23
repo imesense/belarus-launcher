@@ -27,4 +27,9 @@
     <s:String x:Key="LocalizedStrings.ErrorInternetDescription">Невозможно подключиться к серверу!</s:String>
     <s:String x:Key="LocalizedStrings.Warning">Предупреждение</s:String>
     <s:String x:Key="LocalizedStrings.LoadNews">Идет загрузка новостей</s:String>
+    <s:String x:Key="LocalizedStrings.Message">Сообщение</s:String>
+    <s:String x:Key="LocalizedStrings.Cancel">Отменить</s:String>
+    <s:String x:Key="LocalizedStrings.Loading">Загрузка лаунчера</s:String>
+    <s:String x:Key="LocalizedStrings.AccessingRepository">Обращение к репозиторию</s:String>
+    <s:String x:Key="LocalizedStrings.DataInitialization">Инициализация данных</s:String>
 </ResourceDictionary>

@@ -98,4 +98,9 @@ public class MainWindowViewModel : ReactiveObject
     {
         PageViewModel = _startGameViewModel;
     }
+
+    public void ShowSplashScreenImpl(SplashScreenViewModel splash)
+    {
+        PageViewModel = splash;
+    }
 }
