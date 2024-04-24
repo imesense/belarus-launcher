@@ -4,6 +4,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://ImeSense.Launchers.Belarus.Themes.Avalonia/Styles/Border.axaml" />
         <ResourceInclude Source="avares://ImeSense.Launchers.Belarus.Themes.Avalonia/Styles/Button.axaml" />
+        <ResourceInclude Source="avares://ImeSense.Launchers.Belarus.Themes.Avalonia/Styles/ComboBoxItem.axaml" />
         <ResourceInclude Source="avares://ImeSense.Launchers.Belarus.Themes.Avalonia/Styles/TextBlock.axaml" />
         <ResourceInclude Source="avares://ImeSense.Launchers.Belarus.Themes.Avalonia/Styles/TextBox.axaml" />
     </ResourceDictionary.MergedDictionaries>
