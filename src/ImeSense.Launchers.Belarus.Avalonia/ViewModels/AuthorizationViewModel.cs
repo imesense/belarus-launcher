@@ -24,7 +24,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 {
     private readonly ILogger<AuthorizationViewModel> _logger;
     private readonly ILauncherStorage _launcherStorage;
-    private readonly ILocaleManager _localeManager;
+    private readonly IApplicationLocaleManager _localeManager;
 
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
@@ -44,7 +44,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
     public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
-        ILauncherStorage launcherStorage, ILocaleManager localeManager,
+        ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager,
         IWindowManager windowManager, UserManager userManager,
         AuthenticationViewModelValidator authenticationViewModelValidator,
         LauncherViewModel launcherViewModel)
@@ -77,8 +77,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     {
         var username = Username.Trim();
         if (string.IsNullOrWhiteSpace(username)) {
-            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered",
-                SelectedLanguage.Key));
+            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered"));
         }
 
         if (_userManager is null) {
@@ -146,11 +145,11 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 
     private void SetupValidation()
     {
-        _disposables = new CompositeDisposable {
+        _disposables = [
             _authenticationViewModelValidator.EnsureUsernameNotEmpty(this),
             _authenticationViewModelValidator.EnsureUsernameCorrectLength(this),
             _authenticationViewModelValidator.EnsureUsernameCorrectCharacters(this),
-        };
+        ];
     }
 
     private void OnCommandException(Exception exception)

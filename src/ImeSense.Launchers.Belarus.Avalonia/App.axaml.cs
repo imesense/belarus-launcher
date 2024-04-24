@@ -66,7 +66,7 @@ public partial class App : Application
         services.AddTransient<IAuthenticationValidator, AuthenticationValidator>();
         services.AddTransient<IStartGameValidator, StartGameValidator>();
         services.AddSingleton<ILauncherStorage, MemoryLauncherStorage>();
-        services.AddSingleton<ILocaleManager, LocaleManager>();
+        services.AddSingleton<IApplicationLocaleManager, AxamlLocaleManager>();
         services.AddTransient<IReleaseComparerService<GitHubRelease>, ReleaseComparerService>();
         services.AddTransient<IUpdaterService, UpdaterService>();
         services.AddSingleton<AuthenticationViewModelValidator>();
@@ -117,27 +117,27 @@ public partial class App : Application
             await userManager.LoadAsync();
             initializerManager.InitializeLocale();
 
-            var localeManager = _serviceProvider.GetRequiredService<ILocaleManager>();
-            var locale = userManager.UserSettings?.Locale?.Key!;
+            var localeManager = _serviceProvider.GetRequiredService<IApplicationLocaleManager>();
 
             var splashScreenViewModel = _serviceProvider.GetRequiredService<SplashScreenViewModel>();
             var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = new MainWindow {
                 DataContext = mainViewModel
             };
+            desktop.MainWindow.Show();
 
             try {
                 mainViewModel.ShowSplashScreenImpl(splashScreenViewModel);
                 splashScreenViewModel.Progress++;
                 splashScreenViewModel.InformationMessage = new InformationMessage(
-                    localeManager.GetStringByKey("LocalizedStrings.Loading", locale),
-                    localeManager.GetStringByKey("LocalizedStrings.AccessingRepository", locale));
+                    localeManager.GetStringByKey("LocalizedStrings.Loading"),
+                    localeManager.GetStringByKey("LocalizedStrings.AccessingRepository"));
                 //await Task.Delay(2000, splashScreenViewModel.CancellationToken);
                 await initializerManager.InitializeAsync();
                 splashScreenViewModel.Progress++;
                 splashScreenViewModel.InformationMessage = new InformationMessage(
-                    localeManager.GetStringByKey("LocalizedStrings.Loading", locale),
-                    localeManager.GetStringByKey("LocalizedStrings.DataInitialization", locale));
+                    localeManager.GetStringByKey("LocalizedStrings.Loading"),
+                    localeManager.GetStringByKey("LocalizedStrings.DataInitialization"));
                 //await Task.Delay(2000, splashScreenViewModel.CancellationToken);
                 await mainViewModel.InitializeAsync();
                 splashScreenViewModel.Progress++;

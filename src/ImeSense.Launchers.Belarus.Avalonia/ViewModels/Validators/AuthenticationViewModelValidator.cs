@@ -6,68 +6,29 @@ using ReactiveUI.Validation.Helpers;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
 
-public sealed class AuthenticationViewModelValidator
+public sealed class AuthenticationViewModelValidator(IAuthenticationValidator validator, IApplicationLocaleManager localeManager)
 {
-    private readonly IAuthenticationValidator _validator;
-    private readonly ILocaleManager _localeManager;
-    private readonly UserManager _userManager;
-
-    public AuthenticationViewModelValidator(IAuthenticationValidator validator, ILocaleManager localeManager,
-        UserManager userManager)
-    {
-        _validator = validator;
-        _localeManager = localeManager;
-        _userManager = userManager;
-    }
+    private readonly IAuthenticationValidator _validator = validator;
+    private readonly IApplicationLocaleManager _localeManager = localeManager;
 
     public ValidationHelper EnsureUsernameNotEmpty(AuthorizationViewModel authorizationViewModel)
     {
-        if (_userManager is null) {
-            throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
-        }
-        if (_userManager.UserSettings.Locale is null) {
-            throw new NullReferenceException("User settings locale object is null");
-        }
-
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
             username => username != null && _validator.IsUsernameNotEmpty(username),
-            _localeManager.GetStringByKey("LocalizedStrings.EnterNickName", _userManager.UserSettings.Locale.Key));
+            _localeManager.GetStringByKey("LocalizedStrings.EnterNickName"));
     }
 
     public ValidationHelper EnsureUsernameCorrectLength(AuthorizationViewModel authorizationViewModel)
     {
-        if (_userManager is null) {
-            throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
-        }
-        if (_userManager.UserSettings.Locale is null) {
-            throw new NullReferenceException("User settings locale object is null");
-        }
-
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
             username => username != null && _validator.IsUsernameCorrectLength(username),
-            _localeManager.GetStringByKey("LocalizedStrings.TooLongNickname", _userManager.UserSettings.Locale.Key));
+            _localeManager.GetStringByKey("LocalizedStrings.TooLongNickname"));
     }
 
     public ValidationHelper EnsureUsernameCorrectCharacters(AuthorizationViewModel authorizationViewModel)
     {
-        if (_userManager is null) {
-            throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
-        }
-        if (_userManager.UserSettings.Locale is null) {
-            throw new NullReferenceException("User settings locale object is null");
-        }
-
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
             username => username != null && _validator.IsUsernameCorrectCharacters(username),
-            _localeManager.GetStringByKey("LocalizedStrings.InvalidCharacters", _userManager.UserSettings.Locale.Key));
+            _localeManager.GetStringByKey("LocalizedStrings.InvalidCharacters"));
     }
 }

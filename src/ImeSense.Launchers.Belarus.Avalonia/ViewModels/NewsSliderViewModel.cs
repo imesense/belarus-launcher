@@ -20,6 +20,7 @@ public class NewsSliderViewModel : ReactiveObject
     private readonly ILogger<NewsSliderViewModel> _logger;
     private readonly ViewModelLocator _viewModelLocator;
     private readonly ILauncherStorage _launcherStorage;
+    private readonly IApplicationLocaleManager _localeManager;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
@@ -28,25 +29,19 @@ public class NewsSliderViewModel : ReactiveObject
 
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
-    public UserManager UserManager { get; set; }
 
     public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator,
-        UserManager userManager, ILauncherStorage launcherStorage, ILocaleManager localeManager)
+        ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager)
     {
         logger.LogInformation("NewsSliderViewModel CTOR");
 
-        if (userManager.UserSettings is not null) {
-            var locale = userManager.UserSettings.Locale;
-            if (locale is not null) {
-                News = [new(localeManager.GetStringByKey("LocalizedStrings.Warning", locale.Key),
-                            localeManager.GetStringByKey("LocalizedStrings.LoadNews", locale.Key))];
-            }
-        }
+        News = [new(localeManager.GetStringByKey("LocalizedStrings.Warning"),
+                            localeManager.GetStringByKey("LocalizedStrings.LoadNews"))];
 
         _logger = logger;
         _viewModelLocator = viewModelLocator;
-        UserManager = userManager;
         _launcherStorage = launcherStorage;
+        _localeManager = localeManager;
         LinkViewModel = viewModelLocator.LinkViewModel;
 
         SetupBinding();
@@ -55,24 +50,29 @@ public class NewsSliderViewModel : ReactiveObject
         var canLoadNews = this.WhenAnyValue(x => x._launcherStorage.NewsContents)
             .Any(news => news != null && news.Any());
 
-        var reloadNewsCommand = ReactiveCommand.Create<Locale?>((lang) => {
+        var reloadNewsCommand = ReactiveCommand.Create<string>((lang) => {
             _logger.LogInformation("Language has been changed!");
             ReloadNews(lang);
         }, canLoadNews);
-        this.WhenAnyValue(x => x.UserManager.UserSettings!.Locale)
+        this.WhenAnyValue(x => x._localeManager.Locale)
             .InvokeCommand(reloadNewsCommand);
 
         this.WhenAnyValue(x => x._launcherStorage.NewsContents)
-            .Where(news => news != null && news.Any())
+            .Where(news => news != null && !string.IsNullOrEmpty(_localeManager.Locale) && news.Any())
             .Subscribe((n) => {
-                var locale = UserManager.UserSettings!.Locale;
+                var locale = _localeManager.Locale;
                 ReloadNews(locale);
             });
     }
 
-    private void ReloadNews(Locale? locale)
+    private void ReloadNews(string locale)
     {
         _logger.LogInformation("Call ReloadNews() method");
+
+        if (string.IsNullOrEmpty(locale)) {
+            _logger.LogError("Locale not set");
+            return;
+        }
 
         if (_launcherStorage.NewsContents is null) {
             _logger.LogError("News content is null");
@@ -80,7 +80,7 @@ public class NewsSliderViewModel : ReactiveObject
         }
 
         var news = _launcherStorage.NewsContents
-            .FirstOrDefault(x => x.Locale != null && locale != null && x.Locale.Key.Equals(locale.Key));
+            .FirstOrDefault(x => x.Locale != null && x.Locale.Key.Equals(locale));
         if (news is not null) {
             SetNews(news.NewsContents!);
         } else {
@@ -96,8 +96,8 @@ public class NewsSliderViewModel : ReactiveObject
 
         LinkViewModel = null!;
         _viewModelLocator = null!;
-        UserManager = null!;
         _launcherStorage = null!;
+        _localeManager = null!;
     }
 
     private void SetupCommands()

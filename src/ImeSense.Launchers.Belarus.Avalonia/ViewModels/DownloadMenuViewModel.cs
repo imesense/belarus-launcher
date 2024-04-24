@@ -16,11 +16,10 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 public class DownloadMenuViewModel : ReactiveObject
 {
     private readonly ILogger<DownloadMenuViewModel> _logger;
-    private readonly ILocaleManager _localeManager;
+    private readonly IApplicationLocaleManager _localeManager;
 
     private readonly IWindowManager _windowManager;
     private readonly IDownloadResourcesService _downloadResourcesService;
-    private readonly UserManager _userManager;
     private readonly ILauncherStorage _launcherStorage;
     private CancellationTokenSource _tokenSource = new();
 
@@ -38,17 +37,15 @@ public class DownloadMenuViewModel : ReactiveObject
     [Reactive] public bool IsDownload { get; set; }
 
     public DownloadMenuViewModel(ILogger<DownloadMenuViewModel> logger,
-        ILocaleManager localeManager,
+        IApplicationLocaleManager localeManager,
         IWindowManager windowManager,
         IDownloadResourcesService downloadResourcesService,
-        UserManager userManager,
         ILauncherStorage launcherStorage)
     {
         _logger = logger;
         _localeManager = localeManager;
-        _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
-        _downloadResourcesService = downloadResourcesService ?? throw new ArgumentNullException(nameof(downloadResourcesService));
-        _userManager = userManager;
+        _windowManager = windowManager;
+        _downloadResourcesService = downloadResourcesService;
         _launcherStorage = launcherStorage;
         IsDownload = false;
 
@@ -63,7 +60,6 @@ public class DownloadMenuViewModel : ReactiveObject
         _localeManager = null!;
         _windowManager = null!;
         _downloadResourcesService = null!;
-        _userManager = null!;
         _launcherStorage = null!;
     }
 
@@ -94,23 +90,13 @@ public class DownloadMenuViewModel : ReactiveObject
 
     private async Task DownloadsImplAsync(LauncherViewModel launcherViewModel)
     {
-        if (_userManager is null) {
-            throw new NullReferenceException("User manager object is null");
-        }
-        if (_userManager.UserSettings is null) {
-            throw new NullReferenceException("User settings object is null");
-        }
-        if (_userManager.UserSettings.Locale is null) {
-            throw new NullReferenceException("User settings locale object is null");
-        }
-
         DownloadFileName = string.Empty;
         var progress = new Progress<int>(percentage => {
             DownloadProgress = percentage;
         });
 
         IsProgress = true;
-        StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.IntegrityChecking", _userManager.UserSettings.Locale.Key);
+        StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.IntegrityChecking");
 
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
         if (filesDownload != null && filesDownload.Any()) {
@@ -120,7 +106,7 @@ public class DownloadMenuViewModel : ReactiveObject
             try {
                 foreach (var file in filesDownload) {
                     numberFile++;
-                    StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files", _userManager.UserSettings.Locale.Key) +
+                    StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files") +
                                      $": {numberFile} / {countFiles}";
                     DownloadFileName = Path.GetFileName(file.Key);
                     await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource.Token);

@@ -19,7 +19,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 {
     private readonly ILogger<StartGameViewModel> _logger;
     private readonly UserManager _userManager;
-    private readonly ILocaleManager _localeManager;
+    private readonly IApplicationLocaleManager _localeManager;
     private readonly IWindowManager _windowManager;
     private readonly StartGameViewModelValidator _startGameViewModelValidator;
 
@@ -31,7 +31,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
 
     public StartGameViewModel(ILogger<StartGameViewModel> logger, UserManager userManager,
-        IWindowManager windowManager, ILocaleManager localeManager,
+        IWindowManager windowManager, IApplicationLocaleManager localeManager,
         StartGameViewModelValidator startGameViewModelValidator)
     {
         _logger = logger;
@@ -77,14 +77,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
 
-        if (_userManager is null) {
-            return;
-        }
-        if (_userManager.UserSettings is null) {
-            return;
-        }
-
-        this.WhenAnyValue(x => x._userManager.UserSettings!.Locale)
+        this.WhenAnyValue(x => x._localeManager.Locale)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(x => {
                 _disposables?.Dispose();
@@ -110,22 +103,18 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
         if (_userManager.UserSettings is null) {
             throw new NullReferenceException("User settings object is null");
         }
-        if (_userManager.UserSettings.Locale is null) {
-            throw new NullReferenceException("User settings locale object is null");
-        }
 
         if (string.IsNullOrWhiteSpace(IpAddress)) {
-            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered",
-                _userManager.UserSettings.Locale.Key));
+            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered"));
         }
 
         _userManager.UserSettings.IpAddress = IpAddress;
         _userManager.Save();
 
         var process = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
-            arguments: new List<string> {
+            arguments: [
                 @$"-start -center_screen -silent_error_mode client({_userManager.UserSettings.IpAddress}/name={ _userManager.UserSettings.Username})"
-            });
+            ]);
 
         process?.Start();
         _windowManager.Close();

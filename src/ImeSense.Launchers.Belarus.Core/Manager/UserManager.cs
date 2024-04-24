@@ -7,22 +7,18 @@ using ImeSense.Launchers.Belarus.Core.Validators;
 
 using Microsoft.Extensions.Logging;
 
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
 public class UserManager(ILogger<UserManager>? logger,
     IAuthenticationValidator authenticationValidator,
     IStartGameValidator startGameValidator,
-    ILauncherStorage launcherStorage) : ReactiveObject
+    ILauncherStorage launcherStorage)
 {
     private readonly ILogger<UserManager>? _logger = logger;
     private readonly IAuthenticationValidator _authenticationValidator = authenticationValidator;
     private readonly IStartGameValidator _startGameValidator = startGameValidator;
     private readonly ILauncherStorage _launcherStorage = launcherStorage;
 
-    [Reactive]
     public UserSettings? UserSettings { get; set; }
 
     public async Task LoadAsync()

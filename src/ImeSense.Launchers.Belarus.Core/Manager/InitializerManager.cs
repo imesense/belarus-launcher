@@ -13,14 +13,14 @@ namespace ImeSense.Launchers.Belarus.Core.Manager;
 public class InitializerManager(
     ILogger<InitializerManager> logger,
     IGitStorageApiService gitStorageApiService, UserManager userManager,
-    ILocaleManager localeManager, ILauncherStorage launcherStorage,
+    IApplicationLocaleManager localeManager, ILauncherStorage launcherStorage,
     IReleaseComparerService<GitHubRelease> releaseComparerService,
     IUpdaterService updaterService)
 {
     private readonly ILogger<InitializerManager> _logger = logger;
     private readonly IGitStorageApiService _gitStorageApiService = gitStorageApiService;
     private readonly UserManager _userManager = userManager;
-    private readonly ILocaleManager _localeManager = localeManager;
+    private readonly IApplicationLocaleManager _localeManager = localeManager;
     private readonly ILauncherStorage _launcherStorage = launcherStorage;
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService = releaseComparerService;
     private readonly IUpdaterService _updaterService = updaterService;
@@ -89,8 +89,8 @@ public class InitializerManager(
 
         try {
             allNews.Add(new LangNewsContent(locale, [new NewsContent(
-                _localeManager.GetStringByKey("LocalizedStrings.ErrorTitle", locale.Key),
-                _localeManager.GetStringByKey("LocalizedStrings.ErrorInternetDescription", locale.Key)
+                _localeManager.GetStringByKey("LocalizedStrings.ErrorTitle"),
+                _localeManager.GetStringByKey("LocalizedStrings.ErrorInternetDescription")
             )]));
         } catch (Exception ex) {
             _logger.LogError("{Message}", ex.Message);
