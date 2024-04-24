@@ -19,7 +19,7 @@ public class UserManager(ILogger<UserManager>? logger,
     private readonly IStartGameValidator _startGameValidator = startGameValidator;
     private readonly ILauncherStorage _launcherStorage = launcherStorage;
 
-    public UserSettings? UserSettings { get; set; }
+    public UserSettings? UserSettings { get; private set; }
 
     public async Task LoadAsync()
     {

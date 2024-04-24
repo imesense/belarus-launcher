@@ -1,40 +1,55 @@
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml.Styling;
 
 using ImeSense.Launchers.Belarus.Core.Manager;
+
+using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace ImeSense.Launchers.Belarus.Avalonia.Manager;
 
-public class AxamlLocaleManager : ReactiveObject, IApplicationLocaleManager
+public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveObject, IApplicationLocaleManager
 {
-    [Reactive]
-    public string Locale { get; private set; } = string.Empty;
+    private readonly ILogger<AxamlLocaleManager> _logger = logger;
+    private ResourceInclude? _resources;
+
+    [Reactive] public string Locale { get; private set; } = string.Empty;
 
     public void SetLocale(string locale)
     {
         Locale = locale;
 
         App.Current?.Resources.Clear();
-        var resource = new ResourceInclude(new Uri("avares://SBLauncher/Assets/Locales/")) {
-            Source = new Uri($"avares://SBLauncher/Assets/Locales/{Locale}.axaml"),
-        };
-        App.Current?.Resources.MergedDictionaries.Add(resource);
+        LoadLocalizedResources();
+    }
+
+    private void LoadLocalizedResources()
+    {
+        try {
+            _resources = new ResourceInclude(new Uri("avares://SBLauncher/Assets/Locales/")) {
+                Source = new Uri($"avares://SBLauncher/Assets/Locales/{Locale}.axaml")
+            };
+            App.Current?.Resources.MergedDictionaries.Add(_resources);
+        } catch (Exception ex) {
+            _logger.LogError(ex, "Failed to load localized resources for locale: {Locale}", Locale);
+            throw;
+        }
     }
 
     public string GetStringByKey(string key)
     {
-        var resources = new ResourceInclude(new Uri("avares://SBLauncher/Assets/Locales/")) {
-            Source = new Uri($"avares://SBLauncher/Assets/Locales/{Locale}.axaml"),
-        };
-        var control = new Control {
-            Resources = resources.Loaded,
-        };
-        if (control.TryFindResource(key, out var value)) {
-            return (string) value!;
+        if (_resources is null) {
+            _logger.LogError("Resource include is not initialized");
+            return string.Empty;
         }
-        return string.Empty;
+
+        var resources = _resources.Loaded;
+        if (resources.TryGetValue(key, out var value)) {
+            return (string) value!;
+        } else {
+            _logger.LogError("Resource with key '{Key}' not found for locale '{Locale}'", key, Locale);
+            return string.Empty;
+        }
     }
 }
