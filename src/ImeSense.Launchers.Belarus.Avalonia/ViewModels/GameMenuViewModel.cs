@@ -15,10 +15,10 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class GameMenuViewModel : ReactiveObject
 {
-    private readonly ILogger<GameMenuViewModel> _logger;
+    private readonly ILogger<GameMenuViewModel>? _logger;
     private readonly IWindowManager _windowManager;
-    private readonly UserManager _userManager;
     private readonly ILauncherStorage _launcherStorage;
+    private readonly UserManager _userManager;
 
     public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
@@ -27,10 +27,11 @@ public class GameMenuViewModel : ReactiveObject
 
     [Reactive] public bool IsStartServer { get; set; } = false;
 
-    public GameMenuViewModel(ILogger<GameMenuViewModel> logger, IWindowManager windowManager, UserManager userManager, ILauncherStorage launcherStorage)
+    public GameMenuViewModel(ILogger<GameMenuViewModel>? logger, IWindowManager windowManager,
+        UserManager userManager, ILauncherStorage launcherStorage)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+        _logger = logger;
+        _windowManager = windowManager;
         _userManager = userManager;
         _launcherStorage = launcherStorage;
 
@@ -41,7 +42,6 @@ public class GameMenuViewModel : ReactiveObject
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(GameMenuViewModel)}");
 
-        _logger = null!;
         _windowManager = null!;
         _userManager = null!;
         _launcherStorage = null!;
@@ -125,5 +125,5 @@ public class GameMenuViewModel : ReactiveObject
     }
 
     private void OnCommandException(Exception exception)
-        => _logger.LogError("{Message}", exception.Message);
+        => _logger?.LogError("{Message}", exception.Message);
 }

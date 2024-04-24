@@ -17,12 +17,11 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class StartGameViewModel : ReactiveValidationObject, IDisposable
 {
-    private readonly ILogger<StartGameViewModel> _logger;
-    private readonly UserManager _userManager;
+    private readonly ILogger<StartGameViewModel>? _logger;
     private readonly IApplicationLocaleManager _localeManager;
     private readonly IWindowManager _windowManager;
+    private readonly UserManager _userManager;
     private readonly StartGameViewModelValidator _startGameViewModelValidator;
-
     private CompositeDisposable? _disposables = null;
 
     [Reactive] public string IpAddress { get; set; }
@@ -30,12 +29,12 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
 
-    public StartGameViewModel(ILogger<StartGameViewModel> logger, UserManager userManager,
+    public StartGameViewModel(ILogger<StartGameViewModel>? logger, UserManager userManager,
         IWindowManager windowManager, IApplicationLocaleManager localeManager,
         StartGameViewModelValidator startGameViewModelValidator)
     {
         _logger = logger;
-        _logger.LogInformation("StartGameViewModel ctor");
+        _logger?.LogInformation("StartGameViewModel ctor");
 
         _userManager = userManager;
 
@@ -59,7 +58,6 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(StartGameViewModel)}");
 
-        _logger = null!;
         _userManager = null!;
         _windowManager = null!;
         _localeManager = null!;
@@ -87,7 +85,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
     private void SetupValidation()
     {
-        _logger.LogInformation("StartGameViewModel SetupValidation");
+        _logger?.LogInformation("StartGameViewModel: setup validation");
         
         _disposables = [
             _startGameViewModelValidator.EnsureIpAddressNotEmpty(this),
@@ -126,7 +124,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     }
 
     private void OnCommandException(Exception exception)
-        => _logger.LogError("{Message}", exception.Message);
+        => _logger?.LogError("{Message}", exception.Message);
 
     protected virtual void Dispose(bool disposing)
     {

@@ -17,10 +17,10 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class NewsSliderViewModel : ReactiveObject
 {
-    private readonly ILogger<NewsSliderViewModel> _logger;
-    private readonly ViewModelLocator _viewModelLocator;
+    private readonly ILogger<NewsSliderViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
     private readonly IApplicationLocaleManager _localeManager;
+    private readonly ViewModelLocator _viewModelLocator;
 
     [Reactive] public int NumPage { get; set; }
     [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
@@ -30,11 +30,9 @@ public class NewsSliderViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
     public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
 
-    public NewsSliderViewModel(ILogger<NewsSliderViewModel> logger, ViewModelLocator viewModelLocator,
+    public NewsSliderViewModel(ILogger<NewsSliderViewModel>? logger, ViewModelLocator viewModelLocator,
         ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager)
     {
-        logger.LogInformation("NewsSliderViewModel CTOR");
-
         News = [new(localeManager.GetStringByKey("LocalizedStrings.Warning"),
                             localeManager.GetStringByKey("LocalizedStrings.LoadNews"))];
 
@@ -51,7 +49,7 @@ public class NewsSliderViewModel : ReactiveObject
             .Any(news => news != null && news.Any());
 
         var reloadNewsCommand = ReactiveCommand.Create<string>((lang) => {
-            _logger.LogInformation("Language has been changed!");
+            _logger?.LogInformation("Language has been changed!");
             ReloadNews(lang);
         }, canLoadNews);
         this.WhenAnyValue(x => x._localeManager.Locale)
@@ -67,15 +65,15 @@ public class NewsSliderViewModel : ReactiveObject
 
     private void ReloadNews(string locale)
     {
-        _logger.LogInformation("Call ReloadNews() method");
+        _logger?.LogInformation("Reload News");
 
         if (string.IsNullOrEmpty(locale)) {
-            _logger.LogError("Locale not set");
+            _logger?.LogError("Locale not set");
             return;
         }
 
         if (_launcherStorage.NewsContents is null) {
-            _logger.LogError("News content is null");
+            _logger?.LogError("News content is null");
             return;
         }
 
@@ -84,15 +82,13 @@ public class NewsSliderViewModel : ReactiveObject
         if (news is not null) {
             SetNews(news.NewsContents!);
         } else {
-            _logger.LogError("News collection is empty");
+            _logger?.LogError("News collection is empty");
         }
     }
 
     public NewsSliderViewModel()
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(NewsSliderViewModel)}");
-
-        _logger = null!;
 
         LinkViewModel = null!;
         _viewModelLocator = null!;
@@ -159,5 +155,5 @@ public class NewsSliderViewModel : ReactiveObject
     }
 
     private void OnCommandException(Exception exception)
-        => _logger.LogError("{Message}", exception.Message);
+        => _logger?.LogError("{Message}", exception.Message);
 }

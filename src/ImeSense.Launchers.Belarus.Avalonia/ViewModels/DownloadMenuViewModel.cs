@@ -15,9 +15,8 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class DownloadMenuViewModel : ReactiveObject
 {
-    private readonly ILogger<DownloadMenuViewModel> _logger;
+    private readonly ILogger<DownloadMenuViewModel>? _logger;
     private readonly IApplicationLocaleManager _localeManager;
-
     private readonly IWindowManager _windowManager;
     private readonly IDownloadResourcesService _downloadResourcesService;
     private readonly ILauncherStorage _launcherStorage;
@@ -36,7 +35,7 @@ public class DownloadMenuViewModel : ReactiveObject
     //Download status
     [Reactive] public bool IsDownload { get; set; }
 
-    public DownloadMenuViewModel(ILogger<DownloadMenuViewModel> logger,
+    public DownloadMenuViewModel(ILogger<DownloadMenuViewModel>? logger,
         IApplicationLocaleManager localeManager,
         IWindowManager windowManager,
         IDownloadResourcesService downloadResourcesService,
@@ -56,7 +55,6 @@ public class DownloadMenuViewModel : ReactiveObject
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(DownloadMenuViewModel)}");
 
-        _logger = null!;
         _localeManager = null!;
         _windowManager = null!;
         _downloadResourcesService = null!;
@@ -130,5 +128,5 @@ public class DownloadMenuViewModel : ReactiveObject
     }
 
     private void OnCommandException(Exception exception)
-        => _logger.LogError("{Message}", exception.Message);
+        => _logger?.LogError("{Message}", exception.Message);
 }

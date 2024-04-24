@@ -1,6 +1,7 @@
 using System.Reactive;
 
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
@@ -15,11 +16,11 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class LauncherViewModel : ReactiveObject
 {
-    private readonly ILogger<LauncherViewModel> _logger;
+    private readonly ILogger<LauncherViewModel>? _logger;
+    private readonly IWebsiteLauncher _websiteLauncher;
     private readonly DownloadMenuViewModel _downloadMenuViewModel;
     private readonly GameMenuViewModel _gameMenuViewModel;
     private readonly GameDirectoryValidator _directoryValidator;
-    private readonly IWebsiteLauncher _websiteLauncher;
 
     public string AppVersion { get; set; }
     public string CompanyName { get; set; }
@@ -30,18 +31,16 @@ public class LauncherViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit>? OpenMainRepositoryUriCommand { get; set; }
     public ReactiveCommand<Unit, Unit>? OpenOrganizationUriCommand { get; set; }
 
-    public LauncherViewModel(ILogger<LauncherViewModel> logger, DownloadMenuViewModel downloadMenuViewModel,
-        GameMenuViewModel gameMenuViewModel, NewsSliderViewModel newsSliderViewModel,
+    public LauncherViewModel(ILogger<LauncherViewModel>? logger, ViewModelLocator viewModelLocator,
         GameDirectoryValidator directoryValidator, IWebsiteLauncher websiteLauncher)
     {
         _logger = logger;
+        _downloadMenuViewModel = viewModelLocator.DownloadMenuViewModel;
+        _gameMenuViewModel = viewModelLocator.GameMenuViewModel;
+        NewsSliderViewModel = viewModelLocator.NewsSliderViewModel;
 
-        _logger.LogInformation("LauncherViewModel CTOR");
-        _downloadMenuViewModel = downloadMenuViewModel;
-        _gameMenuViewModel = gameMenuViewModel;
         _directoryValidator = directoryValidator;
         _websiteLauncher = websiteLauncher;
-        NewsSliderViewModel = newsSliderViewModel;
 
         AppVersion = ApplicationHelper.GetAppVersion();
         CompanyName = (char) 0169 + ApplicationHelper.GetCompanyName();
@@ -59,7 +58,6 @@ public class LauncherViewModel : ReactiveObject
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LauncherViewModel)}");
 
-        _logger = null!;
         _downloadMenuViewModel = null!;
         _gameMenuViewModel = null!;
         _directoryValidator = null!;

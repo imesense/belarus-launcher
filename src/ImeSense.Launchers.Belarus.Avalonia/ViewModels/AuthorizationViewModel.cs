@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using DynamicData;
 
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
 using ImeSense.Launchers.Belarus.Avalonia.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
@@ -22,10 +23,9 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 {
-    private readonly ILogger<AuthorizationViewModel> _logger;
+    private readonly ILogger<AuthorizationViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
     private readonly IApplicationLocaleManager _localeManager;
-
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
     private readonly AuthenticationViewModelValidator _authenticationViewModelValidator;
@@ -43,19 +43,19 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     public ReactiveCommand<MainWindowViewModel, Unit> ShowLauncher { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
-    public AuthorizationViewModel(ILogger<AuthorizationViewModel> logger,
+    public AuthorizationViewModel(ILogger<AuthorizationViewModel>? logger,
         ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager,
         IWindowManager windowManager, UserManager userManager,
         AuthenticationViewModelValidator authenticationViewModelValidator,
-        LauncherViewModel launcherViewModel)
+        ViewModelLocator viewModelLocator)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logger = logger;
         _launcherStorage = launcherStorage;
         _localeManager = localeManager;
         _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
         _userManager = userManager;
         _authenticationViewModelValidator = authenticationViewModelValidator;
-        _launcherViewModel = launcherViewModel;
+        _launcherViewModel = viewModelLocator.LauncherViewModel;
 
         SetupBinding();
     }
@@ -64,7 +64,6 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(AuthorizationViewModel)}");
 
-        _logger = null!;
         _launcherStorage = null!;
         _localeManager = null!;
         _windowManager = null!;
@@ -104,7 +103,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 
     private void SetupBinding()
     {
-        _logger.LogInformation("Call AuthorizationViewModel::SetupBinding()");
+        _logger?.LogInformation("Call AuthorizationViewModel::SetupBinding()");
 
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
@@ -153,7 +152,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     }
 
     private void OnCommandException(Exception exception)
-        => _logger.LogError("{Message}", exception.Message);
+        => _logger?.LogError("{Message}", exception.Message);
 
     protected virtual void Dispose(bool disposing)
     {

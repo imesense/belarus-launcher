@@ -16,17 +16,16 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {
-    private readonly ILogger<MainWindowViewModel> _logger;
-
-    private readonly InitializerManager _initializerManager;
+    private readonly ILogger<MainWindowViewModel>? _logger;
     private readonly IUpdaterService _updaterService;
+    private readonly InitializerManager _initializerManager;
     private readonly ViewModelLocator _viewModelLocator;
     private readonly StartGameViewModel _startGameViewModel;
     private readonly LauncherViewModel _launcherViewModel;
 
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
 
-    public MainWindowViewModel(ILogger<MainWindowViewModel> logger, InitializerManager initializerManager,
+    public MainWindowViewModel(ILogger<MainWindowViewModel>? logger, InitializerManager initializerManager,
         IUpdaterService updaterService, ViewModelLocator viewModelLocator)
     {
         _logger = logger;
@@ -41,7 +40,6 @@ public class MainWindowViewModel : ReactiveObject
     {
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(MainWindowViewModel)}");
 
-        _logger = null!;
         _startGameViewModel = null!;
         _launcherViewModel = null!;
         _initializerManager = null!;
@@ -65,8 +63,8 @@ public class MainWindowViewModel : ReactiveObject
                     await _launcherViewModel.SelectUpdateMenuAsync();
                 }
             } catch (Exception ex) {
-                _logger.LogError("{Message}", ex.Message);
-                _logger.LogError("{StackTrace}", ex.StackTrace);
+                _logger?.LogError("{Message}", ex.Message);
+                _logger?.LogError("{StackTrace}", ex.StackTrace);
             }
         }
 
@@ -78,7 +76,7 @@ public class MainWindowViewModel : ReactiveObject
         }
 
         stopwatch.Stop();
-        _logger.LogInformation("MainWindowViewModel Initialize: {Time}", stopwatch.ElapsedMilliseconds);
+        _logger?.LogInformation("MainWindowViewModel Initialize: {Time}", stopwatch.ElapsedMilliseconds);
     }
 
     public void ShowLauncherImpl()

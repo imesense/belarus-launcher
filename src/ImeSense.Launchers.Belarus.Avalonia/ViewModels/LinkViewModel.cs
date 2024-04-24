@@ -18,14 +18,14 @@ namespace ImeSense.Launchers.Belarus.Avalonia.ViewModels;
 
 public class LinkViewModel : ReactiveObject
 {
-    private readonly ILogger<LinkViewModel> _logger;
+    private readonly ILogger<LinkViewModel>? _logger;
     private readonly IWebsiteLauncher _websiteLauncher;
     private readonly ILauncherStorage _launcherStorage;
 
     public ObservableCollection<WebResource> WebResources { get; set; } = new();
     public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
 
-    public LinkViewModel(ILogger<LinkViewModel> logger, IWebsiteLauncher websiteLauncher,
+    public LinkViewModel(ILogger<LinkViewModel>? logger, IWebsiteLauncher websiteLauncher,
         ILauncherStorage launcherStorage)
     {
         _logger = logger;
@@ -45,17 +45,16 @@ public class LinkViewModel : ReactiveObject
 
         _websiteLauncher = null!;
         OpenUrlCommand = null!;
-        _logger = null!;
         _launcherStorage = null!;
     }
 
     private void Init()
     {
         if (_launcherStorage.WebResources != null) {
-            _logger.LogInformation("Web resources are initialized");
+            _logger?.LogInformation("Web resources are initialized");
             WebResources.AddRange(_launcherStorage.WebResources);
         } else {
-            _logger.LogError("Web resources is null!");
+            _logger?.LogError("Web resources is null!");
         }
     }
 
