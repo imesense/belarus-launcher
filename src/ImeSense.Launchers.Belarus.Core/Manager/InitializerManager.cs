@@ -178,11 +178,9 @@ public class InitializerManager(
         var userSettings = _userManager.UserSettings ??
             throw new Exception("Error loading user config!");
 
-        userSettings.Locale = new();
-
-        if (userSettings.Locale.Key == string.Empty) {
-            var defaultLocale = _launcherStorage.Locales[0];
-            userSettings.Locale = defaultLocale;
+        if (userSettings.Locale is null) {
+            _logger.LogError("Locale was not set");
+            userSettings.Locale = _launcherStorage.Locales[0];
         }
 
         _localeManager.SetLocale(userSettings.Locale.Key);

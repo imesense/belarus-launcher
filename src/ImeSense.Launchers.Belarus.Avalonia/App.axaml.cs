@@ -117,7 +117,7 @@ public partial class App : Application
 
             var userManager = _serviceProvider.GetRequiredService<UserManager>();
             var localeManager = _serviceProvider.GetRequiredService<ILocaleManager>();
-            var locale = userManager.UserSettings?.Locale?.Key;
+            var locale = userManager.UserSettings?.Locale?.Key!;
 
             var splashScreenViewModel = _serviceProvider.GetRequiredService<SplashScreenViewModel>();
             var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
@@ -144,7 +144,6 @@ public partial class App : Application
                 desktop.Shutdown();
                 return;
             }
-
         }
 
         base.OnFrameworkInitializationCompleted();
