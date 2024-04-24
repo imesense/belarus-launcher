@@ -71,7 +71,8 @@
                 <Setter Property="Foreground" Value="{DynamicResource ComboBoxItemForegroundSelectedPointerOver}" />
             </Style>
             <Style Selector="^:pressed /template/ ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundSelectedPressed}" />
+                <Setter Property="Background" Value="LightGray" />
+                <Setter Property="Opacity" Value="0.5" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxItemBorderBrushSelectedPressed}" />
                 <Setter Property="Foreground" Value="{DynamicResource ComboBoxItemForegroundSelectedPressed}" />
             </Style>
