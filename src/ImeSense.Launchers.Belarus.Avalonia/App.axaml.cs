@@ -113,9 +113,10 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
+            var userManager = _serviceProvider.GetRequiredService<UserManager>();
+            await userManager.LoadAsync();
             initializerManager.InitializeLocale();
 
-            var userManager = _serviceProvider.GetRequiredService<UserManager>();
             var localeManager = _serviceProvider.GetRequiredService<ILocaleManager>();
             var locale = userManager.UserSettings?.Locale?.Key!;
 
