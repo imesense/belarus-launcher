@@ -56,6 +56,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
         _userManager = userManager;
         _authenticationViewModelValidator = authenticationViewModelValidator;
         _launcherViewModel = launcherViewModel;
+
+        SetupBinding();
     }
 
     public AuthorizationViewModel()
@@ -101,8 +103,10 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
         mainWindowViewModel.ShowLauncherImpl();
     }
 
-    public void SetupBinding()
+    private void SetupBinding()
     {
+        _logger.LogInformation("Call AuthorizationViewModel::SetupBinding()");
+
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
         }

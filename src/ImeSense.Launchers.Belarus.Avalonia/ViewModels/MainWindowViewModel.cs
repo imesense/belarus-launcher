@@ -1,6 +1,7 @@
 using System.Diagnostics;
 
 using ImeSense.Launchers.Belarus.Avalonia.Helpers;
+using ImeSense.Launchers.Belarus.Avalonia.Services;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
@@ -19,22 +20,21 @@ public class MainWindowViewModel : ReactiveObject
 
     private readonly InitializerManager _initializerManager;
     private readonly IUpdaterService _updaterService;
-    private readonly AuthorizationViewModel _authorizationViewModel;
+    private readonly ViewModelLocator _viewModelLocator;
     private readonly StartGameViewModel _startGameViewModel;
     private readonly LauncherViewModel _launcherViewModel;
 
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
 
     public MainWindowViewModel(ILogger<MainWindowViewModel> logger, InitializerManager initializerManager,
-        IUpdaterService updaterService, LauncherViewModel launcherViewModel,
-        AuthorizationViewModel authorizationViewModel, StartGameViewModel startGameViewModel)
+        IUpdaterService updaterService, ViewModelLocator viewModelLocator)
     {
         _logger = logger;
         _initializerManager = initializerManager;
         _updaterService = updaterService;
-        _authorizationViewModel = authorizationViewModel;
-        _startGameViewModel = startGameViewModel ?? throw new ArgumentNullException(nameof(startGameViewModel));
-        _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel));
+        _viewModelLocator = viewModelLocator;
+        _startGameViewModel = viewModelLocator.StartGameViewModel;
+        _launcherViewModel = viewModelLocator.LauncherViewModel;
     }
 
     public MainWindowViewModel()
@@ -42,11 +42,11 @@ public class MainWindowViewModel : ReactiveObject
         ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(MainWindowViewModel)}");
 
         _logger = null!;
-        _authorizationViewModel = null!;
         _startGameViewModel = null!;
         _launcherViewModel = null!;
         _initializerManager = null!;
         _updaterService = null!;
+        _viewModelLocator = null!;
     }
 
     public async Task InitializeAsync()
@@ -56,9 +56,6 @@ public class MainWindowViewModel : ReactiveObject
 
         ProcessHelper.KillAllXrEngine();
 
-        if (!_initializerManager.IsUserAuthorized) {
-            _authorizationViewModel.SetupBinding();
-        }
         var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
 
         if (File.Exists(PathStorage.LauncherSetting)) {
@@ -91,7 +88,7 @@ public class MainWindowViewModel : ReactiveObject
 
     public void ShowAuthorizationImpl()
     {
-        PageViewModel = _authorizationViewModel;
+        PageViewModel = _viewModelLocator.AuthorizationViewModel;
     }
 
     public void ShowStartGameImpl()
