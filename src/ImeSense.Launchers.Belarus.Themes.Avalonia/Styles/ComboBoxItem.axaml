@@ -55,7 +55,7 @@
 
         <Style Selector="^:selected">
             <Style Selector="^ /template/ ContentPresenter">
-                <Setter Property="Background" Value="LightGray" />
+                <Setter Property="Background" Value="Gray" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxItemBorderBrushSelected}" />
                 <Setter Property="Foreground" Value="{DynamicResource ComboBoxItemForegroundSelected}" />
             </Style>
@@ -66,7 +66,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource ComboBoxItemForegroundSelectedDisabled}" />
             </Style>
             <Style Selector="^:pointerover /template/ ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundSelectedPointerOver}" />
+                <Setter Property="Background" Value="Gray" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxItemBorderBrushSelectedPointerOver}" />
                 <Setter Property="Foreground" Value="{DynamicResource ComboBoxItemForegroundSelectedPointerOver}" />
             </Style>
