@@ -72,7 +72,7 @@ public class DownloadResourcesService : IDownloadResourcesService
                 continue;
             }
 
-        #if !DEBUG
+        #if DEBUG
             if (assetFile.Directory.Equals("resources")) {
                 continue;
             }
@@ -83,7 +83,7 @@ public class DownloadResourcesService : IDownloadResourcesService
                 filesRes.TryAdd(filePath, asset.BrowserDownloadUrl);
                 CalcProgress(ref completedTasks, progress, totalTasks);
             } else {
-            #if !DEBUG
+            #if DEBUG
                 if (assetFile.Directory.Equals("resources")) {
                     continue;
                 }
