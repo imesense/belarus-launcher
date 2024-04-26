@@ -55,8 +55,19 @@ public partial class App : Application
         services.AddTransient<GameDirectoryValidator>();
 
         services.AddHttpClient<IGitStorageApiService, GitHubApiService>()
+            .ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            return new HttpClientHandler {
+                SslProtocols = System.Security.Authentication.SslProtocols.Tls12
+            }; ;
+        })
             .ConfigureHttpClient(ConfigureClient);
         services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
+            .ConfigurePrimaryHttpMessageHandler(() => {
+            return new HttpClientHandler {
+                SslProtocols = System.Security.Authentication.SslProtocols.Tls12
+            }; ;
+        })
             .ConfigureHttpClient(ConfigureClient);
 
         services.AddTransient<IHashProvider, Md5HashProvider>();
