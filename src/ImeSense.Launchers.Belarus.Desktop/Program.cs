@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.ReactiveUI;
 
+using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
@@ -53,28 +54,11 @@ internal class Program
 
     private static void StartApp(string[] args)
     {
-        Log.Information("Start launcher");
-
-        PrintOsInfo();
+        Log.Information("Start SBLauncher");
+        Log.Information(InformationPrinter.GetOsInfo());
+        Log.Information(InformationPrinter.GetApplicationInfo());
 
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-    }
-
-    private static void PrintOsInfo()
-    {
-        Log.Information("OS: {0}", Environment.OSVersion);
-        Log.Information("Processor architecture: {0}",
-            Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"));
-        Log.Information("User / PC: {UserName} / {MachineName}", Environment.UserName,
-            Environment.MachineName);
-        Log.Information("System directory: {0}", Environment.SystemDirectory);
-        Log.Information("Windows locale: {0} {NewLine}", CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName, Environment.NewLine);
-        Log.Information(".NET: {0}", Environment.Version);
-        Log.Information("ProcessId: {0}", Environment.ProcessId);
-        Log.Information("Processor count: {0}", Environment.ProcessorCount);
-        Log.Information("Process path: {0}", Environment.ProcessPath);
-        Log.Information("Current directory: {0}", Environment.CurrentDirectory);
-        Log.Information("Base directory: {0} {NewLine}", AppDomain.CurrentDomain.BaseDirectory, Environment.NewLine);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
