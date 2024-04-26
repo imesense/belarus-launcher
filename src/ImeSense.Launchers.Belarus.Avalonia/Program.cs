@@ -1,3 +1,5 @@
+using System.Globalization;
+
 using Avalonia;
 using Avalonia.ReactiveUI;
 
@@ -65,7 +67,8 @@ internal class Program
             Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"));
         Log.Information("User / PC: {UserName} / {MachineName}", Environment.UserName,
             Environment.MachineName);
-        Log.Information("System directory: {0} {NewLine}", Environment.SystemDirectory, Environment.NewLine);
+        Log.Information("System directory: {0}", Environment.SystemDirectory);
+        Log.Information("Windows locale: {0} {NewLine}", CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName, Environment.NewLine);
         Log.Information(".NET: {0}", Environment.Version);
         Log.Information("ProcessId: {0}", Environment.ProcessId);
         Log.Information("Processor count: {0}", Environment.ProcessorCount);

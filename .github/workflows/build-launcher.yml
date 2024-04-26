@@ -248,7 +248,7 @@ jobs:
           --runtime ${{ matrix.runtime }} `
           --self-contained true `
           -p:PublishAot=true `
-          -p:InvariantGlobalization=true `
+          -p:InvariantGlobalization=false `
           -p:IsAotCompatible=true `
           -p:DebugSymbols=false `
           -p:DebugType=None
