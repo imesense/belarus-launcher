@@ -82,10 +82,9 @@ public class GameMenuViewModel : ReactiveObject
 
         if (IsStartServer) {
             var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
-                arguments: new List<string> {
-                    @$"-start client(localhost/name={_userManager.UserSettings.Username})",
-                    $"{_userManager.UserSettings.Locale}",
-                });
+                arguments: [
+                    @$"-start client(localhost/name={_userManager.UserSettings.Username})"
+                ]);
 
             if (launch == null) {
                 return;
@@ -103,11 +102,11 @@ public class GameMenuViewModel : ReactiveObject
         ProcessHelper.KillAllXrEngine();
 
         var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
-            arguments: new List<string> {
+            arguments: [
                 "-dedicated",
                 "-i",
                 @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
-            });
+            ]);
 
         if (launch is null) {
             return;
