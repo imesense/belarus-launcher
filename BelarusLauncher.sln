@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus", "src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5C302503-C8E0-442C-BD33-7B70930858F0} = {5C302503-C8E0-442C-BD33-7B70930858F0}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A3AF009-CDC3-4035-B1A7-554D325D5408}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -23,6 +18,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		publish-updater.bat = publish-updater.bat
 		README.md = README.md
 		Settings.XamlStyler = Settings.XamlStyler
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImeSense.Launchers.Belarus.Desktop", "src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj", "{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus", "src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5C302503-C8E0-442C-BD33-7B70930858F0} = {5C302503-C8E0-442C-BD33-7B70930858F0}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Core", "src\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj", "{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}"
@@ -65,6 +67,10 @@ Global
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

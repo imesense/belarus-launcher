@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <InvariantGlobalization>false</InvariantGlobalization>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <TrimmableAssembly Include="ImeSense.Launchers.Belarus.Themes.Avalonia" />
+        <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <ApplicationIcon>..\ImeSense.Launchers.Belarus\Assets\Icons\stalker_cs.ico</ApplicationIcon>
+        <AssemblyName>SBLauncher</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <PublishAot>true</PublishAot>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj" />
+    </ItemGroup>
+</Project>

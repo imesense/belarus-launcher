@@ -43,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj
+      LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
 
     steps:
     - name: Checkout
@@ -158,7 +158,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj
+      LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
 
     steps:
     - name: Checkout
@@ -188,7 +188,7 @@ jobs:
           --runtime ${{ matrix.runtime }} `
           --self-contained true `
           -p:PublishAot=true `
-          -p:InvariantGlobalization=true `
+          -p:InvariantGlobalization=false `
           -p:IsAotCompatible=true `
           -p:DebugSymbols=false `
           -p:DebugType=None

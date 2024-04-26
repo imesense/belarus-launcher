@@ -1,24 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Library</OutputType>
         <TargetFramework>net8.0</TargetFramework>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <InvariantGlobalization>false</InvariantGlobalization>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <TrimmableAssembly Include="ImeSense.Launchers.Belarus.Themes.Avalonia" />
-        <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
-    </ItemGroup>
-    
-    <PropertyGroup>
-        <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
-        <AssemblyName>SBLauncher</AssemblyName>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,9 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="app.manifest">
-            <DependentUpon>App.axaml</DependentUpon>
-        </None>
         <None Include="FodyWeavers.xsd">
             <DependentUpon>FodyWeavers.xml</DependentUpon>
         </None>
@@ -36,7 +17,6 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.10" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.0.10" Condition="'$(Configuration)' == 'Debug'" />

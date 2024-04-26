@@ -10,7 +10,7 @@
         <type fullname="CompiledAvaloniaXaml.XamlIlTrampolines" />
     </assembly>
 
-    <assembly fullname="SBLauncher">
+    <assembly fullname="ImeSense.Launchers.Belarus">
         <type fullname="CompiledAvaloniaXaml.!AvaloniaResources" />
         <type fullname="CompiledAvaloniaXaml.!IndexerAccessorFactoryClosure" />
         <type fullname="CompiledAvaloniaXaml.!XamlLoader" />

@@ -26,8 +26,8 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
     private void LoadLocalizedResources(string locale)
     {
         try {
-            _resources = new ResourceInclude(new Uri("avares://SBLauncher/Assets/Locales/")) {
-                Source = new Uri($"avares://SBLauncher/Assets/Locales/{locale}.axaml")
+            _resources = new ResourceInclude(new Uri("avares://ImeSense.Launchers.Belarus/Assets/Locales/")) {
+                Source = new Uri($"avares://ImeSense.Launchers.Belarus/Assets/Locales/{locale}.axaml")
             };
             App.Current?.Resources.MergedDictionaries.Add(_resources);
         } catch (Exception ex) {

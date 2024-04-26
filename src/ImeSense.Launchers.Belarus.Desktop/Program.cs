@@ -8,11 +8,11 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Serilog;
 
-namespace ImeSense.Launchers.Belarus;
+namespace ImeSense.Launchers.Belarus.Desktop;
 
 internal class Program
 {
-    private const string _mutexName = "Belarus.Launcher.Avalonia";
+    private const string _mutexName = "Belarus.Launcher.Desktop";
 
     private static Mutex? _mutex;
 

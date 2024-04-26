@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/ImeSense.Launchers.Belarus/ImeSense.Launchers.Belarus.csproj",
+                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.Desktop/ImeSense.Launchers.Belarus.Desktop.csproj",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],
