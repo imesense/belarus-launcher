@@ -1,26 +1,20 @@
-using System.Net.Http.Headers;
-
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-
-using ImeSense.Launchers.Belarus.Manager;
 using ImeSense.Launchers.Belarus.Models;
 using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.ViewModels;
-using ImeSense.Launchers.Belarus.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Views;
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
 using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Core.Models;
-using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
-using ImeSense.Launchers.Belarus.Core.Validators;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using Serilog;
+using ImeSense.Launchers.Belarus.Injection;
+using ImeSense.Launchers.Belarus.Core.Services;
 
 namespace ImeSense.Launchers.Belarus;
 
@@ -34,79 +28,27 @@ public partial class App : Application
                 .BuildServiceProvider();
     }
 
-    private IServiceCollection ConfigureServices()
+    private static ServiceCollection ConfigureServices()
     {
         var services = new ServiceCollection();
 
         services.AddLogging(loggingBuilder =>
             loggingBuilder.AddSerilog(dispose: true));
 
-        services.AddSingleton<IWindowManager, WindowManager>();
-        services.AddSingleton<AuthorizationView>();
-        services.AddSingleton<DownloadMenuView>();
-        services.AddSingleton<GameMenuView>();
-        services.AddSingleton<LauncherView>();
-        services.AddSingleton<LinkView>();
-        services.AddSingleton<NewsSliderView>();
-        services.AddTransient<NewsView>();
-        services.AddTransient<SplashScreenView>();
-        services.AddSingleton<StartGameView>();
-
-        services.AddTransient<GameDirectoryValidator>();
-
-        services.AddHttpClient<IGitStorageApiService, GitHubApiService>()
-            .ConfigurePrimaryHttpMessageHandler(() =>
-        {
-            return new HttpClientHandler {
-                SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-            }; ;
-        })
-            .ConfigureHttpClient(ConfigureClient);
-        services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
-            .ConfigurePrimaryHttpMessageHandler(() => {
-            return new HttpClientHandler {
-                SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-            }; ;
-        })
-            .ConfigureHttpClient(ConfigureClient);
+        services.AddPresetationServices();
+        services.AddValidators();
+        services.AddManagers();
+        services.AddServices();
 
         services.AddTransient<IHashProvider, Md5HashProvider>();
-        services.AddTransient<HashChecker>();
-        services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
         services.AddTransient<IWebsiteLauncher, WebsiteLauncher>();
-        services.AddTransient<IAuthenticationValidator, AuthenticationValidator>();
-        services.AddTransient<IStartGameValidator, StartGameValidator>();
+        services.AddTransient<HashChecker>();
         services.AddSingleton<ILauncherStorage, MemoryLauncherStorage>();
-        services.AddSingleton<IApplicationLocaleManager, AxamlLocaleManager>();
-        services.AddTransient<IReleaseComparerService<GitHubRelease>, ReleaseComparerService>();
-        services.AddTransient<IUpdaterService, UpdaterService>();
-        services.AddSingleton<AuthenticationViewModelValidator>();
-        services.AddSingleton<StartGameViewModelValidator>();
-        services.AddSingleton<UserManager>();
-        services.AddSingleton<InitializerManager>();
-        services.AddTransient<SplashScreenViewModel>();
-        services.AddTransient<LinkViewModel>();
-        services.AddTransient<NewsSliderViewModel>();
-        services.AddSingleton<LauncherViewModel>();
-        services.AddTransient<DownloadMenuViewModel>();
-        services.AddTransient<GameMenuViewModel>();
-
-        services.AddTransient<AuthorizationViewModel>();
-        services.AddSingleton<StartGameViewModel>();
-        services.AddSingleton<MainWindowViewModel>();
-
         services.AddSingleton<ViewModelLocator>();
 
         return services;
     }
 
-    private static void ConfigureClient(HttpClient httpClient)
-    {
-        httpClient.BaseAddress = UriStorage.BelarusApiUri;
-        httpClient.DefaultRequestHeaders.Accept.Clear();
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-        httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-    }
 
     public override void Initialize()
     {
@@ -116,6 +58,7 @@ public partial class App : Application
             AvaloniaXamlLoader.Load(this);
         } catch (Exception exception) {
             logger.LogCritical("{Message}", exception.Message);
+            logger.LogInformation("{StackTrace}", exception.StackTrace);
             throw;
         }
     }
