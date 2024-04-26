@@ -23,7 +23,7 @@ internal class Program
     public static void Main(string[] args)
     {
         var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
-        Log.Logger = LogManager.CreateLogger(pathLog, true);
+        Log.Logger = LogManager.CreateLogger(pathLog);
         var isMutexCreated = false;
         try {
             _mutex = new Mutex(initiallyOwned: false, _mutexName, out isMutexCreated);

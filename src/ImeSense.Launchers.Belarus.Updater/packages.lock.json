@@ -108,6 +108,14 @@
         "resolved": "3.1.1",
         "contentHash": "P6G4/4Kt9bT635bhuwdXlJ2SCqqn2nhh4gqFqQueCOr9bK/e7W9ll/IoX1Ter948cV2Z/5+5v8pAfJYUISY03A=="
       },
+      "Serilog.Enrichers.Thread": {
+        "type": "Transitive",
+        "resolved": "3.1.0",
+        "contentHash": "85lWsGRJpRxvKT6j/H67no55SUBsBIvp556TKuBTGhjtoPeq+L7j/sDWbgAtvT0p7u7/phJyX6j35PQ4Vtqw0g==",
+        "dependencies": {
+          "Serilog": "2.3.0"
+        }
+      },
       "Serilog.Sinks.Console": {
         "type": "Transitive",
         "resolved": "5.0.1",
@@ -166,6 +174,7 @@
           "Microsoft.Extensions.Logging.Abstractions": "[8.0.1, )",
           "ReactiveUI.Fody": "[19.5.41, )",
           "Serilog": "[3.1.1, )",
+          "Serilog.Enrichers.Thread": "[3.1.0, )",
           "Serilog.Sinks.Console": "[5.0.1, )",
           "Serilog.Sinks.Debug": "[2.0.0, )",
           "Serilog.Sinks.File": "[5.0.0, )"
