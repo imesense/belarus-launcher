@@ -43,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
+      LauncherProject: src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj
 
     steps:
     - name: Checkout
@@ -158,7 +158,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj
+      LauncherProject: src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj
 
     steps:
     - name: Checkout

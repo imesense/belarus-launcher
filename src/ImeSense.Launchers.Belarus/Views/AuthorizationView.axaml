@@ -1,0 +1,88 @@
+<UserControl
+    x:Class="ImeSense.Launchers.Belarus.Views.AuthorizationView"
+    x:DataType="vm:AuthorizationViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:vm="using:ImeSense.Launchers.Belarus.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:AuthorizationViewModel />
+    </Design.DataContext>
+
+    <Border
+        Padding="10,30,20,0"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Classes="styled">
+        <StackPanel>
+            <Grid
+                ColumnDefinitions="Auto,*"
+                RowDefinitions="Auto,Auto,Auto,Auto">
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Text="{DynamicResource LocalizedStrings.Language}"
+                    Margin="10,5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Classes="styled"
+                    FontSize="20" />
+                <ComboBox
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Width="200"
+                    Margin="0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    DisplayMemberBinding="{Binding Title}"
+                    FontSize="16"
+                    ItemsSource="{Binding Languages}"
+                    SelectedValue="{Binding SelectedLanguage}" />
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Text="{DynamicResource LocalizedStrings.Nickname}"
+                    Margin="10,5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Classes="styled"
+                    FontSize="20" />
+                <TextBox
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Text="{Binding Username}"
+                    Width="200"
+                    Margin="0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    FontSize="16"
+                    Watermark="Vasyan" />
+            </Grid>
+
+            <StackPanel
+                Margin="20"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Content="{DynamicResource LocalizedStrings.Next}"
+                    Command="{Binding ShowLauncher}"
+                    CommandParameter="{Binding $parent[Window].DataContext}"
+                    Margin="10,0"
+                    Classes="styled"
+                    FontSize="20" />
+                <Button
+                    Content="{DynamicResource LocalizedStrings.Close}"
+                    Command="{Binding Close}"
+                    Margin="10,0"
+                    Classes="styled"
+                    FontSize="20" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

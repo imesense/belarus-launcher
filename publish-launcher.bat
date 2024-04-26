@@ -1,4 +1,4 @@
-dotnet publish src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj ^
+dotnet publish src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj ^
     --configuration Release ^
     --runtime win-x64 ^
     -p:PublishAot=true ^

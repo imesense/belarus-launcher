@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Avalonia", "src\ImeSense.Launchers.Belarus.Avalonia\ImeSense.Launchers.Belarus.Avalonia.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus", "src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5C302503-C8E0-442C-BD33-7B70930858F0} = {5C302503-C8E0-442C-BD33-7B70930858F0}
 	EndProjectSection
