@@ -7,7 +7,7 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         
         <AssemblyName>SBLauncherUpdater</AssemblyName>
-        <ApplicationIcon>Assets\Icons\stalker_cs.ico</ApplicationIcon>
+        <ApplicationIcon>..\ImeSense.Launchers.Belarus\Assets\Icons\stalker_cs.ico</ApplicationIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
