@@ -83,6 +83,7 @@ public class InitializerManager(
         } catch (Exception ex) {
             _logger.LogError("{Message}", ex.Message);
             _logger.LogError("{StackTrace}", ex.StackTrace);
+            throw;
         }
     }
 
@@ -159,6 +160,10 @@ public class InitializerManager(
     private async Task<bool> IsGameReleaseCurrentAsync(CancellationToken cancellationToken = default)
     {
         var gitStorageRelease = _launcherStorage.GitHubRelease;
+
+        if (!Directory.Exists(DirectoryStorage.LauncherCache)) {
+            Directory.CreateDirectory(DirectoryStorage.LauncherCache);
+        }
 
         if (File.Exists(PathStorage.CurrentRelease)) {
             var releaseComparer = gitStorageRelease != null && await _releaseComparerService.IsComparerAsync(gitStorageRelease, cancellationToken);

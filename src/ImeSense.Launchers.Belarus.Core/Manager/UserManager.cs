@@ -58,8 +58,8 @@ public class UserManager(ILogger<UserManager>? logger,
             throw new NullReferenceException("Username not specified");
         }
 
-        if (!Directory.Exists(DirectoryStorage.User)) {
-            Directory.CreateDirectory(DirectoryStorage.User);
+        if (!Directory.Exists(DirectoryStorage.AppData)) {
+            Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
         using var fileStream = new FileStream(PathStorage.LauncherSetting,
@@ -79,8 +79,8 @@ public class UserManager(ILogger<UserManager>? logger,
             throw new NullReferenceException("Username not specified");
         }
 
-        if (!Directory.Exists(DirectoryStorage.User)) {
-            Directory.CreateDirectory(DirectoryStorage.User);
+        if (!Directory.Exists(DirectoryStorage.AppData)) {
+            Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
         using var fileStream = new FileStream(PathStorage.LauncherSetting,

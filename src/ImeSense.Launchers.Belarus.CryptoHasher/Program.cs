@@ -15,7 +15,7 @@ Console.Title = "Belarus CryptoHasher";
 
 IEnumerable<string> GetDirectories() => [DirectoryStorage.Binaries, DirectoryStorage.Resources, DirectoryStorage.Patches];
 
-var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.CryptoHasherLog);
+var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.CryptoHasherLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
 var logger = factory.CreateLogger<Program>();
 logger.LogInformation("Start CryptoHasher application");

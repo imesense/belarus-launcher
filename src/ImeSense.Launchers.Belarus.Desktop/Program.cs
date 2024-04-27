@@ -23,7 +23,7 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        var pathLog = Path.Combine(DirectoryStorage.UserLogs, FileNameStorage.LauncherLog);
+        var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherLog);
         Log.Logger = LogManager.CreateLogger(pathLog);
         var isMutexCreated = false;
         try {

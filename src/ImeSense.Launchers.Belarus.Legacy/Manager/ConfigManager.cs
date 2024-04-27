@@ -18,8 +18,8 @@ public static class ConfigManager
             throw new Exception("Username not specified");
         }
 
-        if (!Directory.Exists(DirectoryStorage.User)) {
-            Directory.CreateDirectory(DirectoryStorage.User);
+        if (!Directory.Exists(DirectoryStorage.AppData)) {
+            Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
         using var fileStream = new FileStream(PathStorage.LauncherSetting,
