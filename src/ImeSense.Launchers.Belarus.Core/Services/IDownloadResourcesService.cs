@@ -2,7 +2,7 @@ namespace ImeSense.Launchers.Belarus.Core.Services;
 
 public interface IDownloadResourcesService
 {
-    Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress, CancellationToken token = default);
+    Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress, CancellationToken cancellationToken = default);
 
-    Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken token = default);
+    Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken cancellationToken = default);
 }

@@ -5,25 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
-public class UpdaterService : IUpdaterService
+public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager) : IUpdaterService
 {
-    private readonly ILogger<UpdaterService> _logger;
-    private readonly IGitStorageApiService _gitStorageApiService;
-    private readonly IFileDownloadManager _fileDownloadManager;
+    private readonly ILogger<UpdaterService> _logger = logger;
+    private readonly IGitStorageApiService _gitStorageApiService = gitStorageApiService;
+    private readonly IFileDownloadManager _fileDownloadManager = fileDownloadManager;
 
-    public UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiService gitStorageApiService, IFileDownloadManager fileDownloadManager)
-    {
-        _logger = logger;
-        _gitStorageApiService = gitStorageApiService;
-        _fileDownloadManager = fileDownloadManager;
-    }
-
-    public async Task UpdaterAsync(Uri uri, string fileSavePath)
+    public async Task UpdaterAsync(Uri uri, string fileSavePath, CancellationToken cancellationToken = default)
     {
         var appName = Path.GetFileNameWithoutExtension(fileSavePath);
         var fullAppName = Path.GetFileName(fileSavePath);
 
-        var lastRelease = await _gitStorageApiService.GetLastReleaseAsync(uri)
+        var lastRelease = await _gitStorageApiService.GetLastReleaseAsync(uri, cancellationToken)
             ?? throw new NullReferenceException("Latest release is null!");
         var sblauncher = lastRelease.Assets?.FirstOrDefault(x => x.Name.Equals(fullAppName))
             ?? throw new NullReferenceException($"{appName} asset is null!");
@@ -42,7 +35,7 @@ public class UpdaterService : IUpdaterService
             Directory.CreateDirectory(pathDownloadFolder);
         }
 
-        await _fileDownloadManager.DownloadAsync(sblauncher.BrowserDownloadUrl, fileDownloadPath, progress);
+        await _fileDownloadManager.DownloadAsync(sblauncher.BrowserDownloadUrl, fileDownloadPath, progress, cancellationToken);
 
         if (File.Exists(fileSavePath)) {
             File.Delete(fileSavePath);

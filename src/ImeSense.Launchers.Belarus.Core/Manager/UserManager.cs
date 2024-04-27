@@ -21,7 +21,7 @@ public class UserManager(ILogger<UserManager>? logger,
 
     public UserSettings? UserSettings { get; private set; }
 
-    public async Task LoadAsync()
+    public async Task LoadAsync(CancellationToken cancellationToken = default)
     {
         if (!File.Exists(PathStorage.LauncherSetting)) {
             UserSettings = CreateDefaultUserSettings();
@@ -30,7 +30,7 @@ public class UserManager(ILogger<UserManager>? logger,
 
         try {
             using var json = File.OpenRead(PathStorage.LauncherSetting);
-            var user = await JsonSerializer.DeserializeAsync(json, SourceGenerationContext.Default.UserSettings);
+            var user = await JsonSerializer.DeserializeAsync(json, SourceGenerationContext.Default.UserSettings, cancellationToken);
             user ??= CreateDefaultUserSettings();
 
             if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress)) {
@@ -52,10 +52,10 @@ public class UserManager(ILogger<UserManager>? logger,
     public void Save()
     {
         if (UserSettings is null) {
-            throw new ArgumentNullException(nameof(UserSettings));
+            throw new NullReferenceException(nameof(UserSettings));
         }
         if (string.IsNullOrEmpty(UserSettings.Username)) {
-            throw new Exception("Username not specified");
+            throw new NullReferenceException("Username not specified");
         }
 
         if (!Directory.Exists(DirectoryStorage.User)) {
@@ -70,13 +70,13 @@ public class UserManager(ILogger<UserManager>? logger,
         writer.Write(json);
     }
 
-    public async Task SaveAsync()
+    public async Task SaveAsync(CancellationToken cancellationToken = default)
     {
         if (UserSettings is null) {
-            throw new ArgumentNullException(nameof(UserSettings));
+            throw new NullReferenceException(nameof(UserSettings));
         }
         if (string.IsNullOrEmpty(UserSettings.Username)) {
-            throw new Exception("Username not specified");
+            throw new NullReferenceException("Username not specified");
         }
 
         if (!Directory.Exists(DirectoryStorage.User)) {
@@ -87,7 +87,7 @@ public class UserManager(ILogger<UserManager>? logger,
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);
 
-        await JsonSerializer.SerializeAsync(fileStream, UserSettings, typeof(UserSettings), SourceGenerationContext.Default);
+        await JsonSerializer.SerializeAsync(fileStream, UserSettings, typeof(UserSettings), SourceGenerationContext.Default, cancellationToken);
     }
 
     private UserSettings CreateDefaultUserSettings()

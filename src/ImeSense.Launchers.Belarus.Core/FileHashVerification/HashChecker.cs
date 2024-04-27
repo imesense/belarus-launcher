@@ -2,16 +2,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.FileHashVerification;
 
-public class HashChecker
+public class HashChecker(ILogger<HashChecker>? logger, IHashProvider hashProvider)
 {
-    private readonly ILogger<HashChecker>? _logger;
-    private readonly IHashProvider _hashProvider;
-
-    public HashChecker(ILogger<HashChecker>? logger, IHashProvider hashProvider)
-    {
-        _logger = logger;
-        _hashProvider = hashProvider;
-    }
+    private readonly ILogger<HashChecker>? _logger = logger;
+    private readonly IHashProvider _hashProvider = hashProvider;
 
     public async Task<bool> VerifyFileHashAsync(string filePath, string expectedHash,
         CancellationToken cancellationToken = default)

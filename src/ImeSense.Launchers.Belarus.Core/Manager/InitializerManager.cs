@@ -12,12 +12,14 @@ namespace ImeSense.Launchers.Belarus.Core.Manager;
 
 public class InitializerManager(
     ILogger<InitializerManager> logger,
+    HttpClient httpClient,
     IGitStorageApiService gitStorageApiService, UserManager userManager,
     IApplicationLocaleManager localeManager, ILauncherStorage launcherStorage,
     IReleaseComparerService<GitHubRelease> releaseComparerService,
     IUpdaterService updaterService)
 {
     private readonly ILogger<InitializerManager> _logger = logger;
+    private readonly HttpClient _httpClient = httpClient;
     private readonly IGitStorageApiService _gitStorageApiService = gitStorageApiService;
     private readonly UserManager _userManager = userManager;
     private readonly IApplicationLocaleManager _localeManager = localeManager;
@@ -28,22 +30,22 @@ public class InitializerManager(
     public bool IsGameReleaseCurrent { get; private set; } = true;
     public bool IsUserAuthorized { get; private set; }
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         try {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync();
+            _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync(cancellationToken);
             _logger.LogInformation("Check GitHub connection time: {Time}", stopwatch.ElapsedMilliseconds);
 
             var locale = _userManager?.UserSettings?.Locale;
             if (_launcherStorage.IsCheckGitHubConnection) {
-                var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync();
+                var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(cancellationToken);
                 _logger.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
                 if (!isLauncherReleaseCurrent) {
                     var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
                         FileNameStorage.SBLauncherUpdater);
-                    await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater);
+                    await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater, cancellationToken);
 
                     var updater = Launcher.Launch(pathLauncherUpdater);
                     updater?.Start();
@@ -51,18 +53,18 @@ public class InitializerManager(
                     return;
                 }
 
-                _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync();
+                _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: cancellationToken);
                 _logger.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
 
-                IsGameReleaseCurrent = await IsGameReleaseCurrentAsync();
+                IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(cancellationToken);
                 IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
                 if (IsUserAuthorized) {
-                    await Task.Factory.StartNew(() => LoadNewsAsync(locale));
+                    await Task.Factory.StartNew(() => LoadNewsAsync(locale, cancellationToken));
                 } else {
-                    await Task.Factory.StartNew(() => LoadNewsAsync());
+                    await Task.Factory.StartNew(() => LoadNewsAsync(cancellationToken: cancellationToken));
                 }
-                await Task.Factory.StartNew(() => LoadWebResourcesAsync());
+                await Task.Factory.StartNew(() => LoadWebResourcesAsync(cancellationToken: cancellationToken));
             } else {
                 if (IsUserAuthorized) {
                     _launcherStorage.NewsContents = new(LoadErrorNews(locale) ?? []);
@@ -70,7 +72,7 @@ public class InitializerManager(
                     _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
                 }
 
-                _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease);
+                _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, cancellationToken);
             }
 
             stopwatch.Stop();
@@ -81,7 +83,7 @@ public class InitializerManager(
         }
     }
 
-    private IList<LangNewsContent>? LoadErrorNews(Locale? locale = null)
+    private List<LangNewsContent>? LoadErrorNews(Locale? locale = null)
     {
         // News in all languages
         var allNews = new List<LangNewsContent>();
@@ -105,11 +107,10 @@ public class InitializerManager(
     /// Checks the connection to github.com.
     /// </summary>
     /// <returns>True if the connection is established successfully, otherwise false.</returns>
-    private async Task<bool> CheckGitHubConnectionAsync()
+    private async Task<bool> CheckGitHubConnectionAsync(CancellationToken cancellationToken = default)
     {
         try {
-            using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("https://github.com");
+            var response = await _httpClient.GetAsync("https://github.com", cancellationToken);
 
             if (response.IsSuccessStatusCode) {
                 _logger.LogInformation("Connection to github.com established");
@@ -128,9 +129,9 @@ public class InitializerManager(
     }
 
 
-    private async Task<bool> IsLauncherReleaseCurrentAsync()
+    private async Task<bool> IsLauncherReleaseCurrentAsync(CancellationToken cancellationToken = default)
     {
-        var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherApiUri);
+        var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherApiUri, cancellationToken);
         if (tags != null) {
             var currentVersion = $"{ApplicationHelper.GetAppVersion()}";
             if (currentVersion[0] != 'v') {
@@ -152,14 +153,14 @@ public class InitializerManager(
         return true;
     }
 
-    private async Task<bool> IsGameReleaseCurrentAsync()
+    private async Task<bool> IsGameReleaseCurrentAsync(CancellationToken cancellationToken = default)
     {
         var gitStorageRelease = _launcherStorage.GitHubRelease;
 
         if (File.Exists(PathStorage.CurrentRelease)) {
-            var releaseComparer = gitStorageRelease != null && await _releaseComparerService.IsComparerAsync(gitStorageRelease);
+            var releaseComparer = gitStorageRelease != null && await _releaseComparerService.IsComparerAsync(gitStorageRelease, cancellationToken);
             if (!releaseComparer) {
-                await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease);
+                await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease, cancellationToken);
                 _logger.LogInformation("The releases don't match. Update required!");
                 return false;
             } else {
@@ -167,7 +168,7 @@ public class InitializerManager(
                 return true;
             }
         } else {
-            await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease);
+            await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease, cancellationToken);
             _logger.LogInformation("The release configuration has not been previously saved");
             return false;
         }
@@ -186,11 +187,11 @@ public class InitializerManager(
         _localeManager.SetLocale(userSettings.Locale.Key);
     }
 
-    private async Task LoadWebResourcesAsync()
+    private async Task LoadWebResourcesAsync(CancellationToken cancellationToken = default)
     {
         try {
             var contents = await _gitStorageApiService
-                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNameStorage.WebResources, UriStorage.BelarusApiUri);
+                .DownloadJsonAsync<IEnumerable<WebResource>>(FileNameStorage.WebResources, UriStorage.BelarusApiUri, cancellationToken);
 
             if (contents != null) {
                 _launcherStorage.WebResources = new(contents);
@@ -202,7 +203,7 @@ public class InitializerManager(
         }
     }
 
-    private async Task LoadNewsAsync(Locale? locale = null)
+    private async Task LoadNewsAsync(Locale? locale = null, CancellationToken cancellationToken = default)
     {
         // News in all languages
         var allNews = new List<LangNewsContent>();
@@ -211,12 +212,12 @@ public class InitializerManager(
             if (locale is null) {
                 foreach (var lang in _launcherStorage.Locales) {
                     var news = await _gitStorageApiService
-                        .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json", UriStorage.BelarusApiUri);
+                        .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json", UriStorage.BelarusApiUri, cancellationToken);
                     AddNews(lang, allNews, news);
                 }
             } else {
                 var news = await _gitStorageApiService
-                    .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json", UriStorage.BelarusApiUri);
+                    .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json", UriStorage.BelarusApiUri, cancellationToken);
                 AddNews(locale, allNews, news);
             }
         } catch (Exception ex) {

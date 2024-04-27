@@ -8,36 +8,29 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Microsoft.Extensions.Logging;
 
+using ReactiveUI;
+
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
-public class DownloadResourcesService : IDownloadResourcesService
+public class DownloadResourcesService(ILogger<DownloadResourcesService> logger,
+    IGitStorageApiService gitStorageApiService,
+    IFileDownloadManager fileDownloadManager,
+    ILauncherStorage launcherStorage, HashChecker hashChecker) : IDownloadResourcesService
 {
-    private readonly ILogger<DownloadResourcesService> _logger;
-    private readonly IGitStorageApiService _gitStorageApiService;
-    private readonly IFileDownloadManager _fileDownloadManager;
-    private readonly ILauncherStorage _launcherStorage;
-    private readonly HashChecker _hashChecker;
+    private readonly ILogger<DownloadResourcesService> _logger = logger;
+    private readonly IGitStorageApiService _gitStorageApiService = gitStorageApiService;
+    private readonly IFileDownloadManager _fileDownloadManager = fileDownloadManager;
+    private readonly ILauncherStorage _launcherStorage = launcherStorage;
+    private readonly HashChecker _hashChecker = hashChecker;
 
     private IList<GameResource>? _hashResources;
 
-    public DownloadResourcesService(ILogger<DownloadResourcesService> logger,
-        IGitStorageApiService gitStorageApiService,
-        IFileDownloadManager fileDownloadManager,
-        ILauncherStorage launcherStorage, HashChecker hashChecker)
-    {
-        _logger = logger;
-        _gitStorageApiService = gitStorageApiService;
-        _fileDownloadManager = fileDownloadManager;
-        _launcherStorage = launcherStorage;
-        _hashChecker = hashChecker;
-    }
-
     public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
         var filesRes = new ConcurrentDictionary<string, Uri>();
         _hashResources ??= await _gitStorageApiService
-            .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri);
+            .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri, cancellationToken);
 
         var release = _launcherStorage.GitHubRelease;
         if (release is null) {
@@ -93,14 +86,14 @@ public class DownloadResourcesService : IDownloadResourcesService
                 if (fileStream.Length > 100000000) {
                     gameResourceTasks.Add(Task.Run(async () => {
                         _logger.LogInformation("File: {File}", assetFile.Title);
-                        var verifyFile = await _hashChecker.VerifyFileHashAsync(filePath, assetFile.Hash, token);
+                        var verifyFile = await _hashChecker.VerifyFileHashAsync(filePath, assetFile.Hash, cancellationToken);
                         if (!verifyFile) {
                             filesRes.TryAdd(fileStream.Name, asset.BrowserDownloadUrl);
                             _logger.LogWarning("The {FileName} is corrupted", assetFile.Title);
                         }
 
                         CalcProgress(ref completedTasks, progress, totalTasks);
-                    }, token));
+                    }, cancellationToken));
                 } else {
                     var verifyFile = _hashChecker.VerifyFileHash(fileStream, assetFile.Hash);
                     if (!verifyFile) {
@@ -129,7 +122,7 @@ public class DownloadResourcesService : IDownloadResourcesService
         _logger.LogInformation("Progress: {Num}%", progressPercentage);
     }
 
-    public async Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken token = default)
+    public async Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken cancellationToken = default)
     {
         try {
             var dirInfo = new DirectoryInfo(Path.GetDirectoryName(path)!);
@@ -137,15 +130,15 @@ public class DownloadResourcesService : IDownloadResourcesService
                 dirInfo.Create();
             }
             _hashResources ??= await _gitStorageApiService
-                .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri);
+                .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri, cancellationToken);
             var verifyFile = false;
             do {
                 try {
-                    await _fileDownloadManager.DownloadAsync(url, path, progress, token);
+                    await _fileDownloadManager.DownloadAsync(url, path, progress, cancellationToken);
                     // Check the downloaded file for integrity
                     var assetName = Path.GetFileName(path);
                     var gameResource = _hashResources?.FirstOrDefault(x => x.Title.Equals(assetName, StringComparison.OrdinalIgnoreCase));
-                    verifyFile = await _hashChecker.VerifyFileHashAsync(path, gameResource!.Hash, token);
+                    verifyFile = await _hashChecker.VerifyFileHashAsync(path, gameResource!.Hash, cancellationToken);
                     if (!verifyFile) {
                         File.Delete(path);
                     }

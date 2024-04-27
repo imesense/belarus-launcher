@@ -66,14 +66,15 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+            var splashScreenViewModel = _serviceProvider.GetRequiredService<SplashScreenViewModel>();
+
             var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
             var userManager = _serviceProvider.GetRequiredService<UserManager>();
-            await userManager.LoadAsync();
+            await userManager.LoadAsync(splashScreenViewModel.CancellationToken);
             initializerManager.InitializeLocale();
 
             var localeManager = _serviceProvider.GetRequiredService<IApplicationLocaleManager>();
 
-            var splashScreenViewModel = _serviceProvider.GetRequiredService<SplashScreenViewModel>();
             var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = new MainWindow {
                 DataContext = mainViewModel
@@ -86,14 +87,12 @@ public partial class App : Application
                 splashScreenViewModel.InformationMessage = new InformationMessage(
                     localeManager.GetStringByKey("LocalizedStrings.Loading"),
                     localeManager.GetStringByKey("LocalizedStrings.AccessingRepository"));
-                //await Task.Delay(2000, splashScreenViewModel.CancellationToken);
-                await initializerManager.InitializeAsync();
+                await initializerManager.InitializeAsync(splashScreenViewModel.CancellationToken);
                 splashScreenViewModel.Progress++;
                 splashScreenViewModel.InformationMessage = new InformationMessage(
                     localeManager.GetStringByKey("LocalizedStrings.Loading"),
                     localeManager.GetStringByKey("LocalizedStrings.DataInitialization"));
-                //await Task.Delay(2000, splashScreenViewModel.CancellationToken);
-                await mainViewModel.InitializeAsync();
+                await mainViewModel.InitializeAsync(splashScreenViewModel.CancellationToken);
                 splashScreenViewModel.Progress++;
             } catch (TaskCanceledException) {
                 desktop.Shutdown();

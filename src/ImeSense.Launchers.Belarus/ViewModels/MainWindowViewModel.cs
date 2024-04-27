@@ -47,7 +47,7 @@ public class MainWindowViewModel : ReactiveObject
         _viewModelLocator = null!;
     }
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         var stopwatch = new Stopwatch();
         stopwatch.Start();
