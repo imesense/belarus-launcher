@@ -1,10 +1,11 @@
-using System.Collections.ObjectModel;
+using System;
 using System.Diagnostics;
 
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Models;
 
 using Microsoft.Extensions.Logging;
 
@@ -30,22 +31,27 @@ public class InitializerManager(
     public bool IsGameReleaseCurrent { get; private set; } = true;
     public bool IsUserAuthorized { get; private set; }
 
-    public async Task InitializeAsync(CancellationToken cancellationToken = default)
+    public async Task InitializeAsync(ISplashScreenManager splashScreenManager)
     {
         try {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync(cancellationToken);
+
+            splashScreenManager.UpdateInformation(new InformationMessage(
+                _localeManager.GetStringByKey("LocalizedStrings.Loading"),
+                _localeManager.GetStringByKey("LocalizedStrings.AccessingRepository")));
+
+            _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync(splashScreenManager.CancellationToken);
             _logger.LogInformation("Check GitHub connection time: {Time}", stopwatch.ElapsedMilliseconds);
 
             var locale = _userManager?.UserSettings?.Locale;
             if (_launcherStorage.IsCheckGitHubConnection) {
-                var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(cancellationToken);
+                var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(splashScreenManager.CancellationToken);
                 _logger.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
                 if (!isLauncherReleaseCurrent) {
                     var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
                         FileNameStorage.SBLauncherUpdater);
-                    await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater, cancellationToken);
+                    await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater, splashScreenManager.CancellationToken);
 
                     var updater = Launcher.Launch(pathLauncherUpdater);
                     updater?.Start();
@@ -53,18 +59,18 @@ public class InitializerManager(
                     return;
                 }
 
-                _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: cancellationToken);
+                _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: splashScreenManager.CancellationToken);
                 _logger.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
 
-                IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(cancellationToken);
+                IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
                 IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
                 if (IsUserAuthorized) {
-                    await Task.Factory.StartNew(() => LoadNewsAsync(locale, cancellationToken));
+                    await Task.Factory.StartNew(() => LoadNewsAsync(locale, splashScreenManager.CancellationToken));
                 } else {
-                    await Task.Factory.StartNew(() => LoadNewsAsync(cancellationToken: cancellationToken));
+                    await Task.Factory.StartNew(() => LoadNewsAsync(cancellationToken: splashScreenManager.CancellationToken));
                 }
-                await Task.Factory.StartNew(() => LoadWebResourcesAsync(cancellationToken: cancellationToken));
+                await Task.Factory.StartNew(() => LoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
             } else {
                 if (IsUserAuthorized) {
                     _launcherStorage.NewsContents = new(LoadErrorNews(locale) ?? []);
@@ -72,7 +78,7 @@ public class InitializerManager(
                     _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
                 }
 
-                _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, cancellationToken);
+                _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, splashScreenManager.CancellationToken);
             }
 
             stopwatch.Stop();

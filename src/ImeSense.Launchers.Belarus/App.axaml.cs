@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using ImeSense.Launchers.Belarus.Models;
 using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.ViewModels;
 using ImeSense.Launchers.Belarus.Views;
@@ -49,7 +48,6 @@ public partial class App : Application
         return services;
     }
 
-
     public override void Initialize()
     {
         var logger = _serviceProvider.GetRequiredService<ILogger<App>>();
@@ -66,14 +64,14 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            var splashScreenViewModel = _serviceProvider.GetRequiredService<SplashScreenViewModel>();
-
             var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
             var userManager = _serviceProvider.GetRequiredService<UserManager>();
-            await userManager.LoadAsync(splashScreenViewModel.CancellationToken);
-            initializerManager.InitializeLocale();
 
-            var localeManager = _serviceProvider.GetRequiredService<IApplicationLocaleManager>();
+            var splashScreenManager = _serviceProvider.GetRequiredService<ISplashScreenManager>();
+            splashScreenManager.MaxProgress = 3;
+
+            await userManager.LoadAsync(splashScreenManager.CancellationToken);
+            initializerManager.InitializeLocale();
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
             desktop.MainWindow = new MainWindow {
@@ -82,18 +80,10 @@ public partial class App : Application
             desktop.MainWindow.Show();
 
             try {
-                mainViewModel.ShowSplashScreenImpl(splashScreenViewModel);
-                splashScreenViewModel.Progress++;
-                splashScreenViewModel.InformationMessage = new InformationMessage(
-                    localeManager.GetStringByKey("LocalizedStrings.Loading"),
-                    localeManager.GetStringByKey("LocalizedStrings.AccessingRepository"));
-                await initializerManager.InitializeAsync(splashScreenViewModel.CancellationToken);
-                splashScreenViewModel.Progress++;
-                splashScreenViewModel.InformationMessage = new InformationMessage(
-                    localeManager.GetStringByKey("LocalizedStrings.Loading"),
-                    localeManager.GetStringByKey("LocalizedStrings.DataInitialization"));
-                await mainViewModel.InitializeAsync(splashScreenViewModel.CancellationToken);
-                splashScreenViewModel.Progress++;
+                mainViewModel.ShowSplashScreenImpl();
+
+                await initializerManager.InitializeAsync(splashScreenManager);
+                await mainViewModel.InitializeAsync(splashScreenManager);
             } catch (TaskCanceledException) {
                 desktop.Shutdown();
                 return;

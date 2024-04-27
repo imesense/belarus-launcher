@@ -28,6 +28,7 @@ internal static class ServiceCollectionExtensions
         services.AddSingleton<UserManager>();
         services.AddSingleton<InitializerManager>();
         services.AddSingleton<IApplicationLocaleManager, AxamlLocaleManager>();
+        services.AddScoped<ISplashScreenManager, SplashScreenManager>();
 
         return services;
     }

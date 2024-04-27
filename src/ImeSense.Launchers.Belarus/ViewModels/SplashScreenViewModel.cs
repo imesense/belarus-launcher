@@ -1,6 +1,7 @@
 using System.Reactive;
 
 using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Models;
 
 using ReactiveUI;
@@ -10,30 +11,44 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 
 public class SplashScreenViewModel : ReactiveObject
 {
-    private readonly CancellationTokenSource _cts = new();
-    public CancellationToken CancellationToken => _cts.Token;
-
     private readonly IWindowManager _windowManager;
-    public ReactiveCommand<Unit, Unit> Cancel { get; set; } = null!;
-    [Reactive] public InformationMessage? InformationMessage { get; set; }
-    [Reactive] public int Progress { get; set; } = 0;
-    [Reactive] public int MaxProgress { get; set; } = 3;
+    ISplashScreenManager SplashScreen { get; set; }
 
+    [Reactive] public InformationMessage InformationMessage { get; set; }
+    [Reactive] public int Progress { get; set; }
+    public int MaxProgress { get; private set; }
+
+    public ReactiveCommand<Unit, Unit> Cancel { get; set; } = null!;
+    
     public SplashScreenViewModel()
     {
+        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(StartGameViewModel)}");
+
         _windowManager = null!;
+        SplashScreen = null!;
     }
 
-    public SplashScreenViewModel(IWindowManager windowManager) : base()
+    public SplashScreenViewModel(IWindowManager windowManager, ISplashScreenManager splashScreen)
     {
-        InformationMessage = new InformationMessage("Title", "Description");
-        Cancel = ReactiveCommand.Create(CancelImpl);
         _windowManager = windowManager;
+        SplashScreen = splashScreen;
+        Progress = SplashScreen.CurrentProgress;
+        MaxProgress = SplashScreen.MaxProgress;
+
+        this.WhenAnyValue(
+            x => x.SplashScreen.CurrentProgress,
+            x => x.SplashScreen.SplashScreenMessage)
+            .Subscribe(u => {
+                Progress = u.Item1;
+                InformationMessage = u.Item2;
+            });
+
+        Cancel = ReactiveCommand.Create(CancelImpl);
     }
 
     private void CancelImpl()
     {
-        _cts.Cancel();
+        SplashScreen.Cancel();
         _windowManager.Close();
     }
 }
