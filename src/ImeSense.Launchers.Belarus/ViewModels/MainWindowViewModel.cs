@@ -18,8 +18,8 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 public class MainWindowViewModel : ReactiveObject
 {
     private readonly ILogger<MainWindowViewModel>? _logger;
+    private readonly ILauncherStorage _launcherStorage;
     private readonly IUpdaterService _updaterService;
-    private readonly InitializerManager _initializerManager;
     private readonly ViewModelLocator _viewModelLocator;
     private readonly IApplicationLocaleManager _localeManager;
     private readonly StartGameViewModel _startGameViewModel;
@@ -28,11 +28,11 @@ public class MainWindowViewModel : ReactiveObject
 
     [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
 
-    public MainWindowViewModel(ILogger<MainWindowViewModel>? logger, InitializerManager initializerManager,
+    public MainWindowViewModel(ILogger<MainWindowViewModel>? logger, ILauncherStorage launcherStorage,
         IUpdaterService updaterService, ViewModelLocator viewModelLocator, IApplicationLocaleManager localeManager)
     {
         _logger = logger;
-        _initializerManager = initializerManager;
+        _launcherStorage = launcherStorage;
         _updaterService = updaterService;
         _viewModelLocator = viewModelLocator;
         _localeManager = localeManager;
@@ -47,7 +47,7 @@ public class MainWindowViewModel : ReactiveObject
 
         _startGameViewModel = null!;
         _launcherViewModel = null!;
-        _initializerManager = null!;
+        _launcherStorage = null!;
         _updaterService = null!;
         _viewModelLocator = null!;
         _localeManager = null!;
@@ -65,7 +65,7 @@ public class MainWindowViewModel : ReactiveObject
 
         ProcessHelper.KillAllXrEngine();
 
-        var isCurrentRelease = _initializerManager.IsGameReleaseCurrent;
+        var isCurrentRelease = _launcherStorage.IsGameReleaseCurrent;
         if (File.Exists(PathStorage.LauncherSetting)) {
             try {
                 if (!isCurrentRelease) {

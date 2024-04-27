@@ -28,9 +28,6 @@ public class InitializerManager(
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService = releaseComparerService;
     private readonly IUpdaterService _updaterService = updaterService;
 
-    public bool IsGameReleaseCurrent { get; private set; } = true;
-    public bool IsUserAuthorized { get; private set; }
-
     public async Task InitializeAsync(ISplashScreenManager splashScreenManager)
     {
         try {
@@ -62,17 +59,17 @@ public class InitializerManager(
                 _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: splashScreenManager.CancellationToken);
                 _logger.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
 
-                IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
-                IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
+                _launcherStorage.IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
+                _launcherStorage.IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
-                if (IsUserAuthorized) {
+                if (_launcherStorage.IsUserAuthorized) {
                     await Task.Factory.StartNew(() => LoadNewsAsync(locale, splashScreenManager.CancellationToken));
                 } else {
                     await Task.Factory.StartNew(() => LoadNewsAsync(cancellationToken: splashScreenManager.CancellationToken));
                 }
                 await Task.Factory.StartNew(() => LoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
             } else {
-                if (IsUserAuthorized) {
+                if (_launcherStorage.IsUserAuthorized) {
                     _launcherStorage.NewsContents = new(LoadErrorNews(locale) ?? []);
                 } else {
                     _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);

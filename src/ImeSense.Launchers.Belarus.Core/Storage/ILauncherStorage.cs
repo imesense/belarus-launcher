@@ -10,10 +10,9 @@ public interface ILauncherStorage
 {
     GitHubRelease? GitHubRelease { get; set; }
     IList<Locale> Locales { get; }
-    [Reactive]
     ObservableCollection<LangNewsContent>? NewsContents { get; set; }
-    [Reactive]
     ObservableCollection<WebResource>? WebResources { get; set; }
-    [Reactive]
     bool IsCheckGitHubConnection { get; set; }
+    bool IsGameReleaseCurrent { get; set; }
+    bool IsUserAuthorized { get; set; }
 }
