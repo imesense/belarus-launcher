@@ -16,11 +16,13 @@ namespace ImeSense.Launchers.Belarus.Core;
 [JsonSerializable(typeof(NewsContent))]
 [JsonSerializable(typeof(IEnumerable<NewsContent>))]
 [JsonSerializable(typeof(IEnumerable<LangNewsContent>))]
+[JsonSerializable(typeof(List<LangNewsContent>))]
 [JsonSerializable(typeof(Tag))]
 [JsonSerializable(typeof(IEnumerable<Tag>))]
 [JsonSerializable(typeof(UserSettings))]
 [JsonSerializable(typeof(WebResource))]
 [JsonSerializable(typeof(WebResource[]))]
+[JsonSerializable(typeof(List<WebResource>))]
 [JsonSerializable(typeof(IEnumerable<WebResource>))]
 public partial class SourceGenerationContext : JsonSerializerContext
 {
