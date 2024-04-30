@@ -70,7 +70,18 @@
                     Margin="0,5,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    Foreground="LightGray" />
+                    Foreground="LightGray"
+                    Maximum="100"
+                    Minimum="0" />
+
+                <Button
+                    Content="{DynamicResource LocalizedStrings.Pause}"
+                    Command="{Binding Pause}"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Right"
+                    Classes="styled"
+                    FontSize="32" />
             </StackPanel>
         </StackPanel>
     </DockPanel>

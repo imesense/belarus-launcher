@@ -36,4 +36,5 @@
     <s:String x:Key="LocalizedStrings.CheckLauncherUpdate">Проверка обновлений лаунчера</s:String>
     <s:String x:Key="LocalizedStrings.CheckGameUpdate">Проверка обновлений игры</s:String>
     <s:String x:Key="LocalizedStrings.LoadLocalData">Загрузка локальных данных</s:String>
+    <s:String x:Key="LocalizedStrings.Pause">Пауза</s:String>
 </ResourceDictionary>

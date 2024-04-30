@@ -76,7 +76,7 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddViews(this IServiceCollection services)
     {
         services.AddTransient<AuthorizationView>();
-        services.AddSingleton<DownloadMenuView>();
+        services.AddTransient<DownloadMenuView>();
         services.AddSingleton<GameMenuView>();
         services.AddSingleton<LauncherView>();
         services.AddSingleton<LinkView>();

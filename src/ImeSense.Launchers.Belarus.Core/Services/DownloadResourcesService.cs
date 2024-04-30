@@ -28,6 +28,7 @@ public class DownloadResourcesService(ILogger<DownloadResourcesService> logger,
     public async Task<IDictionary<string, Uri>?> GetFilesForDownloadAsync(IProgress<int> progress,
         CancellationToken cancellationToken = default)
     {
+        progress.Report(0);
         var filesRes = new ConcurrentDictionary<string, Uri>();
         _hashResources ??= await _gitStorageApiService
             .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri, cancellationToken);

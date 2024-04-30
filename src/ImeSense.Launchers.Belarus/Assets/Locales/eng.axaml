@@ -36,4 +36,5 @@
     <s:String x:Key="LocalizedStrings.CheckLauncherUpdate">Checking for launcher updates</s:String>
     <s:String x:Key="LocalizedStrings.CheckGameUpdate">Checking for game updates</s:String>
     <s:String x:Key="LocalizedStrings.LoadLocalData">Loading local data</s:String>
+    <s:String x:Key="LocalizedStrings.Pause">Pause</s:String>
 </ResourceDictionary>

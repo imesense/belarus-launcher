@@ -20,9 +20,11 @@ public class DownloadMenuViewModel : ReactiveObject
     private readonly IWindowManager _windowManager;
     private readonly IDownloadResourcesService _downloadResourcesService;
     private readonly ILauncherStorage _launcherStorage;
-    private CancellationTokenSource _tokenSource = new();
+    private CancellationTokenSource _cts;
 
+    public CancellationToken CancellationToken { get; private set; }
     public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; } = null!;
+    public ReactiveCommand<Unit, Unit> Pause { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
     [Reactive] public int DownloadProgress { get; set; } = 0;
@@ -47,6 +49,7 @@ public class DownloadMenuViewModel : ReactiveObject
         _downloadResourcesService = downloadResourcesService;
         _launcherStorage = launcherStorage;
         IsDownload = false;
+        _cts = null!;
 
         SetupCommands();
     }
@@ -59,6 +62,7 @@ public class DownloadMenuViewModel : ReactiveObject
         _windowManager = null!;
         _downloadResourcesService = null!;
         _launcherStorage = null!;
+        _cts = new();
     }
 
     public async Task UpdateAsync(LauncherViewModel launcherViewModel)
@@ -71,6 +75,7 @@ public class DownloadMenuViewModel : ReactiveObject
         var isGitHubConnection = this.WhenAnyValue(x => x._launcherStorage.IsCheckGitHubConnection);
 
         StartDownload = ReactiveCommand.CreateFromTask<LauncherViewModel>(DownloadsImplAsync, isGitHubConnection);
+        Pause = ReactiveCommand.Create(PauseImpl);
         Close = ReactiveCommand.Create(CloseImpl);
 
         StartDownload.ThrownExceptions.Merge(Close.ThrownExceptions)
@@ -78,55 +83,80 @@ public class DownloadMenuViewModel : ReactiveObject
             .Subscribe(OnCommandException);
     }
 
+    private void PauseImpl()
+    {
+        ClearData();
+        _cts?.Cancel();
+    }
+
+    private void ClearData()
+    {
+        DownloadProgress = 0;
+        DownloadFileName = string.Empty;
+        IsProgress = false;
+        IsDownload = false;
+    }
+
     private void CloseImpl()
     {
-        _tokenSource.Cancel();
-        _tokenSource.Dispose();
+        PauseImpl();
 
         _windowManager.Close();
     }
 
     private async Task DownloadsImplAsync(LauncherViewModel launcherViewModel)
     {
-        DownloadFileName = string.Empty;
-        var progress = new Progress<int>(percentage => {
+        _cts = new();
+        CancellationToken = _cts.Token;
+        ClearData();
+
+        IProgress<int> progress = new Progress<int>(percentage => {
             DownloadProgress = percentage;
         });
 
         IsProgress = true;
         StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.IntegrityChecking");
 
-        var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress);
+        var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress, CancellationToken);
+
+        if (CancellationToken.IsCancellationRequested) {
+            launcherViewModel.SelectMenu();
+            PauseImpl();
+            return;
+        }
+
         if (filesDownload != null && filesDownload.Any()) {
             var countFiles = filesDownload.Count;
             var numberFile = 0;
             IsDownload = true;
-            try {
-                foreach (var file in filesDownload) {
-                    numberFile++;
-                    StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files") +
-                                     $": {numberFile} / {countFiles}";
-                    DownloadFileName = Path.GetFileName(file.Key);
-                    await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, _tokenSource.Token);
+            foreach (var file in filesDownload) {
+                numberFile++;
+                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files") +
+                                 $": {numberFile} / {countFiles}";
+                DownloadFileName = Path.GetFileName(file.Key);
+                await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, CancellationToken);
+
+                if (CancellationToken.IsCancellationRequested) {
+                    PauseImpl();
+                    launcherViewModel.SelectMenu();
+                    return;
                 }
-            } catch (AggregateException ae) {
-                foreach (var e in ae.InnerExceptions) {
-                    if (e is TaskCanceledException) {
-                    } else {
-                        //Console.WriteLine(e.Message);
-                    }
-                }
-            } finally {
-                _tokenSource.Cancel();
-                _tokenSource.Dispose();
+
+                progress.Report(0);
             }
         }
 
-        IsDownload = false;
-        DownloadFileName = string.Empty;
+        progress.Report(0);
+        ClearData();
+
         launcherViewModel.SelectMenu();
     }
 
     private void OnCommandException(Exception exception)
-        => _logger?.LogError("{Message}", exception.Message);
+    {
+        ClearData();
+
+        _logger?.LogError("{Message}", exception.Message);
+        _logger?.LogError("{Message}", exception.StackTrace);
+    }
 }

@@ -30,6 +30,9 @@ internal class Program
             _mutex = new Mutex(initiallyOwned: false, _mutexName, out isMutexCreated);
         } catch (Exception exception) {
             Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
+            Log.CloseAndFlush();
+            _mutex?.Dispose();
+            throw;
         }
         if (!isMutexCreated) {
             return;
@@ -43,6 +46,8 @@ internal class Program
                 StartApp(args);
             } catch (Exception exception) {
                 Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
+                Log.CloseAndFlush();
+                _mutex?.Dispose();
                 throw;
             }
 #endif
