@@ -30,6 +30,10 @@
     <s:String x:Key="LocalizedStrings.Message">Сообщение</s:String>
     <s:String x:Key="LocalizedStrings.Cancel">Отменить</s:String>
     <s:String x:Key="LocalizedStrings.Loading">Загрузка лаунчера</s:String>
+    <s:String x:Key="LocalizedStrings.OffineLoading">Offline загрузка</s:String>
     <s:String x:Key="LocalizedStrings.AccessingRepository">Обращение к репозиторию</s:String>
     <s:String x:Key="LocalizedStrings.DataInitialization">Инициализация данных</s:String>
+    <s:String x:Key="LocalizedStrings.CheckLauncherUpdate">Проверка обновлений лаунчера</s:String>
+    <s:String x:Key="LocalizedStrings.CheckGameUpdate">Проверка обновлений игры</s:String>
+    <s:String x:Key="LocalizedStrings.LoadLocalData">Загрузка локальных данных</s:String>
 </ResourceDictionary>

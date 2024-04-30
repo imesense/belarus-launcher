@@ -30,6 +30,10 @@
     <s:String x:Key="LocalizedStrings.Message">Message</s:String>
     <s:String x:Key="LocalizedStrings.Cancel">Cancel</s:String>
     <s:String x:Key="LocalizedStrings.Loading">Loading</s:String>
+    <s:String x:Key="LocalizedStrings.OffineLoading">Offline loading</s:String>
     <s:String x:Key="LocalizedStrings.AccessingRepository">Accessing the repository</s:String>
     <s:String x:Key="LocalizedStrings.DataInitialization">Data initialization</s:String>
+    <s:String x:Key="LocalizedStrings.CheckLauncherUpdate">Checking for launcher updates</s:String>
+    <s:String x:Key="LocalizedStrings.CheckGameUpdate">Checking for game updates</s:String>
+    <s:String x:Key="LocalizedStrings.LoadLocalData">Loading local data</s:String>
 </ResourceDictionary>

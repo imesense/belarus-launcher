@@ -29,15 +29,18 @@ public class InitializerManager(
 
     public void InitializeLocale()
     {
-        var userSettings = _userManager.UserSettings ??
-            throw new Exception("Error loading user config!");
-
-        if (userSettings.Locale is null) {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+        if (_userManager.UserSettings.Locale is null) {
             _logger?.LogError("Locale was not set");
-            userSettings.Locale = _launcherStorage.Locales[0];
+            _userManager.UserSettings.Locale = _launcherStorage.Locales[0];
         }
 
-        _localeManager.SetLocale(userSettings.Locale.Key);
+        _localeManager.SetLocale(_userManager.UserSettings.Locale.Key);
     }
 
     public async Task InitializeAsync(ISplashScreenManager splashScreenManager)
@@ -71,7 +74,11 @@ public class InitializerManager(
             if (_launcherStorage.IsCheckGitHubConnection) {
                 await HandleOnlineInitializationAsync(splashScreenManager, stopwatch);
             } else {
-                await HandleOfflineInitializationAsync(splashScreenManager);
+                splashScreenManager.UpdateInformation(new InformationMessage(
+                    _localeManager.GetStringByKey("LocalizedStrings.OffineLoading"),
+                    _localeManager.GetStringByKey("LocalizedStrings.LoadLocalData")));
+
+                await HandleOfflineInitializationAsync(splashScreenManager.CancellationToken);
             }
 
             stopwatch.Stop();
@@ -92,6 +99,10 @@ public class InitializerManager(
             throw new NullReferenceException("User settings object is null");
         }
 
+        splashScreenManager.UpdateInformation(new InformationMessage(
+            _localeManager.GetStringByKey("LocalizedStrings.Loading"),
+            _localeManager.GetStringByKey("LocalizedStrings.CheckLauncherUpdate")));
+
         var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(splashScreenManager.CancellationToken);
         _logger?.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
         if (!isLauncherReleaseCurrent) {
@@ -104,6 +115,9 @@ public class InitializerManager(
             return;
         }
 
+        splashScreenManager.UpdateInformation(new InformationMessage(
+            _localeManager.GetStringByKey("LocalizedStrings.Loading"),
+            _localeManager.GetStringByKey("LocalizedStrings.CheckGameUpdate")));
         _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: splashScreenManager.CancellationToken);
         _logger?.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
 
@@ -111,14 +125,19 @@ public class InitializerManager(
         _launcherStorage.IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
         if (_launcherStorage.IsGameReleaseCurrent) {
-            await HandleGameReleaseCurrentAsync(splashScreenManager);
+            splashScreenManager.UpdateInformation(new InformationMessage(
+                _localeManager.GetStringByKey("LocalizedStrings.Loading"),
+                _localeManager.GetStringByKey("LocalizedStrings.LoadLocalData")));
+
+            await HandleGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
         } else {
-            await LoadRemoteContent(splashScreenManager, _userManager.UserSettings.Locale);
+
+            await LoadRemoteContent(_userManager.UserSettings.Locale, splashScreenManager.CancellationToken);
             await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
         }
     }
 
-    private async Task HandleGameReleaseCurrentAsync(ISplashScreenManager splashScreenManager)
+    private async Task HandleGameReleaseCurrentAsync(CancellationToken cancellationToken)
     {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
@@ -127,7 +146,7 @@ public class InitializerManager(
             throw new NullReferenceException("User settings object is null");
         }
 
-        var contentNews = await LocaleLoadCacheAsync<LangNewsContent>(PathStorage.NewsCache) ?? [];
+        var contentNews = await LocaleLoadCacheAsync<LangNewsContent>(PathStorage.NewsCache, cancellationToken) ?? [];
         var isContentNews = contentNews.Any(x => 
                                             x.Locale is not null 
                                             && _userManager.UserSettings.Locale is not null 
@@ -135,18 +154,18 @@ public class InitializerManager(
         if (isContentNews) {
             _launcherStorage.NewsContents = new(contentNews);
         } else {
-            await LoadRemoteContent(splashScreenManager, _userManager.UserSettings.Locale);
+            await LoadRemoteContent(_userManager.UserSettings.Locale, cancellationToken);
         }
 
-        var contentRes = await LocaleLoadCacheAsync<WebResource>(PathStorage.WebResourcesCache);
+        var contentRes = await LocaleLoadCacheAsync<WebResource>(PathStorage.WebResourcesCache, cancellationToken);
         if (contentRes is not null && contentRes.Count != 0) {
             _launcherStorage.WebResources = new(contentRes);
         } else {
-            await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
+            await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: cancellationToken));
         }
     }
 
-    private async Task HandleOfflineInitializationAsync(ISplashScreenManager splashScreenManager)
+    private async Task HandleOfflineInitializationAsync(CancellationToken cancellationToken = default)
     {
         if (_userManager is null) {
             throw new NullReferenceException("User manager object is null");
@@ -161,15 +180,15 @@ public class InitializerManager(
             _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
         }
 
-        _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, splashScreenManager.CancellationToken);
+        _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, cancellationToken);
     }
 
-    private async Task LoadRemoteContent(ISplashScreenManager splashScreenManager, Locale? locale)
+    private async Task LoadRemoteContent(Locale? locale, CancellationToken cancellationToken = default)
     {
         if (_launcherStorage.IsUserAuthorized) {
-            await Task.Factory.StartNew(() => RemoteLoadNewsAsync(locale, splashScreenManager.CancellationToken), splashScreenManager.CancellationToken);
+            await Task.Factory.StartNew(() => RemoteLoadNewsAsync(locale, cancellationToken), cancellationToken);
         } else {
-            await Task.Factory.StartNew(() => RemoteLoadNewsAsync(cancellationToken: splashScreenManager.CancellationToken), splashScreenManager.CancellationToken);
+            await Task.Factory.StartNew(() => RemoteLoadNewsAsync(cancellationToken: cancellationToken), cancellationToken);
         }
     }
 

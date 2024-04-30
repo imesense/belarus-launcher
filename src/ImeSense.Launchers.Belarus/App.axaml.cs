@@ -68,7 +68,7 @@ public partial class App : Application
             var userManager = _serviceProvider.GetRequiredService<UserManager>();
 
             var splashScreenManager = _serviceProvider.GetRequiredService<ISplashScreenManager>();
-            splashScreenManager.MaxProgress = 3;
+            splashScreenManager.MaxProgress = 4;
 
             await userManager.LoadAsync(splashScreenManager.CancellationToken);
             initializerManager.InitializeLocale();
