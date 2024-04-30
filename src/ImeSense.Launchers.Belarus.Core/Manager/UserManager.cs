@@ -37,6 +37,8 @@ public class UserManager(ILogger<UserManager>? logger,
                 user.IpAddress = string.Empty;
             }
 
+            user.Locale ??= GetAutoLocale();
+
             var isUsernameCorrect =
                 _authenticationValidator.IsUsernameNotEmpty(user.Username) &&
                 _authenticationValidator.IsUsernameCorrectLength(user.Username) &&
@@ -92,15 +94,20 @@ public class UserManager(ILogger<UserManager>? logger,
 
     private UserSettings CreateDefaultUserSettings()
     {
-        var userSettings = new UserSettings();
+        var userSettings = new UserSettings {
+            Locale = GetAutoLocale()
+        };
+        _logger?.LogInformation("Set locale: {locale}", userSettings.Locale.Title);
+        return userSettings;
+    }
+
+    private Locale GetAutoLocale()
+    {
         var systemCulture = CultureInfo.CurrentCulture;
         if (systemCulture.ThreeLetterISOLanguageName.Equals(_launcherStorage.Locales[0].Key)) {
-            userSettings.Locale = _launcherStorage.Locales[0];
+            return _launcherStorage.Locales[0];
         } else {
-            userSettings.Locale = _launcherStorage.Locales[1];
+            return _launcherStorage.Locales[1];
         }
-        _logger?.LogInformation("Set locale: {locale}", userSettings.Locale.Title);
-
-        return userSettings;
     }
 }
