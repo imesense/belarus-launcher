@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
 
+using ImeSense.Launchers.Belarus.Core.Storage;
+
 namespace ImeSense.Launchers.Belarus.Core.Validators;
 
 public sealed partial class StartGameValidator : IStartGameValidator
@@ -11,6 +13,6 @@ public sealed partial class StartGameValidator : IStartGameValidator
         (!string.IsNullOrWhiteSpace(serverAddress) &&
             IpAddressOrUrlRegex().IsMatch(serverAddress));
 
-    [GeneratedRegex(@"^(?:(?:https?|ftp):\/\/)?(?:www\.)?([a-zA-Z0-9-]+\.?)+[a-zA-Z]{2,}(?::\d+)?(?:\/[^\s]*)?$|^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?::\d+)?$")]
+    [GeneratedRegex(RegexPatternStorage.IpAddressPattern)]
     private static partial Regex IpAddressOrUrlRegex();
 }

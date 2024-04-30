@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
 
+using ImeSense.Launchers.Belarus.Core.Storage;
+
 namespace ImeSense.Launchers.Belarus.Core.Validators;
 
 public partial class AuthenticationValidator : IAuthenticationValidator
@@ -14,6 +16,6 @@ public partial class AuthenticationValidator : IAuthenticationValidator
         (!string.IsNullOrWhiteSpace(username) &&
             UsernameCharactersRegex().IsMatch(username));
 
-    [GeneratedRegex("^[a-zA-Z]+$")]
+    [GeneratedRegex(RegexPatternStorage.UsernamePattern)]
     private static partial Regex UsernameCharactersRegex();
 }
