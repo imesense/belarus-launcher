@@ -27,6 +27,19 @@ public class InitializerManager(
     private readonly IReleaseComparerService<GitHubRelease> _releaseComparerService = releaseComparerService;
     private readonly IUpdaterService _updaterService = updaterService;
 
+    public void InitializeLocale()
+    {
+        var userSettings = _userManager.UserSettings ??
+            throw new Exception("Error loading user config!");
+
+        if (userSettings.Locale is null) {
+            _logger?.LogError("Locale was not set");
+            userSettings.Locale = _launcherStorage.Locales[0];
+        }
+
+        _localeManager.SetLocale(userSettings.Locale.Key);
+    }
+
     public async Task InitializeAsync(ISplashScreenManager splashScreenManager)
     {
         try {
@@ -43,7 +56,6 @@ public class InitializerManager(
                 _logger?.LogError("User settings locale object is null. Default locale will be selected");
                 _userManager.UserSettings.Locale = _launcherStorage.Locales[0];
             }
-            var locale = _userManager.UserSettings.Locale;
 
             if (!Directory.Exists(DirectoryStorage.LauncherCache)) {
                 Directory.CreateDirectory(DirectoryStorage.LauncherCache);
@@ -53,56 +65,13 @@ public class InitializerManager(
                 _localeManager.GetStringByKey("LocalizedStrings.Loading"),
                 _localeManager.GetStringByKey("LocalizedStrings.AccessingRepository")));
 
-            _launcherStorage.IsCheckGitHubConnection = await CheckGitHubConnectionAsync(splashScreenManager.CancellationToken);
+            _launcherStorage.IsCheckGitHubConnection = await IsCheckGitHubConnectionAsync(splashScreenManager.CancellationToken);
             _logger?.LogInformation("Check GitHub connection time: {Time}", stopwatch.ElapsedMilliseconds);
 
             if (_launcherStorage.IsCheckGitHubConnection) {
-                var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(splashScreenManager.CancellationToken);
-                _logger?.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
-                if (!isLauncherReleaseCurrent) {
-                    var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base,
-                        FileNameStorage.SBLauncherUpdater);
-                    await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater, splashScreenManager.CancellationToken);
-
-                    var updater = Launcher.Launch(pathLauncherUpdater);
-                    updater?.Start();
-
-                    return;
-                }
-
-                _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: splashScreenManager.CancellationToken);
-                _logger?.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
-
-                _launcherStorage.IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
-                _launcherStorage.IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
-
-                if (_launcherStorage.IsGameReleaseCurrent) {
-                    var contentNews = await LocaleLoadCacheAsync<LangNewsContent>(PathStorage.NewsCache) ?? [];
-                    var isContentNews = contentNews.Any(x => x.Locale is not null && x.Locale.Key.Equals(_userManager.UserSettings.Locale.Key));
-                    if (isContentNews) {
-                        _launcherStorage.NewsContents = new(contentNews);
-                    } else {
-                        await LoadRemoteContent(splashScreenManager, locale);
-                    }
-
-                    var contentRes = await LocaleLoadCacheAsync<WebResource>(PathStorage.WebResourcesCache);
-                    if (contentRes is not null && contentRes.Count != 0) {
-                        _launcherStorage.WebResources = new(contentRes);
-                    } else {
-                        await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
-                    }
-                } else {
-                    await LoadRemoteContent(splashScreenManager, locale);
-                    await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
-                }
+                await HandleOnlineInitializationAsync(splashScreenManager, stopwatch);
             } else {
-                if (_launcherStorage.IsUserAuthorized) {
-                    _launcherStorage.NewsContents = new(LoadErrorNews(locale) ?? []);
-                } else {
-                    _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
-                }
-
-                _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, splashScreenManager.CancellationToken);
+                await HandleOfflineInitializationAsync(splashScreenManager);
             }
 
             stopwatch.Stop();
@@ -112,6 +81,87 @@ public class InitializerManager(
             _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
         }
+    }
+
+    private async Task HandleOnlineInitializationAsync(ISplashScreenManager splashScreenManager, Stopwatch stopwatch)
+    {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
+        var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(splashScreenManager.CancellationToken);
+        _logger?.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
+        if (!isLauncherReleaseCurrent) {
+            var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncherUpdater);
+            await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater, splashScreenManager.CancellationToken);
+
+            var updater = Launcher.Launch(pathLauncherUpdater);
+            updater?.Start();
+
+            return;
+        }
+
+        _launcherStorage.GitHubRelease = await _gitStorageApiService.GetLastReleaseAsync(cancellationToken: splashScreenManager.CancellationToken);
+        _logger?.LogInformation("Check last release time: {Time}", stopwatch.ElapsedMilliseconds);
+
+        _launcherStorage.IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
+        _launcherStorage.IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
+
+        if (_launcherStorage.IsGameReleaseCurrent) {
+            await HandleGameReleaseCurrentAsync(splashScreenManager);
+        } else {
+            await LoadRemoteContent(splashScreenManager, _userManager.UserSettings.Locale);
+            await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
+        }
+    }
+
+    private async Task HandleGameReleaseCurrentAsync(ISplashScreenManager splashScreenManager)
+    {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
+        var contentNews = await LocaleLoadCacheAsync<LangNewsContent>(PathStorage.NewsCache) ?? [];
+        var isContentNews = contentNews.Any(x => 
+                                            x.Locale is not null 
+                                            && _userManager.UserSettings.Locale is not null 
+                                            && x.Locale.Key.Equals(_userManager.UserSettings.Locale.Key));
+        if (isContentNews) {
+            _launcherStorage.NewsContents = new(contentNews);
+        } else {
+            await LoadRemoteContent(splashScreenManager, _userManager.UserSettings.Locale);
+        }
+
+        var contentRes = await LocaleLoadCacheAsync<WebResource>(PathStorage.WebResourcesCache);
+        if (contentRes is not null && contentRes.Count != 0) {
+            _launcherStorage.WebResources = new(contentRes);
+        } else {
+            await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
+        }
+    }
+
+    private async Task HandleOfflineInitializationAsync(ISplashScreenManager splashScreenManager)
+    {
+        if (_userManager is null) {
+            throw new NullReferenceException("User manager object is null");
+        }
+        if (_userManager.UserSettings is null) {
+            throw new NullReferenceException("User settings object is null");
+        }
+
+        if (_launcherStorage.IsUserAuthorized) {
+            _launcherStorage.NewsContents = new(LoadErrorNews(_userManager.UserSettings.Locale) ?? []);
+        } else {
+            _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
+        }
+
+        _launcherStorage.GitHubRelease = await FileDataHelper.LoadDataAsync<GitHubRelease>(PathStorage.CurrentRelease, splashScreenManager.CancellationToken);
     }
 
     private async Task LoadRemoteContent(ISplashScreenManager splashScreenManager, Locale? locale)
@@ -162,7 +212,7 @@ public class InitializerManager(
     /// Checks the connection to github.com.
     /// </summary>
     /// <returns>True if the connection is established successfully, otherwise false.</returns>
-    private async Task<bool> CheckGitHubConnectionAsync(CancellationToken cancellationToken = default)
+    private async Task<bool> IsCheckGitHubConnectionAsync(CancellationToken cancellationToken = default)
     {
         try {
             var response = await _httpClient.GetAsync("https://github.com", cancellationToken);
@@ -226,19 +276,6 @@ public class InitializerManager(
             _logger?.LogInformation("The release configuration has not been previously saved");
             return false;
         }
-    }
-
-    public void InitializeLocale()
-    {
-        var userSettings = _userManager.UserSettings ??
-            throw new Exception("Error loading user config!");
-
-        if (userSettings.Locale is null) {
-            _logger?.LogError("Locale was not set");
-            userSettings.Locale = _launcherStorage.Locales[0];
-        }
-
-        _localeManager.SetLocale(userSettings.Locale.Key);
     }
 
     private async Task RemoteLoadWebResourcesAsync(CancellationToken cancellationToken = default)
