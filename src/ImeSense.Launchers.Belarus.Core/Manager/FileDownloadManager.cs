@@ -4,19 +4,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class FileDownloadManager : IFileDownloadManager
+/// <summary>
+/// Default constructor
+/// </summary>
+public class FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClient httpClient) : IFileDownloadManager
 {
-    private readonly ILogger<FileDownloadManager>? _logger;
-    private readonly HttpClient _httpClient;
-
-    /// <summary>
-    /// Default constructor
-    /// </summary>
-    public FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClient httpClient)
-    {
-        _logger = logger;
-        _httpClient = httpClient;
-    }
+    private readonly ILogger<FileDownloadManager>? _logger = logger;
+    private readonly HttpClient _httpClient = httpClient;
 
     /// <summary>
     /// Downloads a file from the specified URL and saves it to the specified path.
@@ -93,9 +87,11 @@ public class FileDownloadManager : IFileDownloadManager
             }
         } catch (HttpRequestException ex) {
             _logger?.LogError("{Message}", ex.Message);
+            _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
         } catch (Exception ex) {
             _logger?.LogError("{Message}", ex.Message);
+            _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
         }
     }

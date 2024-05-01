@@ -15,14 +15,14 @@ public sealed class StartGameViewModelValidator(IStartGameValidator validator, I
     {
 
         return startGameViewModel.ValidationRule(viewModel => viewModel.IpAddress,
-            serverAddress => serverAddress != null && _validator.IsIpAddressNotEmpty(serverAddress),
+            serverAddress => serverAddress is not null && _validator.IsIpAddressNotEmpty(serverAddress),
             _localeManager.GetStringByKey("LocalizedStrings.IpAddressNotEntered"));
     }
 
     public ValidationHelper EnsureValidIpAddressOrUrl(StartGameViewModel startGameViewModel)
     {
         return startGameViewModel.ValidationRule(viewModel => viewModel.IpAddress,
-                serverAddress => serverAddress != null && _validator.IsValidIpAddressOrUrl(serverAddress),
+                serverAddress => serverAddress is not null && _validator.IsValidIpAddressOrUrl(serverAddress),
                 _localeManager.GetStringByKey("LocalizedStrings.InvalidIpAddress"));
     }
 }

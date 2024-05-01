@@ -125,7 +125,7 @@ public class DownloadMenuViewModel : ReactiveObject
             return;
         }
 
-        if (filesDownload != null && filesDownload.Any()) {
+        if (filesDownload is not null && filesDownload.Any()) {
             var countFiles = filesDownload.Count;
             var numberFile = 0;
             IsDownload = true;

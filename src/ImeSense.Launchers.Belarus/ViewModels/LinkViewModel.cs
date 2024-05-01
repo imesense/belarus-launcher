@@ -50,7 +50,7 @@ public class LinkViewModel : ReactiveObject
 
     private void Init()
     {
-        if (_launcherStorage.WebResources != null) {
+        if (_launcherStorage.WebResources is not null) {
             _logger?.LogInformation("Web resources are initialized");
             WebResources.AddRange(_launcherStorage.WebResources);
         } else {

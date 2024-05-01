@@ -14,21 +14,21 @@ public sealed class AuthenticationViewModelValidator(IAuthenticationValidator va
     public ValidationHelper EnsureUsernameNotEmpty(AuthorizationViewModel authorizationViewModel)
     {
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
-            username => username != null && _validator.IsUsernameNotEmpty(username),
+            username => username is not null && _validator.IsUsernameNotEmpty(username),
             _localeManager.GetStringByKey("LocalizedStrings.EnterNickName"));
     }
 
     public ValidationHelper EnsureUsernameCorrectLength(AuthorizationViewModel authorizationViewModel)
     {
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
-            username => username != null && _validator.IsUsernameCorrectLength(username),
+            username => username is not null && _validator.IsUsernameCorrectLength(username),
             _localeManager.GetStringByKey("LocalizedStrings.TooLongNickname"));
     }
 
     public ValidationHelper EnsureUsernameCorrectCharacters(AuthorizationViewModel authorizationViewModel)
     {
         return authorizationViewModel.ValidationRule(viewModel => viewModel.Username,
-            username => username != null && _validator.IsUsernameCorrectCharacters(username),
+            username => username is not null && _validator.IsUsernameCorrectCharacters(username),
             _localeManager.GetStringByKey("LocalizedStrings.InvalidCharacters"));
     }
 }

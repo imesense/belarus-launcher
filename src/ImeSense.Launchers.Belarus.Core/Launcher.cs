@@ -17,7 +17,7 @@ public static class Launcher
         var process = new Process {
             StartInfo = new ProcessStartInfo {
                 FileName = path,
-                Arguments = arguments != null
+                Arguments = arguments is not null
                     ? string.Join(" ", arguments)
                     : string.Empty,
                 WorkingDirectory = workingDirectory,
