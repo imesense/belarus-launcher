@@ -66,6 +66,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
             var userManager = _serviceProvider.GetRequiredService<UserManager>();
+            //UserManager.MigratorSettings();
 
             var splashScreenManager = _serviceProvider.GetRequiredService<ISplashScreenManager>();
             splashScreenManager.MaxProgress = 4;

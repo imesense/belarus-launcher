@@ -21,6 +21,20 @@ public class UserManager(ILogger<UserManager>? logger,
 
     public UserSettings? UserSettings { get; private set; }
 
+    public static void MigratorSettings()
+    {
+        // Проверяем существование текущих настроек
+        if (File.Exists(PathStorage.LauncherSetting)) {
+            return;
+        }
+
+        // Проверяем настройки версии 2.0 / 2.1
+        if (File.Exists(PathStorage.V2LauncherSetting)) {
+            File.Move(PathStorage.V2LauncherSetting, PathStorage.LauncherSetting);
+            return;
+        }
+    }
+
     public async Task LoadAsync(CancellationToken cancellationToken = default)
     {
         if (!File.Exists(PathStorage.LauncherSetting)) {
