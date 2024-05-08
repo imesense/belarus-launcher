@@ -24,9 +24,12 @@ try {
     }
 
     logger.LogInformation($"Start update");
-    var fileSavePath = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncher);
+    var fileSavePath = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncherZip);
+     
+    using var httpClient = new HttpClient(new HttpClientHandler {
+        SslProtocols = System.Security.Authentication.SslProtocols.Tls12
+    });
 
-    using var httpClient = new HttpClient();
     httpClient.BaseAddress = UriStorage.LauncherApiUri;
     httpClient.DefaultRequestHeaders.Accept.Clear();
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
@@ -38,7 +41,7 @@ try {
     await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath);
 
     logger.LogInformation($"Finish!");
-    Launcher.Launch(fileSavePath)?.Start();
+    Launcher.Launch(Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncher))?.Start();
 } catch (Exception ex) {
     logger.LogInformation("{Message}", ex.Message);
     logger.LogInformation("{StackTrace}", ex.StackTrace);

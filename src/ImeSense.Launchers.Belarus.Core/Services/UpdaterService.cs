@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
@@ -13,23 +15,23 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
 
     public async Task UpdaterAsync(Uri uri, string fileSavePath, CancellationToken cancellationToken = default)
     {
-        var appName = Path.GetFileNameWithoutExtension(fileSavePath);
-        var fullAppName = Path.GetFileName(fileSavePath);
+        var fileName = Path.GetFileNameWithoutExtension(fileSavePath);
+        var fullFileName = Path.GetFileName(fileSavePath);
 
         var lastRelease = await _gitStorageApiService.GetLastReleaseAsync(uri, cancellationToken)
             ?? throw new NullReferenceException("Latest release is null!");
-        var sblauncher = lastRelease.Assets?.FirstOrDefault(x => x.Name.Equals(fullAppName))
-            ?? throw new NullReferenceException($"{appName} asset is null!");
+        var sblauncher = lastRelease.Assets?.FirstOrDefault(x => x.Name.Equals(fullFileName))
+            ?? throw new NullReferenceException($"{fileName} asset is null!");
 
         if (sblauncher.BrowserDownloadUrl == null) {
             throw new NullReferenceException("Browser download url is null!");
         }
         var progress = new Progress<int>(percentage => {
-            _logger.LogInformation("{appName} is {percentage}% downloaded", appName, percentage);
+            _logger.LogInformation("{fileName} is {percentage}% downloaded", fileName, percentage);
         });
 
         var pathDownloadFolder = Path.Combine(DirectoryStorage.Base, "temp");
-        var fileDownloadPath = Path.Combine(pathDownloadFolder, fullAppName);
+        var fileDownloadPath = Path.Combine(pathDownloadFolder, fullFileName);
 
         if (!Directory.Exists(pathDownloadFolder)) {
             Directory.CreateDirectory(pathDownloadFolder);
@@ -37,13 +39,27 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
 
         await _fileDownloadManager.DownloadAsync(sblauncher.BrowserDownloadUrl, fileDownloadPath, progress, cancellationToken);
 
-        if (File.Exists(fileSavePath)) {
-            File.Delete(fileSavePath);
-        }
-        File.Move(fileDownloadPath, fileSavePath);
+        ExtractFile(fileDownloadPath, fileSavePath);
+        CleanUpTempFiles();
+    }
 
+    private static void ExtractFile(string sourcePath, string destinationPath)
+    {
+        if (Path.GetExtension(sourcePath).Equals(".zip", StringComparison.OrdinalIgnoreCase)) {
+            ZipFile.ExtractToDirectory(sourcePath, DirectoryStorage.Base, true);
+        } else {
+            if (File.Exists(destinationPath)) {
+                File.Delete(destinationPath);
+            }
+            File.Move(sourcePath, destinationPath);
+        }
+    }
+
+    private static void CleanUpTempFiles()
+    {
+        var pathDownloadFolder = Path.Combine(DirectoryStorage.Base, "temp");
         if (Directory.Exists(pathDownloadFolder)) {
-            Directory.Delete(pathDownloadFolder);
+            Directory.Delete(pathDownloadFolder, true);
         }
     }
 }

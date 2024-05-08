@@ -8,7 +8,9 @@ public static class FileNameStorage
     public static string CryptoHasherLog => "CryptoHasherReport-";
     public static string WebResources => "WebResources.json";
     public static string SBLauncher => "SBLauncher.exe";
+    public static string SBLauncherZip => "sblauncher-publish.zip";
     public static string SBLauncherUpdater => "SBLauncherUpdater.exe";
+    public static string SBLauncherUpdaterZip => "sblauncher-updater-publish.zip";
     public static string GameSetting => "user.ltx";
     public static string LauncherSetting => "sblauncher.json";
     public static string CurrentRelease => "CurrentRelease.json";

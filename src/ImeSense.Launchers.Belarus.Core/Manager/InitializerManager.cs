@@ -106,9 +106,10 @@ public class InitializerManager(
         var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(splashScreenManager.CancellationToken);
         _logger?.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
         if (!isLauncherReleaseCurrent) {
-            var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncherUpdater);
-            await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdater, splashScreenManager.CancellationToken);
+            var pathLauncherUpdaterZip = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncherUpdaterZip);
+            await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdaterZip, splashScreenManager.CancellationToken);
 
+            var pathLauncherUpdater = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncherUpdater);
             var updater = Launcher.Launch(pathLauncherUpdater);
             updater?.Start();
 
