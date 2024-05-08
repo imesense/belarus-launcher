@@ -23,7 +23,7 @@ internal static class ServiceCollectionExtensions
            .ConfigurePrimaryHttpMessageHandler(() => {
                return new HttpClientHandler {
                    SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-               }; ;
+               };
            }).ConfigureHttpClient(ConfigureClient);
         services.AddSingleton<UserManager>();
         services.AddSingleton<InitializerManager>();
@@ -40,7 +40,7 @@ internal static class ServiceCollectionExtensions
             {
                 return new HttpClientHandler {
                     SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-                }; ;
+                };
             })
             .ConfigureHttpClient(ConfigureClient);
         services.AddTransient<IReleaseComparerService<GitHubRelease>, ReleaseComparerService>();

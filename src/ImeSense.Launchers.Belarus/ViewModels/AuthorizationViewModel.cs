@@ -97,6 +97,16 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
             using var writer = new StreamWriter(PathStorage.GameUser, true);
             writer.WriteLine($"language {SelectedLanguage.Key}");
         }
+
+        // TODO: Удалить в следующем релизе
+        if (!File.Exists(PathStorage.LegacyGameUser)) {
+            if (!Directory.Exists(DirectoryStorage.LegacyUserData)) {
+                Directory.CreateDirectory(DirectoryStorage.LegacyUserData);
+            }
+
+            using var writer = new StreamWriter(PathStorage.LegacyGameUser, true);
+            writer.WriteLine($"language {SelectedLanguage.Key}");
+        }
         _launcherViewModel.SelectMenu();
         mainWindowViewModel.ShowLauncherImpl();
     }
