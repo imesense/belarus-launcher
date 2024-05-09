@@ -32,7 +32,7 @@
 
 ## Быстрый старт
 
-Вы можете получить последнюю версию приложения [на странице релизов] (https://github.com/imesense/belarus-launcher/releases).
+Вы можете получить последнюю версию приложения [на странице релизов](https://github.com/imesense/belarus-launcher/releases)
 
 ## Особенности
 
@@ -63,6 +63,10 @@
   ```console
   dotnet build BelarusLauncher.sln
   ```
+
+## Список изменений
+
+Все значимые изменения данного проекта задокументированы в [этом](./CHANGELOG.ru.md) файле
 
 ## Участники
 

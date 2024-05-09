@@ -32,7 +32,7 @@ Specialized launcher for Belarus modification for downloading and updating modif
 
 ## Quick Start
 
-You can get the latest release of the app [in the releases page](https://github.com/imesense/belarus-launcher/releases).
+You can get the latest release of the app [in the releases page](https://github.com/imesense/belarus-launcher/releases)
 
 ## Features
 
@@ -63,6 +63,10 @@ Launcher provides ease of use and easy access to the necessary functions so that
   ```console
   dotnet build BelarusLauncher.sln
   ```
+
+## Changelog
+
+All significant changes to this repository are documented in [this](CHANGELOG.md) file
 
 ## Contributors
 
