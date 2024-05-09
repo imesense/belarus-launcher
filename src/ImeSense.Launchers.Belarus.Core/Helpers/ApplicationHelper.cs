@@ -4,7 +4,7 @@ public static class ApplicationHelper
 {
     public static string GetAppVersion()
     {
-        return "2.1";
+        return "3.0";
     }
 
     public static string? GetCompanyName()
