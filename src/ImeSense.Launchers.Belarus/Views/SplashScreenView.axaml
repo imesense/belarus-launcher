@@ -6,8 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vm="using:ImeSense.Launchers.Belarus.ViewModels"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    Width="380"
     mc:Ignorable="d">
 
     <Design.DataContext>
@@ -16,10 +15,12 @@
 
     <Border
         Padding="30,30,30,0"
-        HorizontalAlignment="Center"
+        HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
         Classes="styled">
-        <StackPanel>
+        <StackPanel
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
             <TextBlock
                 Text="{Binding InformationMessage.Title}"
                 Margin="10"
@@ -30,11 +31,13 @@
 
             <TextBlock
                 Text="{Binding InformationMessage.Description}"
-                Margin="10,10"
-                HorizontalAlignment="Left"
+                Margin="10"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Classes="styled"
-                FontSize="20" />
+                FontSize="20"
+                TextAlignment="Center"
+                TextWrapping="WrapWithOverflow" />
 
             <ProgressBar
                 Value="{Binding Progress}"
