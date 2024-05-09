@@ -1,5 +1,5 @@
 #define MyAppName "Belarus Launcher"
-#define MyAppVersion "2.0"
+#define MyAppVersion "3.0"
 #define MyAppPublisher "ImeSense"
 #define MyAppURL "https://github.com/imesense/belarus-launcher"
 #define MyAppExeName "SBLauncher.exe"
@@ -36,6 +36,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "..\..\bin\Release\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\bin\Release\win-x64\publish\SBLauncherUpdater.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\Release\win-x64\publish\av_libglesv2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\Release\win-x64\publish\libHarfBuzzSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\Release\win-x64\publish\libSkiaSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
