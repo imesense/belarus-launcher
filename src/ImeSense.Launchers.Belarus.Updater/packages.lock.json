@@ -4,9 +4,9 @@
     "net8.0": {
       "Microsoft.DotNet.ILCompiler": {
         "type": "Direct",
-        "requested": "[8.0.4, )",
-        "resolved": "8.0.4",
-        "contentHash": "bVK6XD5E/BpkPmdrx99ZkloZZX3nOvTAcW+W6jW4cs8elWlLFAc9BXHk2esxSVHMiaCLiLdIJAyhUfhV50TW+Q=="
+        "requested": "[8.0.5, )",
+        "resolved": "8.0.5",
+        "contentHash": "tfdncRQLXNpATB4Ykj11O5+fbkBAHoeLi6XfyxAWmilU4rwC3apT612RIuhqB6tBGE69G7Dl1g7HeydsH3Wz1w=="
       },
       "Microsoft.Extensions.Logging": {
         "type": "Direct",
@@ -21,9 +21,9 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.4, )",
-        "resolved": "8.0.4",
-        "contentHash": "PZb5nfQ+U19nhnmnR9T1jw+LTmozhuG2eeuzuW5A7DqxD/UXW2ucjmNJqnqOuh8rdPzM3MQXoF8AfFCedJdCUw=="
+        "requested": "[8.0.5, )",
+        "resolved": "8.0.5",
+        "contentHash": "4ISW1Ndgz86FkIbu5rVlMqhhtojdy5rUlxC/N+9kPh9qbYcvHiCvYbHKzAPVIx9OPYIjT9trXt7JI42Y5Ukq6A=="
       },
       "Serilog.Extensions.Logging": {
         "type": "Direct",
