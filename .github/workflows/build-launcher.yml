@@ -68,8 +68,7 @@ jobs:
 
     - name: Restore dependencies
       run: |
-        dotnet restore $env:LauncherProject `
-          --locked-mode
+        dotnet restore $env:LauncherProject
 
     - name: Build launcher
       run: |
@@ -124,8 +123,7 @@ jobs:
 
     - name: Restore dependencies
       run: |
-        dotnet restore $env:UpdaterProject `
-          --locked-mode
+        dotnet restore $env:UpdaterProject
 
     - name: Build updater
       run: |

@@ -68,8 +68,7 @@ jobs:
 
     - name: Restore dependencies
       run: |
-        dotnet restore $env:HasherProject `
-          --locked-mode
+        dotnet restore $env:HasherProject
 
     - name: Build hasher
       run: |

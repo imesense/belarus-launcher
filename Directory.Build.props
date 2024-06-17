@@ -12,10 +12,6 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    </PropertyGroup>
-
-    <PropertyGroup>
         <TrimmerSingleWarn>false</TrimmerSingleWarn>
     </PropertyGroup>
 
