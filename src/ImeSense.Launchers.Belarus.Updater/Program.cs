@@ -35,10 +35,11 @@ try {
     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
     httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
 
+    var cancellationToken = new CancellationTokenSource();
     var updaterService = new UpdaterService(factory.CreateLogger<UpdaterService>(),
         new GitHubApiService(factory.CreateLogger<GitHubApiService>(), httpClient, null),
         new FileDownloadManager(factory.CreateLogger<FileDownloadManager>(), httpClient));
-    await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath);
+    await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath, cancellationToken.Token);
 
     logger.LogInformation($"Finish!");
     Launcher.Launch(Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncher))?.Start();

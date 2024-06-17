@@ -15,6 +15,8 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
 
     public async Task UpdaterAsync(Uri uri, string fileSavePath, CancellationToken cancellationToken = default)
     {
+        CleanUpTempFiles(); // Delete files if user canceled download
+
         var fileName = Path.GetFileNameWithoutExtension(fileSavePath);
         var fullFileName = Path.GetFileName(fileSavePath);
 
