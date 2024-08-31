@@ -5,12 +5,12 @@ using System.Reactive.Linq;
 
 using DynamicData;
 
-using ImeSense.Launchers.Belarus.Helpers;
-using ImeSense.Launchers.Belarus.Services;
-using ImeSense.Launchers.Belarus.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Helpers;
+using ImeSense.Launchers.Belarus.Services;
+using ImeSense.Launchers.Belarus.ViewModels.Validators;
 
 using Microsoft.Extensions.Logging;
 
@@ -164,9 +164,11 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     private void OnCommandException(Exception exception)
         => _logger?.LogError("{Message}", exception.Message);
 
-    protected virtual void Dispose(bool disposing)
+    protected new virtual void Dispose(bool disposing)
     {
         if (disposing) {
+            ValidationContext.Dispose();
+
             if (_disposables is not null) {
                 _disposables?.Dispose();
                 _disposables = null;
@@ -174,7 +176,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
         }
     }
 
-    public void Dispose()
+    public new void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);

@@ -2,9 +2,9 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.ViewModels.Validators;
-using ImeSense.Launchers.Belarus.Core.Manager;
 
 using Microsoft.Extensions.Logging;
 
@@ -86,7 +86,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     private void SetupValidation()
     {
         _logger?.LogInformation("StartGameViewModel: setup validation");
-        
+
         _disposables = [
             _startGameViewModelValidator.EnsureIpAddressNotEmpty(this),
             _startGameViewModelValidator.EnsureValidIpAddressOrUrl(this)
@@ -126,9 +126,11 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     private void OnCommandException(Exception exception)
         => _logger?.LogError("{Message}", exception.Message);
 
-    protected virtual void Dispose(bool disposing)
+    protected new virtual void Dispose(bool disposing)
     {
         if (disposing) {
+            ValidationContext.Dispose();
+
             if (_disposables is not null) {
                 _disposables?.Dispose();
                 _disposables = null;
@@ -136,7 +138,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
         }
     }
 
-    public void Dispose()
+    public new void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
