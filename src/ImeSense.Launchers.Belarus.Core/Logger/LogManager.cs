@@ -1,5 +1,4 @@
 using Serilog;
-using Serilog.Enrichers;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace ImeSense.Launchers.Belarus.Core.Logger;
@@ -26,7 +25,7 @@ public static class LogManager
         return new LoggerConfiguration()
             .Enrich.WithThreadId()
             .Enrich.WithThreadName()
-            .Enrich.WithProperty(ThreadNameEnricher.ThreadNamePropertyName, "MainThread")
+            .Enrich.WithProperty(name: "ThreadName", value: "MainThread")
             .WriteTo.Debug(outputTemplate: _outputTemplate)
             .WriteTo.File($"{pathLog}.log", outputTemplate: _outputTemplate, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5);
     }
