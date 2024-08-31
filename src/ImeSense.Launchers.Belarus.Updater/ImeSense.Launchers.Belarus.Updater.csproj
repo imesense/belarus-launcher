@@ -2,10 +2,10 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
-        
+
         <PublishAot>true</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
-        
+
         <AssemblyName>SBLauncherUpdater</AssemblyName>
         <ApplicationIcon>..\ImeSense.Launchers.Belarus\Assets\Icons\stalker_cs.ico</ApplicationIcon>
     </PropertyGroup>
@@ -15,8 +15,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-      <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" />
+        <PackageReference Include="Serilog.Extensions.Logging" />
     </ItemGroup>
 
     <ItemGroup>

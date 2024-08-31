@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        <OutputType>WinExe</OutputType>
+
         <InvariantGlobalization>false</InvariantGlobalization>
     </PropertyGroup>
 
@@ -22,10 +22,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
+        <PackageReference Include="Avalonia.Desktop" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj" />
+        <ProjectReference Include="..\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj" />
     </ItemGroup>
 </Project>

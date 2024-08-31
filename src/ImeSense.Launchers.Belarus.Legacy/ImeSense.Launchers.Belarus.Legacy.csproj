@@ -11,6 +11,8 @@
         <Authors>Drombeys</Authors>
 
         <PublishSingleFile>true</PublishSingleFile>
+
+        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     </PropertyGroup>
 
     <ItemGroup>

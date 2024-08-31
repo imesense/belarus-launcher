@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.markdownlint.json = .markdownlint.json
 		.vsconfig = .vsconfig
 		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
 		NuGet.config = NuGet.config
 		publish-hasher.bat = publish-hasher.bat
 		publish-installer.bat = publish-installer.bat
@@ -20,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImeSense.Launchers.Belarus.Desktop", "src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj", "{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Desktop", "src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj", "{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus", "src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -43,6 +44,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{909E77E9-FE72-41F3-A631-D552185DF754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{909E77E9-FE72-41F3-A631-D552185DF754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{909E77E9-FE72-41F3-A631-D552185DF754}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,10 +72,6 @@ Global
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C302503-C8E0-442C-BD33-7B70930858F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
