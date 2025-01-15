@@ -38,7 +38,7 @@ jobs:
           - Debug
           - Release
         framework:
-          - net8.0
+          - net9.0
 
     runs-on: ${{ matrix.system }}
 
@@ -54,7 +54,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -93,7 +93,7 @@ jobs:
           - Debug
           - Release
         framework:
-          - net8.0
+          - net9.0
 
     runs-on: ${{ matrix.system }}
 
@@ -109,7 +109,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -152,7 +152,7 @@ jobs:
         runtime:
           - win-x64
         framework:
-          - net8.0
+          - net9.0
 
     runs-on: ${{ matrix.system }}
 
@@ -168,7 +168,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -213,7 +213,7 @@ jobs:
         runtime:
           - win-x64
         framework:
-          - net8.0
+          - net9.0
 
     runs-on: ${{ matrix.system }}
 
@@ -229,7 +229,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -275,7 +275,7 @@ jobs:
         runtime:
           - win-x64
         framework:
-          - net8.0
+          - net9.0
 
     runs-on: ${{ matrix.system }}
 
