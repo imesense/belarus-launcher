@@ -1,7 +1,6 @@
 using System.Reactive;
 
 using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Models;
 
 using ReactiveUI;
