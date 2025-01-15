@@ -8,7 +8,6 @@ using DynamicData;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
-using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.ViewModels.Validators;
 
@@ -52,24 +51,12 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
         _logger = logger;
         _launcherStorage = launcherStorage;
         _localeManager = localeManager;
-        _windowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+        _windowManager = windowManager;
         _userManager = userManager;
         _authenticationViewModelValidator = authenticationViewModelValidator;
         _launcherViewModel = viewModelLocator.LauncherViewModel;
 
         SetupBinding();
-    }
-
-    public AuthorizationViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(AuthorizationViewModel)}");
-
-        _launcherStorage = null!;
-        _localeManager = null!;
-        _windowManager = null!;
-        _userManager = null!;
-        _authenticationViewModelValidator = null!;
-        _launcherViewModel = null!;
     }
 
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel)

@@ -7,11 +7,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:v="using:ImeSense.Launchers.Belarus.Views"
     xmlns:vm="using:ImeSense.Launchers.Belarus.ViewModels"
+    xmlns:helpers="clr-namespace:ImeSense.Launchers.Belarus.Helpers"
     d:DesignHeight="450"
     d:DesignWidth="360"
     mc:Ignorable="d">
+
     <Design.DataContext>
-        <vm:DownloadMenuViewModel />
+        <helpers:DesignTimeViewModelResolver x:TypeArguments="vm:DownloadMenuViewModel" />
     </Design.DataContext>
 
     <DockPanel

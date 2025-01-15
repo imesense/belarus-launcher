@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vm="using:ImeSense.Launchers.Belarus.ViewModels"
+    xmlns:helpers="clr-namespace:ImeSense.Launchers.Belarus.Helpers"
     Title="S.T.A.L.K.E.R. Belarus Launcher"
     Width="1135"
     Height="760"
@@ -18,9 +19,9 @@
     <Window.Background>
         <ImageBrush Source="../Assets/Images/background.png" />
     </Window.Background>
-
+    
     <Design.DataContext>
-        <vm:MainWindowViewModel />
+        <helpers:DesignTimeViewModelResolver x:TypeArguments="vm:MainWindowViewModel" />
     </Design.DataContext>
 
     <ContentControl

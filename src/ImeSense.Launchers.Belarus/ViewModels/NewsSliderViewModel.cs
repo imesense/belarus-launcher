@@ -27,8 +27,8 @@ public class NewsSliderViewModel : ReactiveObject
     [Reactive] public LinkViewModel LinkViewModel { get; set; }
     [Reactive] public ObservableCollection<NewsViewModel>? News { get; set; }
 
-    public ReactiveCommand<Unit, Unit> GoNext { get; set; } = null!;
-    public ReactiveCommand<Unit, Unit> GoBack { get; set; } = null!;
+    public ReactiveCommand<Unit, Unit> GoNext { get; set; }
+    public ReactiveCommand<Unit, Unit> GoBack { get; set; }
 
     public NewsSliderViewModel(ILogger<NewsSliderViewModel>? logger, ViewModelLocator viewModelLocator,
         ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager)
@@ -45,22 +45,8 @@ public class NewsSliderViewModel : ReactiveObject
         SetupBinding();
         SetupCommands();
 
-        var canLoadNews = this.WhenAnyValue(x => x._launcherStorage.NewsContents)
-            .Any(news => news != null && news.Any());
-
-        var reloadNewsCommand = ReactiveCommand.Create<string>((lang) => {
-            _logger?.LogInformation("Language has been changed!");
-            ReloadNews(lang);
-        }, canLoadNews);
-        this.WhenAnyValue(x => x._localeManager.Locale)
-            .InvokeCommand(reloadNewsCommand);
-
-        this.WhenAnyValue(x => x._launcherStorage.NewsContents)
-            .Where(news => news != null && !string.IsNullOrEmpty(_localeManager.Locale) && news.Any())
-            .Subscribe((n) => {
-                var locale = _localeManager.Locale;
-                ReloadNews(locale);
-            });
+        GoNext = GoNext ?? throw new NullReferenceException(nameof(GoNext));
+        GoBack = GoBack ?? throw new NullReferenceException(nameof(GoBack));
     }
 
     private void ReloadNews(string locale)
@@ -86,16 +72,6 @@ public class NewsSliderViewModel : ReactiveObject
         }
     }
 
-    public NewsSliderViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(NewsSliderViewModel)}");
-
-        LinkViewModel = null!;
-        _viewModelLocator = null!;
-        _launcherStorage = null!;
-        _localeManager = null!;
-    }
-
     private void SetupCommands()
     {
         var canExecuteBack = this.WhenAnyValue(x => x.NumPage,
@@ -111,6 +87,17 @@ public class NewsSliderViewModel : ReactiveObject
         GoNext.ThrownExceptions.Merge(GoBack.ThrownExceptions)
             .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
             .Subscribe(OnCommandException);
+
+
+        var canLoadNews = this.WhenAnyValue(x => x._launcherStorage.NewsContents)
+            .Any(news => news != null && news.Any());
+
+        var reloadNewsCommand = ReactiveCommand.Create<string>((lang) => {
+            _logger?.LogInformation("Language has been changed!");
+            ReloadNews(lang);
+        }, canLoadNews);
+        this.WhenAnyValue(x => x._localeManager.Locale)
+            .InvokeCommand(reloadNewsCommand);
     }
 
     private void SetupBinding()
@@ -122,6 +109,13 @@ public class NewsSliderViewModel : ReactiveObject
                 if (News is not null && News.Any()) {
                     SelectedNewsViewModel = News[x];
                 }
+            });
+
+        this.WhenAnyValue(x => x._launcherStorage.NewsContents)
+            .Where(news => news != null && !string.IsNullOrEmpty(_localeManager.Locale) && news.Any())
+            .Subscribe((n) => {
+                var locale = _localeManager.Locale;
+                ReloadNews(locale);
             });
     }
 

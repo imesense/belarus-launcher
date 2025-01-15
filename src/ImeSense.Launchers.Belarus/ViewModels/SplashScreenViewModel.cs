@@ -18,16 +18,8 @@ public class SplashScreenViewModel : ReactiveObject
     [Reactive] public int Progress { get; set; }
     public int MaxProgress { get; private set; }
 
-    public ReactiveCommand<Unit, Unit> Cancel { get; set; } = null!;
+    public ReactiveCommand<Unit, Unit> Cancel { get; set; }
     
-    public SplashScreenViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(StartGameViewModel)}");
-
-        _windowManager = null!;
-        SplashScreen = null!;
-    }
-
     public SplashScreenViewModel(IWindowManager windowManager, ISplashScreenManager splashScreen)
     {
         _windowManager = windowManager;

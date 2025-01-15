@@ -41,19 +41,6 @@ public class MainWindowViewModel : ReactiveObject
         _splashScreenViewModel = _viewModelLocator.SplashScreenViewModel;
     }
 
-    public MainWindowViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(MainWindowViewModel)}");
-
-        _startGameViewModel = null!;
-        _launcherViewModel = null!;
-        _launcherStorage = null!;
-        _updaterService = null!;
-        _viewModelLocator = null!;
-        _localeManager = null!;
-        _splashScreenViewModel = null!;
-    }
-
     public async Task InitializeAsync(ISplashScreenManager splashScreenManager)
     {
         var stopwatch = new Stopwatch();

@@ -25,7 +25,7 @@ public class LauncherViewModel : ReactiveObject
     public string AppVersion { get; set; }
     public string CompanyName { get; set; }
 
-    [Reactive] public ReactiveObject PageMenuViewModel { get; set; } = null!;
+    [Reactive] public ReactiveObject? PageMenuViewModel { get; set; }
     [Reactive] public NewsSliderViewModel NewsSliderViewModel { get; set; }
 
     public ReactiveCommand<Unit, Unit>? OpenMainRepositoryUriCommand { get; set; }
@@ -54,33 +54,11 @@ public class LauncherViewModel : ReactiveObject
         OpenOrganizationUriCommand = ReactiveCommand.Create(() => OpenUrl(UriStorage.ImeSenseUri.AbsoluteUri));
     }
 
-    public LauncherViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LauncherViewModel)}");
-
-        _downloadMenuViewModel = null!;
-        _gameMenuViewModel = null!;
-        _directoryValidator = null!;
-        _websiteLauncher = null!;
-
-        AppVersion = null!;
-        CompanyName = null!;
-
-        NewsSliderViewModel = null!;
-
-        OpenMainRepositoryUriCommand = null!;
-        OpenOrganizationUriCommand = null!;
-    }
-
     private void OpenUrl(string uri) => _websiteLauncher.OpenWebsite(uri);
 
     public void SelectMenu()
     {
-        if (_directoryValidator.IsDirectoryValid()) {
-            PageMenuViewModel = _gameMenuViewModel;
-        } else {
-            PageMenuViewModel = _downloadMenuViewModel;
-        }
+        PageMenuViewModel = _directoryValidator.IsDirectoryValid() ? _gameMenuViewModel : _downloadMenuViewModel;
     }
 
     public async Task SelectUpdateMenuAsync()

@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.ViewModels.Validators;
 
 using Microsoft.Extensions.Logging;
@@ -22,7 +21,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
     private readonly StartGameViewModelValidator _startGameViewModelValidator;
-    private CompositeDisposable? _disposables = null;
+    private CompositeDisposable? _disposables;
 
     [Reactive] public string IpAddress { get; set; }
 
@@ -53,19 +52,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
         SetupCommands();
     }
-
-    public StartGameViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(StartGameViewModel)}");
-
-        _userManager = null!;
-        _windowManager = null!;
-        _localeManager = null!;
-        _startGameViewModelValidator = null!;
-
-        IpAddress = null!;
-    }
-
+    
     private void SetupCommands()
     {
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());

@@ -1,7 +1,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
-using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
@@ -23,9 +22,9 @@ public class DownloadMenuViewModel : ReactiveObject
     private CancellationTokenSource _cts;
 
     public CancellationToken CancellationToken { get; private set; }
-    public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; } = null!;
-    public ReactiveCommand<Unit, Unit> Pause { get; private set; } = null!;
-    public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
+    public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; }
+    public ReactiveCommand<Unit, Unit> Pause { get; private set; }
+    public ReactiveCommand<Unit, Unit> Close { get; private set; }
 
     [Reactive] public int DownloadProgress { get; set; } = 0;
     [Reactive] public string StatusProgress { get; set; } = string.Empty;
@@ -52,17 +51,10 @@ public class DownloadMenuViewModel : ReactiveObject
         _cts = null!;
 
         SetupCommands();
-    }
 
-    public DownloadMenuViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(DownloadMenuViewModel)}");
-
-        _localeManager = null!;
-        _windowManager = null!;
-        _downloadResourcesService = null!;
-        _launcherStorage = null!;
-        _cts = new();
+        StartDownload = StartDownload ?? throw new NullReferenceException(nameof(StartDownload));
+        Pause = Pause ?? throw new NullReferenceException(nameof(Pause));
+        Close = Close ?? throw new NullReferenceException(nameof(Close));
     }
 
     public async Task UpdateAsync(LauncherViewModel launcherViewModel)

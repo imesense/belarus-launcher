@@ -22,12 +22,4 @@ public class NewsViewModel : ReactiveObject
         Title = newsContent.Title;
         Description = newsContent.Description;
     }
-
-    public NewsViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(NewsViewModel)}");
-
-        Title = null!;
-        Description = null!;
-    }
 }

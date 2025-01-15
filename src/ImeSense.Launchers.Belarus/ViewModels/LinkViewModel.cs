@@ -22,7 +22,7 @@ public class LinkViewModel : ReactiveObject
     private readonly IWebsiteLauncher _websiteLauncher;
     private readonly ILauncherStorage _launcherStorage;
 
-    public ObservableCollection<WebResource> WebResources { get; set; } = new();
+    public ObservableCollection<WebResource> WebResources { get; set; } = [];
     public ReactiveCommand<string, Unit> OpenUrlCommand { get; set; }
 
     public LinkViewModel(ILogger<LinkViewModel>? logger, IWebsiteLauncher websiteLauncher,
@@ -37,15 +37,6 @@ public class LinkViewModel : ReactiveObject
         this.WhenAnyValue(x => x._launcherStorage.WebResources)
             .Where(webRes => webRes != null && webRes.Any())
             .Subscribe((n) => Init());
-    }
-
-    public LinkViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(LinkViewModel)}");
-
-        _websiteLauncher = null!;
-        OpenUrlCommand = null!;
-        _launcherStorage = null!;
     }
 
     private void Init()

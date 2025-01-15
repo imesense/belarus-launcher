@@ -1,7 +1,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 
-using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Storage;
@@ -20,10 +19,10 @@ public class GameMenuViewModel : ReactiveObject
     private readonly ILauncherStorage _launcherStorage;
     private readonly UserManager _userManager;
 
-    public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; } = null!;
-    public ReactiveCommand<Unit, Unit> StartServer { get; private set; } = null!;
-    public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; } = null!;
-    public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
+    public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; }
+    public ReactiveCommand<Unit, Unit> StartServer { get; private set; }
+    public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; }
+    public ReactiveCommand<Unit, Unit> Close { get; private set; }
 
     [Reactive] public bool IsStartServer { get; set; } = false;
 
@@ -36,15 +35,11 @@ public class GameMenuViewModel : ReactiveObject
         _launcherStorage = launcherStorage;
 
         SetupCommands();
-    }
 
-    public GameMenuViewModel()
-    {
-        ExceptionHelper.ThrowIfEmptyConstructorNotInDesignTime($"{nameof(GameMenuViewModel)}");
-
-        _windowManager = null!;
-        _userManager = null!;
-        _launcherStorage = null!;
+        PlayGame = PlayGame ?? throw new NullReferenceException(nameof(PlayGame));
+        StartServer = StartServer ?? throw new NullReferenceException(nameof(StartServer));
+        CheckUpdates = CheckUpdates ?? throw new NullReferenceException(nameof(CheckUpdates));
+        Close = Close ?? throw new NullReferenceException(nameof(Close));
     }
 
     private void SetupCommands()
