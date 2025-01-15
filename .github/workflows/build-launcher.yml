@@ -59,9 +59,9 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          key: Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          key: Launcher-NuGet-${{ hashFiles('Directory.Packages.props') }}
           restore-keys: |
-            Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Launcher-NuGet-${{ hashFiles('Directory.Packages.props') }}
             Launcher-NuGet-
           path: |
             ~/.nuget/packages
@@ -114,9 +114,9 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          key: Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          key: Updater-NuGet-${{ hashFiles('Directory.Packages.props') }}
           restore-keys: |
-            Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Updater-NuGet-${{ hashFiles('Directory.Packages.props') }}
             Updater-NuGet-
           path: |
             ~/.nuget/packages
@@ -173,9 +173,9 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          key: Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          key: Launcher-NuGet-${{ hashFiles('Directory.Packages.props') }}
           restore-keys: |
-            Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Launcher-NuGet-${{ hashFiles('Directory.Packages.props') }}
             Launcher-NuGet-
           path: |
             ~/.nuget/packages
@@ -234,9 +234,9 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          key: Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          key: Updater-NuGet-${{ hashFiles('Directory.Packages.props') }}
           restore-keys: |
-            Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Updater-NuGet-${{ hashFiles('Directory.Packages.props') }}
             Updater-NuGet-
           path: |
             ~/.nuget/packages
