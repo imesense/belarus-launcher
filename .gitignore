@@ -4,6 +4,7 @@
 .vs/
 *.suo
 *.user
+launchSettings.json
 
 # Visual Studio Code cache and settings
 .vscode/*
