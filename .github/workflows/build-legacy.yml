@@ -3,24 +3,24 @@ name: 'Build legacy'
 on:
   push:
     branches:
-    - '**'
+      - '**'
     paths:
-    - '.github/workflows/**'
-    - 'src/**'
-    - '*.sln'
-    - '*.config'
-    - '*.props'
-    - '*.targets'
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.config'
+      - '*.props'
+      - '*.targets'
   pull_request:
     branches:
-    - '**'
+      - '**'
     paths:
-    - '.github/workflows/**'
-    - 'src/**'
-    - '*.sln'
-    - '*.config'
-    - '*.props'
-    - '*.targets'
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.config'
+      - '*.props'
+      - '*.targets'
 
 defaults:
   run:
@@ -33,12 +33,12 @@ jobs:
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Debug
-        - Release
+          - Debug
+          - Release
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -46,57 +46,58 @@ jobs:
       LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Legacy-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Legacy-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Restore dependencies
-      run: |
-        dotnet restore $env:LauncherProject
+      - name: Restore dependencies
+        run: |
+          dotnet restore $env:LauncherProject
 
-    - name: Build launcher
-      run: |
-        dotnet build $env:LauncherProject `
-          --configuration ${{ matrix.config }} `
-          --no-restore
+      - name: Build launcher
+        run: |
+          dotnet build $env:LauncherProject `
+            --configuration ${{ matrix.config }} `
+            --no-restore
 
-    - name: Upload launcher
-      uses: actions/upload-artifact@v4
-      with:
-        name: launcher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/
+      - name: Upload launcher
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/
 
   publish-launcher:
     name: 'Publish launcher'
 
-    needs: build-launcher
+    needs:
+      - build-launcher
 
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Release
+          - Release
         runtime:
-        - win-x64
+          - win-x64
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -104,40 +105,40 @@ jobs:
       LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Legacy-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Legacy-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Legacy-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Publish launcher
-      run: |
-        dotnet publish $env:LauncherProject `
-          --configuration ${{ matrix.config }} `
-          --runtime ${{ matrix.runtime }} `
-          --self-contained true `
-          -p:PublishSingleFile=true `
-          -p:IncludeAllContentForSelfExtract=true `
-          -p:EnableCompressionInSingleFile=true `
-          -p:DebugSymbols=false `
-          -p:DebugType=None
+      - name: Publish launcher
+        run: |
+          dotnet publish $env:LauncherProject `
+            --configuration ${{ matrix.config }} `
+            --runtime ${{ matrix.runtime }} `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeAllContentForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:DebugSymbols=false `
+            -p:DebugType=None
 
-    - name: Upload launcher
-      uses: actions/upload-artifact@v4
-      with:
-        name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+      - name: Upload launcher
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/

@@ -3,24 +3,24 @@ name: 'Build hasher'
 on:
   push:
     branches:
-    - '**'
+      - '**'
     paths:
-    - '.github/workflows/**'
-    - 'src/**'
-    - '*.sln'
-    - '*.config'
-    - '*.props'
-    - '*.targets'
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.config'
+      - '*.props'
+      - '*.targets'
   pull_request:
     branches:
-    - '**'
+      - '**'
     paths:
-    - '.github/workflows/**'
-    - 'src/**'
-    - '*.sln'
-    - '*.config'
-    - '*.props'
-    - '*.targets'
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.config'
+      - '*.props'
+      - '*.targets'
 
 defaults:
   run:
@@ -33,12 +33,12 @@ jobs:
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Debug
-        - Release
+          - Debug
+          - Release
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -46,57 +46,58 @@ jobs:
       HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Hasher-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Hasher-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Restore dependencies
-      run: |
-        dotnet restore $env:HasherProject
+      - name: Restore dependencies
+        run: |
+          dotnet restore $env:HasherProject
 
-    - name: Build hasher
-      run: |
-        dotnet build $env:HasherProject `
-          --configuration ${{ matrix.config }} `
-          --no-restore
+      - name: Build hasher
+        run: |
+          dotnet build $env:HasherProject `
+            --configuration ${{ matrix.config }} `
+            --no-restore
 
-    - name: Upload hasher
-      uses: actions/upload-artifact@v4
-      with:
-        name: hasher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/
+      - name: Upload hasher
+        uses: actions/upload-artifact@v4
+        with:
+          name: hasher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/
 
   publish-hasher:
     name: 'Publish hasher'
 
-    needs: build-hasher
+    needs:
+      - build-hasher
 
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Release
+          - Release
         runtime:
-        - win-x64
+          - win-x64
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -104,40 +105,40 @@ jobs:
       HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Hasher-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Hasher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Hasher-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Publish hasher
-      run: |
-        dotnet publish $env:HasherProject `
-          --configuration ${{ matrix.config }} `
-          --runtime ${{ matrix.runtime }} `
-          --self-contained true `
-          -p:PublishAot=true `
-          -p:InvariantGlobalization=false `
-          -p:IsAotCompatible=true `
-          -p:DebugSymbols=false `
-          -p:DebugType=None
+      - name: Publish hasher
+        run: |
+          dotnet publish $env:HasherProject `
+            --configuration ${{ matrix.config }} `
+            --runtime ${{ matrix.runtime }} `
+            --self-contained true `
+            -p:PublishAot=true `
+            -p:InvariantGlobalization=false `
+            -p:IsAotCompatible=true `
+            -p:DebugSymbols=false `
+            -p:DebugType=None
 
-    - name: Upload hasher
-      uses: actions/upload-artifact@v4
-      with:
-        name: hasher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+      - name: Upload hasher
+        uses: actions/upload-artifact@v4
+        with:
+          name: hasher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/

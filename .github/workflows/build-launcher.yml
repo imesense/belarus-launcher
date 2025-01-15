@@ -3,24 +3,24 @@ name: 'Build launcher'
 on:
   push:
     branches:
-    - '**'
+      - '**'
     paths:
-    - '.github/workflows/**'
-    - 'src/**'
-    - '*.sln'
-    - '*.config'
-    - '*.props'
-    - '*.targets'
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.config'
+      - '*.props'
+      - '*.targets'
   pull_request:
     branches:
-    - '**'
+      - '**'
     paths:
-    - '.github/workflows/**'
-    - 'src/**'
-    - '*.sln'
-    - '*.config'
-    - '*.props'
-    - '*.targets'
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.config'
+      - '*.props'
+      - '*.targets'
 
 defaults:
   run:
@@ -33,12 +33,12 @@ jobs:
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Debug
-        - Release
+          - Debug
+          - Release
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -46,41 +46,41 @@ jobs:
       LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Launcher-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Launcher-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Restore dependencies
-      run: |
-        dotnet restore $env:LauncherProject
+      - name: Restore dependencies
+        run: |
+          dotnet restore $env:LauncherProject
 
-    - name: Build launcher
-      run: |
-        dotnet build $env:LauncherProject `
-          --configuration ${{ matrix.config }} `
-          --no-restore
+      - name: Build launcher
+        run: |
+          dotnet build $env:LauncherProject `
+            --configuration ${{ matrix.config }} `
+            --no-restore
 
-    - name: Upload launcher
-      uses: actions/upload-artifact@v4
-      with:
-        name: launcher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/
+      - name: Upload launcher
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/
 
   build-updater:
     name: 'Build updater'
@@ -88,12 +88,12 @@ jobs:
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Debug
-        - Release
+          - Debug
+          - Release
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -101,57 +101,58 @@ jobs:
       UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Updater-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Updater-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Restore dependencies
-      run: |
-        dotnet restore $env:UpdaterProject
+      - name: Restore dependencies
+        run: |
+          dotnet restore $env:UpdaterProject
 
-    - name: Build updater
-      run: |
-        dotnet build $env:UpdaterProject `
-          --configuration ${{ matrix.config }} `
-          --no-restore
+      - name: Build updater
+        run: |
+          dotnet build $env:UpdaterProject `
+            --configuration ${{ matrix.config }} `
+            --no-restore
 
-    - name: Upload updater
-      uses: actions/upload-artifact@v4
-      with:
-        name: updater-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/
+      - name: Upload updater
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-${{ matrix.framework }}-${{ matrix.config }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/
 
   publish-launcher:
     name: 'Publish launcher'
 
-    needs: build-launcher
+    needs:
+      - build-launcher
 
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Release
+          - Release
         runtime:
-        - win-x64
+          - win-x64
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -159,59 +160,60 @@ jobs:
       LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Launcher-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Launcher-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Launcher-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Publish launcher
-      run: |
-        dotnet publish $env:LauncherProject `
-          --configuration ${{ matrix.config }} `
-          --runtime ${{ matrix.runtime }} `
-          --self-contained true `
-          -p:PublishAot=true `
-          -p:InvariantGlobalization=false `
-          -p:IsAotCompatible=true `
-          -p:DebugSymbols=false `
-          -p:DebugType=None
+      - name: Publish launcher
+        run: |
+          dotnet publish $env:LauncherProject `
+            --configuration ${{ matrix.config }} `
+            --runtime ${{ matrix.runtime }} `
+            --self-contained true `
+            -p:PublishAot=true `
+            -p:InvariantGlobalization=false `
+            -p:IsAotCompatible=true `
+            -p:DebugSymbols=false `
+            -p:DebugType=None
 
-    - name: Upload launcher
-      uses: actions/upload-artifact@v4
-      with:
-        name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+      - name: Upload launcher
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
   publish-updater:
     name: 'Publish updater'
 
-    needs: build-updater
+    needs:
+      - build-updater
 
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Release
+          - Release
         runtime:
-        - win-x64
+          - win-x64
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
@@ -219,89 +221,89 @@ jobs:
       UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        key: Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
-          Updater-NuGet-
-        path: |
-          ~/.nuget/packages
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          key: Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            Updater-NuGet-${{ hashFiles('**/packages.lock.json') }}
+            Updater-NuGet-
+          path: |
+            ~/.nuget/packages
 
-    - name: Publish updater
-      run: |
-        dotnet publish $env:UpdaterProject `
-          --configuration ${{ matrix.config }} `
-          --runtime ${{ matrix.runtime }} `
-          --self-contained true `
-          -p:PublishAot=true `
-          -p:InvariantGlobalization=false `
-          -p:IsAotCompatible=true `
-          -p:DebugSymbols=false `
-          -p:DebugType=None
+      - name: Publish updater
+        run: |
+          dotnet publish $env:UpdaterProject `
+            --configuration ${{ matrix.config }} `
+            --runtime ${{ matrix.runtime }} `
+            --self-contained true `
+            -p:PublishAot=true `
+            -p:InvariantGlobalization=false `
+            -p:IsAotCompatible=true `
+            -p:DebugSymbols=false `
+            -p:DebugType=None
 
-    - name: Upload updater
-      uses: actions/upload-artifact@v4
-      with:
-        name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+      - name: Upload updater
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
   pack-installer:
     name: 'Pack installer'
 
     needs:
-    - publish-launcher
-    - publish-updater
+      - publish-launcher
+      - publish-updater
 
     strategy:
       matrix:
         system:
-        - windows-2022
+          - windows-2022
         config:
-        - Release
+          - Release
         runtime:
-        - win-x64
+          - win-x64
         framework:
-        - net8.0
+          - net8.0
 
     runs-on: ${{ matrix.system }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Get launcher
-      uses: actions/download-artifact@v4
-      with:
-        name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+      - name: Get launcher
+        uses: actions/download-artifact@v4
+        with:
+          name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
-    - name: Get updater
-      uses: actions/download-artifact@v4
-      with:
-        name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
+      - name: Get updater
+        uses: actions/download-artifact@v4
+        with:
+          name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
-    - name: Publish installer
-      shell: cmd
-      run: |
-        "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\ImeSense.Launchers.Belarus.Setup\Setup.iss
+      - name: Publish installer
+        shell: cmd
+        run: |
+          "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\ImeSense.Launchers.Belarus.Setup\Setup.iss
 
-    - name: Upload installer
-      uses: actions/upload-artifact@v4
-      with:
-        name: installer-${{ matrix.runtime }}-${{ github.sha }}
-        path: bin/SBLauncherInstaller.exe
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.runtime }}-${{ github.sha }}
+          path: bin/SBLauncherInstaller.exe
