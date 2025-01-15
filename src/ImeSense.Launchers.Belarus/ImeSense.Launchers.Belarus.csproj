@@ -18,7 +18,10 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia" />
-        <PackageReference Include="Avalonia.Diagnostics" Condition="'$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Avalonia.Diagnostics">
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Avalonia.Fonts.Inter" />
         <PackageReference Include="Avalonia.ReactiveUI" />
         <PackageReference Include="Avalonia.Themes.Fluent" />
