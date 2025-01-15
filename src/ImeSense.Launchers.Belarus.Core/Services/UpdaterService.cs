@@ -32,7 +32,7 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
             _logger.LogInformation("{fileName} is {percentage}% downloaded", fileName, percentage);
         });
 
-        var pathDownloadFolder = Path.Combine(DirectoryStorage.Base, "temp");
+        var pathDownloadFolder = Path.Combine(DirectoryStorage.CurrentDirectory, "temp");
         var fileDownloadPath = Path.Combine(pathDownloadFolder, fullFileName);
 
         if (!Directory.Exists(pathDownloadFolder)) {
@@ -48,7 +48,7 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
     private static void ExtractFile(string sourcePath, string destinationPath)
     {
         if (Path.GetExtension(sourcePath).Equals(".zip", StringComparison.OrdinalIgnoreCase)) {
-            ZipFile.ExtractToDirectory(sourcePath, DirectoryStorage.Base, true);
+            ZipFile.ExtractToDirectory(sourcePath, DirectoryStorage.CurrentDirectory, true);
         } else {
             if (File.Exists(destinationPath)) {
                 File.Delete(destinationPath);
@@ -59,7 +59,7 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
 
     private static void CleanUpTempFiles()
     {
-        var pathDownloadFolder = Path.Combine(DirectoryStorage.Base, "temp");
+        var pathDownloadFolder = Path.Combine(DirectoryStorage.CurrentDirectory, "temp");
         if (Directory.Exists(pathDownloadFolder)) {
             Directory.Delete(pathDownloadFolder, true);
         }

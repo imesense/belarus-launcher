@@ -71,7 +71,7 @@ public class DownloadResourcesService(ILogger<DownloadResourcesService> logger,
                 continue;
             }
         #endif
-            var filePath = Path.Combine(DirectoryStorage.Base, assetFile.Directory, assetFile.Title);
+            var filePath = Path.Combine(DirectoryStorage.CurrentDirectory, assetFile.Directory, assetFile.Title);
 
             if (!File.Exists(filePath)) {
                 filesRes.TryAdd(filePath, asset.BrowserDownloadUrl);

@@ -24,7 +24,7 @@ try {
     }
 
     logger.LogInformation($"Start update");
-    var fileSavePath = Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncherZip);
+    var fileSavePath = Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncherZip);
      
     using var httpClient = new HttpClient(new HttpClientHandler {
         SslProtocols = System.Security.Authentication.SslProtocols.Tls12
@@ -42,7 +42,7 @@ try {
     await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath, cancellationToken.Token);
 
     logger.LogInformation($"Finish!");
-    Launcher.Launch(Path.Combine(DirectoryStorage.Base, FileNameStorage.SBLauncher))?.Start();
+    Launcher.Launch(Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncher))?.Start();
 } catch (Exception ex) {
     logger.LogInformation("{Message}", ex.Message);
     logger.LogInformation("{StackTrace}", ex.StackTrace);
