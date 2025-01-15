@@ -13,9 +13,7 @@ public class LauncherViewModel : ViewModelBase, IRoutableViewModel
 
     public LauncherViewModel(MenuViewModel menuViewModel, StartGameViewModel startGameViewModel, NewsSliderViewModel newsSliderViewModel)
     {
-        if (menuViewModel is null) {
-            throw new ArgumentNullException(nameof(menuViewModel));
-        }
+        ArgumentNullException.ThrowIfNull(menuViewModel);
 
         MenuViewModel = menuViewModel;
         MenuViewModel.LauncherViewModel = this;

@@ -27,9 +27,7 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
     {
         _windowManager = windowManager;
 
-        if (launcherViewModel is null) {
-            throw new ArgumentNullException(nameof(launcherViewModel));
-        }
+        ArgumentNullException.ThrowIfNull(launcherViewModel);
 
         _userSettings = userSettings;
 
@@ -52,9 +50,8 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
 
     private void NextImpl()
     {
-        if (HostScreen is null) {
-            throw new ArgumentNullException(nameof(HostScreen));
-        }
+        ArgumentNullException.ThrowIfNull(HostScreen);
+
         if (string.IsNullOrWhiteSpace(UserName)) {
             throw new Exception("Имя пользователя не введено!");
         }

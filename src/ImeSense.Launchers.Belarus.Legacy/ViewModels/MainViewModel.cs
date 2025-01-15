@@ -15,8 +15,8 @@ public class MainViewModel : ViewModelBase, IScreen
 
     public MainViewModel(AuthorizationViewModel authorizationViewModel, LauncherViewModel launcherViewModel, UserSettings userSettings)
     {
-        _authorizationViewModel = authorizationViewModel ?? throw new ArgumentNullException(nameof(authorizationViewModel));
-        _launcherViewModel = launcherViewModel ?? throw new ArgumentNullException(nameof(launcherViewModel)); ;
+        _authorizationViewModel = authorizationViewModel;
+        _launcherViewModel = launcherViewModel;
 
         _authorizationViewModel.HostScreen = this;
         _launcherViewModel.HostScreen = this;

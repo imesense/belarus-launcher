@@ -11,9 +11,8 @@ public static class ConfigManager
 {
     public static void SaveSettings(UserSettings settings)
     {
-        if (settings is null) {
-            throw new ArgumentNullException(nameof(settings));
-        }
+        ArgumentNullException.ThrowIfNull(settings);
+
         if (string.IsNullOrEmpty(settings.Username)) {
             throw new Exception("Username not specified");
         }
