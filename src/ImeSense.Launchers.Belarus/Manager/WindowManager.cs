@@ -9,7 +9,8 @@ public class WindowManager : IWindowManager
 {
     public void Close()
     {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app)
+        {
             app.Shutdown();
         }
     }

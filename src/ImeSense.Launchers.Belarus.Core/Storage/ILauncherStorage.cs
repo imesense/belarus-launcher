@@ -2,8 +2,6 @@ using System.Collections.ObjectModel;
 
 using ImeSense.Launchers.Belarus.Core.Models;
 
-using ReactiveUI.Fody.Helpers;
-
 namespace ImeSense.Launchers.Belarus.Core.Storage;
 
 public interface ILauncherStorage

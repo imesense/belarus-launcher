@@ -11,11 +11,12 @@ public class MemoryLauncherStorage : ReactiveObject, ILauncherStorage
 {
     public GitHubRelease? GitHubRelease { get; set; }
 
-    public IList<Locale> Locales { get; } = [
-            new() { Key = "rus", Title = "Русский", },
-            // new() { Key = "be", Title = "Беларуская", },
-            new() { Key = "eng", Title = "English", },
-        ];
+    public IList<Locale> Locales { get; } =
+    [
+        new() { Key = "rus", Title = "Русский", },
+        // new() { Key = "be", Title = "Беларуская", },
+        new() { Key = "eng", Title = "English", },
+    ];
 
     [Reactive]
     public ObservableCollection<LangNewsContent>? NewsContents { get; set; }

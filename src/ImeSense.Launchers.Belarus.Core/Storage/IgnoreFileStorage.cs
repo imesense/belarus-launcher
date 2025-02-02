@@ -11,14 +11,17 @@ public static class IgnoreFileStorage
     /// Gets the collection of files to be ignored
     /// </summary>
     public static IReadOnlyCollection<string> IgnoreFiles { get; }
-    
+
     static IgnoreFileStorage()
     {
         var ignoreFilesArray = new string[]
         {
-            FileNameStorage.HashResources, FileNameStorage.WebResources,
-            FileNameStorage.LegacyNews, FileNameStorage.NewsContentRus,
-            FileNameStorage.NewsContentEng, FileNameStorage.LegacyHash,
+            FileNameStorage.HashResources,
+            FileNameStorage.WebResources,
+            FileNameStorage.LegacyNews,
+            FileNameStorage.NewsContentRus,
+            FileNameStorage.NewsContentEng,
+            FileNameStorage.LegacyHash,
         };
 
         IgnoreFiles = new ReadOnlyCollection<string>(ignoreFilesArray);

@@ -18,15 +18,18 @@ using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManage
 var logger = factory.CreateLogger<Program>();
 logger.LogInformation("Start Belarus Launcher Updater");
 
-try {
-    foreach (var process in Process.GetProcessesByName("SBLauncher")) {
+try
+{
+    foreach (var process in Process.GetProcessesByName("SBLauncher"))
+    {
         process.Kill();
     }
 
     logger.LogInformation($"Start update");
     var fileSavePath = Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncherZip);
-     
-    using var httpClient = new HttpClient(new HttpClientHandler {
+
+    using var httpClient = new HttpClient(new HttpClientHandler
+    {
         SslProtocols = System.Security.Authentication.SslProtocols.Tls12
     });
 
@@ -43,11 +46,15 @@ try {
 
     logger.LogInformation($"Finish!");
     Launcher.Launch(Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncher))?.Start();
-} catch (Exception ex) {
+}
+catch (Exception ex)
+{
     logger.LogInformation("{Message}", ex.Message);
     logger.LogInformation("{StackTrace}", ex.StackTrace);
 
     Console.ReadLine();
-} finally {
+}
+finally
+{
     Log.CloseAndFlush();
 }

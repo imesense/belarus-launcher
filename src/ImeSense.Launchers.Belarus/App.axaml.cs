@@ -1,19 +1,20 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+
+using ImeSense.Launchers.Belarus.Core.FileHashVerification;
+using ImeSense.Launchers.Belarus.Core.Manager;
+using ImeSense.Launchers.Belarus.Core.Services;
+using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Injection;
 using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.ViewModels;
 using ImeSense.Launchers.Belarus.Views;
-using ImeSense.Launchers.Belarus.Core.FileHashVerification;
-using ImeSense.Launchers.Belarus.Core.Manager;
-using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using Serilog;
-using ImeSense.Launchers.Belarus.Injection;
-using ImeSense.Launchers.Belarus.Core.Services;
 
 namespace ImeSense.Launchers.Belarus;
 
@@ -52,9 +53,12 @@ public partial class App : Application
     {
         var logger = _serviceProvider.GetRequiredService<ILogger<App>>();
 
-        try {
+        try
+        {
             AvaloniaXamlLoader.Load(this);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             logger.LogCritical("{Message}", exception.Message);
             logger.LogInformation("{StackTrace}", exception.StackTrace);
             throw;
@@ -63,7 +67,8 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
             var initializerManager = _serviceProvider.GetRequiredService<InitializerManager>();
             var userManager = _serviceProvider.GetRequiredService<UserManager>();
             UserManager.MigratorSettings();
@@ -75,17 +80,21 @@ public partial class App : Application
             initializerManager.InitializeLocale();
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
-            desktop.MainWindow = new MainWindow {
+            desktop.MainWindow = new MainWindow
+            {
                 DataContext = mainViewModel
             };
             desktop.MainWindow.Show();
 
-            try {
+            try
+            {
                 mainViewModel.ShowSplashScreenImpl();
 
                 await initializerManager.InitializeAsync(splashScreenManager);
                 await mainViewModel.InitializeAsync(splashScreenManager);
-            } catch (TaskCanceledException) {
+            }
+            catch (TaskCanceledException)
+            {
                 desktop.Shutdown();
                 return;
             }

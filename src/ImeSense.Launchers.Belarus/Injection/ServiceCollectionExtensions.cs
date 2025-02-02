@@ -20,8 +20,10 @@ internal static class ServiceCollectionExtensions
     {
         services.AddSingleton<IWindowManager, WindowManager>();
         services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
-           .ConfigurePrimaryHttpMessageHandler(() => {
-               return new HttpClientHandler {
+           .ConfigurePrimaryHttpMessageHandler(() =>
+           {
+               return new HttpClientHandler
+               {
                    SslProtocols = System.Security.Authentication.SslProtocols.Tls12
                };
            }).ConfigureHttpClient(ConfigureClient);
@@ -38,7 +40,8 @@ internal static class ServiceCollectionExtensions
         services.AddHttpClient<IGitStorageApiService, GitHubApiService>()
             .ConfigurePrimaryHttpMessageHandler(() =>
             {
-                return new HttpClientHandler {
+                return new HttpClientHandler
+                {
                     SslProtocols = System.Security.Authentication.SslProtocols.Tls12
                 };
             })

@@ -52,7 +52,8 @@ public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
     {
         ArgumentNullException.ThrowIfNull(HostScreen);
 
-        if (string.IsNullOrWhiteSpace(UserName)) {
+        if (string.IsNullOrWhiteSpace(UserName))
+        {
             throw new Exception("Имя пользователя не введено!");
         }
 

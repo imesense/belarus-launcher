@@ -13,11 +13,13 @@ public static class ConfigManager
     {
         ArgumentNullException.ThrowIfNull(settings);
 
-        if (string.IsNullOrEmpty(settings.Username)) {
+        if (string.IsNullOrEmpty(settings.Username))
+        {
             throw new Exception("Username not specified");
         }
 
-        if (!Directory.Exists(DirectoryStorage.AppData)) {
+        if (!Directory.Exists(DirectoryStorage.AppData))
+        {
             Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
@@ -25,7 +27,8 @@ public static class ConfigManager
             FileMode.Create);
         using var writer = new StreamWriter(fileStream);
 
-        var options = new JsonSerializerOptions {
+        var options = new JsonSerializerOptions
+        {
             AllowTrailingCommas = true,
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             WriteIndented = true
@@ -36,14 +39,18 @@ public static class ConfigManager
 
     public static UserSettings LoadSettings()
     {
-        if (!File.Exists(PathStorage.LauncherSetting)) {
+        if (!File.Exists(PathStorage.LauncherSetting))
+        {
             return new UserSettings();
         }
 
-        try {
+        try
+        {
             var json = File.ReadAllText(PathStorage.LauncherSetting);
             return JsonSerializer.Deserialize<UserSettings>(json)!;
-        } catch {
+        }
+        catch
+        {
             return new UserSettings();
         }
     }

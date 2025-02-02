@@ -28,7 +28,8 @@ public class FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClien
     public async Task DownloadAsync(Uri url, string filePath, IProgress<int>? status,
         CancellationToken token = default)
     {
-        try {
+        try
+        {
             _logger?.LogInformation("Url: {Url}", url);
 
             const int bufferLength = 8192;
@@ -45,7 +46,8 @@ public class FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClien
                 .ConfigureAwait(false);
             var serverSupportsRange = headResponse.Headers.AcceptRanges.Contains("bytes");
 
-            if (serverSupportsRange) {
+            if (serverSupportsRange)
+            {
                 // If the server supports resuming, set the 'Range' header.
                 request.Headers.Range = new RangeHeaderValue(currentPosition, null);
             }
@@ -66,7 +68,8 @@ public class FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClien
             int bytesReceived;
 
             while ((bytesReceived = await responseStream.ReadAsync(buffer.AsMemory(0, bufferLength), token)
-                       .ConfigureAwait(false)) > 0) {
+                       .ConfigureAwait(false)) > 0)
+            {
                 // Write the received data to the file
                 await fs.WriteAsync(buffer.AsMemory(0, bytesReceived), token).ConfigureAwait(false);
 
@@ -79,17 +82,22 @@ public class FileDownloadManager(ILogger<FileDownloadManager>? logger, HttpClien
 
                 // Since the value ranges from 0 to 100, there is no need to update the interface
                 // if the value has not changed. Notify the progress change using IProgress<int>
-                if (oldProgress == progress) {
+                if (oldProgress == progress)
+                {
                     continue;
                 }
                 status?.Report(progress);
                 //_logger?.LogInformation("URL [{Progress}]: {Url}", progress, url);
             }
-        } catch (HttpRequestException ex) {
+        }
+        catch (HttpRequestException ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;

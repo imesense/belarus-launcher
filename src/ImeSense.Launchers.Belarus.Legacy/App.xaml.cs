@@ -1,20 +1,22 @@
-using Microsoft.Extensions.DependencyInjection;
-
-using Splat;
-
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Legacy.Manager;
 using ImeSense.Launchers.Belarus.Manager;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Splat;
 
 namespace ImeSense.Launchers.Belarus;
 
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application {
+public partial class App : Application
+{
     private readonly IServiceProvider _serviceProvider;
 
-    public App() {
+    public App()
+    {
         var userSettings = ConfigManager.LoadSettings();
 
         var services = new ServiceCollection();
@@ -29,7 +31,8 @@ public partial class App : Application {
         services.AddSingleton<NewsSliderViewModel>();
 
         services.AddSingleton<IScreen, MainViewModel>();
-        services.AddSingleton((services) => new MainWindow() {
+        services.AddSingleton((services) => new MainWindow()
+        {
             DataContext = services.GetRequiredService<IScreen>()
         });
 
@@ -41,7 +44,8 @@ public partial class App : Application {
         RegisterPages();
     }
 
-    private static void RegisterPages() {
+    private static void RegisterPages()
+    {
         Locator.CurrentMutable.Register<IViewFor<AuthorizationViewModel>>(
             () => new AuthorizationView());
         Locator.CurrentMutable.Register<IViewFor<LauncherViewModel>>(
@@ -50,7 +54,8 @@ public partial class App : Application {
             () => new StartGameView());
     }
 
-    protected override void OnStartup(StartupEventArgs e) {
+    protected override void OnStartup(StartupEventArgs e)
+    {
         base.OnStartup(e);
 
         MainWindow = _serviceProvider.GetRequiredService<MainWindow>();

@@ -25,17 +25,20 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
         var sblauncher = lastRelease.Assets?.FirstOrDefault(x => x.Name.Equals(fullFileName))
             ?? throw new NullReferenceException($"{fileName} asset is null!");
 
-        if (sblauncher.BrowserDownloadUrl == null) {
+        if (sblauncher.BrowserDownloadUrl == null)
+        {
             throw new NullReferenceException("Browser download url is null!");
         }
-        var progress = new Progress<int>(percentage => {
+        var progress = new Progress<int>(percentage =>
+        {
             _logger.LogInformation("{fileName} is {percentage}% downloaded", fileName, percentage);
         });
 
         var pathDownloadFolder = Path.Combine(DirectoryStorage.CurrentDirectory, "temp");
         var fileDownloadPath = Path.Combine(pathDownloadFolder, fullFileName);
 
-        if (!Directory.Exists(pathDownloadFolder)) {
+        if (!Directory.Exists(pathDownloadFolder))
+        {
             Directory.CreateDirectory(pathDownloadFolder);
         }
 
@@ -47,10 +50,14 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
 
     private static void ExtractFile(string sourcePath, string destinationPath)
     {
-        if (Path.GetExtension(sourcePath).Equals(".zip", StringComparison.OrdinalIgnoreCase)) {
+        if (Path.GetExtension(sourcePath).Equals(".zip", StringComparison.OrdinalIgnoreCase))
+        {
             ZipFile.ExtractToDirectory(sourcePath, DirectoryStorage.CurrentDirectory, true);
-        } else {
-            if (File.Exists(destinationPath)) {
+        }
+        else
+        {
+            if (File.Exists(destinationPath))
+            {
                 File.Delete(destinationPath);
             }
             File.Move(sourcePath, destinationPath);
@@ -60,7 +67,8 @@ public class UpdaterService(ILogger<UpdaterService> logger, IGitStorageApiServic
     private static void CleanUpTempFiles()
     {
         var pathDownloadFolder = Path.Combine(DirectoryStorage.CurrentDirectory, "temp");
-        if (Directory.Exists(pathDownloadFolder)) {
+        if (Directory.Exists(pathDownloadFolder))
+        {
             Directory.Delete(pathDownloadFolder, true);
         }
     }

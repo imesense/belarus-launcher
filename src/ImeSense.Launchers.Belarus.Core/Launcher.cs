@@ -7,15 +7,19 @@ public static class Launcher
     public static Process? Launch(string? path, string? workingDirectory = null,
         IList<string> arguments = null!)
     {
-        if (string.IsNullOrEmpty(path)) {
+        if (string.IsNullOrEmpty(path))
+        {
             return default;
         }
-        if (!(File.Exists(path) && Path.GetExtension(path) != "exe")) {
+        if (!(File.Exists(path) && Path.GetExtension(path) != "exe"))
+        {
             return default;
         }
 
-        var process = new Process {
-            StartInfo = new ProcessStartInfo {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
                 FileName = path,
                 Arguments = arguments is not null
                     ? string.Join(" ", arguments)
@@ -23,11 +27,10 @@ public static class Launcher
                 WorkingDirectory = workingDirectory,
                 UseShellExecute = true,
                 CreateNoWindow = true,
-                Verb = "runas"
+                Verb = "runas",
             },
-            EnableRaisingEvents = true
+            EnableRaisingEvents = true,
         };
-
         return process;
     }
 }

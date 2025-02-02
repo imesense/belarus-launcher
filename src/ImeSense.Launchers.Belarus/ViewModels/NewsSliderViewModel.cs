@@ -2,10 +2,10 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Services;
 
 using Microsoft.Extensions.Logging;
 
@@ -52,21 +52,26 @@ public class NewsSliderViewModel : ReactiveObject
     {
         _logger?.LogInformation("Reload News");
 
-        if (string.IsNullOrEmpty(locale)) {
+        if (string.IsNullOrEmpty(locale))
+        {
             _logger?.LogError("Locale not set");
             return;
         }
 
-        if (_launcherStorage.NewsContents is null) {
+        if (_launcherStorage.NewsContents is null)
+        {
             _logger?.LogError("News content is null");
             return;
         }
 
         var news = _launcherStorage.NewsContents
             .FirstOrDefault(x => x.Locale != null && x.Locale.Key.Equals(locale));
-        if (news is not null) {
+        if (news is not null)
+        {
             SetNews(news.NewsContents!);
-        } else {
+        }
+        else
+        {
             _logger?.LogError("News collection is empty");
         }
     }
@@ -91,7 +96,8 @@ public class NewsSliderViewModel : ReactiveObject
         var canLoadNews = this.WhenAnyValue(x => x._launcherStorage.NewsContents)
             .Any(news => news != null && news.Any());
 
-        var reloadNewsCommand = ReactiveCommand.Create<string>((lang) => {
+        var reloadNewsCommand = ReactiveCommand.Create<string>((lang) =>
+        {
             _logger?.LogInformation("Language has been changed!");
             ReloadNews(lang);
         }, canLoadNews);
@@ -104,15 +110,18 @@ public class NewsSliderViewModel : ReactiveObject
         this.WhenAnyValue(x => x.NumPage)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Where(x => News != null && x >= 0 && x < News.Count)
-            .Subscribe(x => {
-                if (News is not null && News.Any()) {
+            .Subscribe(x =>
+            {
+                if (News is not null && News.Any())
+                {
                     SelectedNewsViewModel = News[x];
                 }
             });
 
         this.WhenAnyValue(x => x._launcherStorage.NewsContents)
             .Where(news => news != null && !string.IsNullOrEmpty(_localeManager.Locale) && news.Any())
-            .Subscribe((n) => {
+            .Subscribe((n) =>
+            {
                 var locale = _localeManager.Locale;
                 ReloadNews(locale);
             });
@@ -120,17 +129,20 @@ public class NewsSliderViewModel : ReactiveObject
 
     private void GoNextImpl()
     {
-        if (News is null) {
+        if (News is null)
+        {
             return;
         }
-        if (NumPage < News.Count - 1) {
+        if (NumPage < News.Count - 1)
+        {
             NumPage++;
         }
     }
 
     private void GoBackImpl()
     {
-        if (NumPage > 0) {
+        if (NumPage > 0)
+        {
             NumPage--;
         }
     }
@@ -139,7 +151,8 @@ public class NewsSliderViewModel : ReactiveObject
     {
         News = [];
 
-        foreach (var content in newsContents) {
+        foreach (var content in newsContents)
+        {
             News.Add(new NewsViewModel(content!.Title, content.Description));
         }
 

@@ -13,7 +13,8 @@ public static class ProcessHelper
 
     public static void KillAllXrEngine()
     {
-        foreach (var process in Process.GetProcessesByName(NameStorage.GameProcess)) {
+        foreach (var process in Process.GetProcessesByName(NameStorage.GameProcess))
+        {
             process.Kill();
         }
     }
@@ -22,7 +23,8 @@ public static class ProcessHelper
     {
         var processes = GetXrEngineProcesses()
             .Where(x => x.MainWindowTitle.Equals(NameStorage.TitleServerApp));
-        foreach (var process in processes) {
+        foreach (var process in processes)
+        {
             yield return process;
         }
     }
@@ -32,12 +34,15 @@ public static class ProcessHelper
         var processes = GetServerProcesses();
         var countServers = processes.Count();
 
-        if (countServers <= 1) {
+        if (countServers <= 1)
+        {
             return;
         }
 
-        foreach (var process in processes.Take(1)) {
-            if (process.MainWindowTitle.Equals(NameStorage.TitleServerApp)) {
+        foreach (var process in processes.Take(1))
+        {
+            if (process.MainWindowTitle.Equals(NameStorage.TitleServerApp))
+            {
                 process.Kill();
             }
         }

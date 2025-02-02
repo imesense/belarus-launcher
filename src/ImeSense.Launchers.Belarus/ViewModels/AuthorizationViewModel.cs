@@ -62,17 +62,21 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     public void ShowLauncherImpl(MainWindowViewModel mainWindowViewModel)
     {
         var username = Username.Trim();
-        if (string.IsNullOrWhiteSpace(username)) {
+        if (string.IsNullOrWhiteSpace(username))
+        {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered"));
         }
 
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
-        if (_userManager.UserSettings.Locale is null) {
+        if (_userManager.UserSettings.Locale is null)
+        {
             throw new NullReferenceException("User settings locale object is null");
         }
 
@@ -80,14 +84,17 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
         _userManager.UserSettings.Locale = SelectedLanguage;
         _userManager.Save();
 
-        if (!File.Exists(PathStorage.GameUser)) {
+        if (!File.Exists(PathStorage.GameUser))
+        {
             using var writer = new StreamWriter(PathStorage.GameUser, true);
             writer.WriteLine($"language {SelectedLanguage.Key}");
         }
 
         // TODO: Удалить в следующем релизе
-        if (!File.Exists(PathStorage.LegacyGameUser)) {
-            if (!Directory.Exists(DirectoryStorage.LegacyUserData)) {
+        if (!File.Exists(PathStorage.LegacyGameUser))
+        {
+            if (!Directory.Exists(DirectoryStorage.LegacyUserData))
+            {
                 Directory.CreateDirectory(DirectoryStorage.LegacyUserData);
             }
 
@@ -102,24 +109,31 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     {
         _logger?.LogInformation("Call AuthorizationViewModel::SetupBinding()");
 
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
-        if (_userManager.UserSettings.Locale is null) {
+        if (_userManager.UserSettings.Locale is null)
+        {
             throw new NullReferenceException("User settings locale object is null");
         }
 
         Languages.AddRange(_launcherStorage.Locales);
-        if (_userManager.UserSettings.Locale.Key == string.Empty) {
+        if (_userManager.UserSettings.Locale.Key == string.Empty)
+        {
             SelectedLanguage = Languages[0];
-        } else {
+        }
+        else
+        {
             SelectedLanguage = Languages.FirstOrDefault(x => x.Key.Equals(_userManager.UserSettings.Locale.Key)) ?? Languages[0];
         }
 
-        UpdateInterfaceCommand = ReactiveCommand.Create<string>(key => {
+        UpdateInterfaceCommand = ReactiveCommand.Create<string>(key =>
+        {
             _localeManager.SetLocale(key);
             _userManager.UserSettings.Locale = SelectedLanguage ?? Languages[0];
             _disposables?.Dispose();
@@ -153,10 +167,12 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 
     protected new virtual void Dispose(bool disposing)
     {
-        if (disposing) {
+        if (disposing)
+        {
             ValidationContext.Dispose();
 
-            if (_disposables is not null) {
+            if (_disposables is not null)
+            {
                 _disposables?.Dispose();
                 _disposables = null;
             }

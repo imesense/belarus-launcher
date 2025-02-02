@@ -102,7 +102,8 @@ public class DownloadMenuViewModel : ReactiveObject
         CancellationToken = _cts.Token;
         ClearData();
 
-        IProgress<int> progress = new Progress<int>(percentage => {
+        IProgress<int> progress = new Progress<int>(percentage =>
+        {
             DownloadProgress = percentage;
         });
 
@@ -111,24 +112,28 @@ public class DownloadMenuViewModel : ReactiveObject
 
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress, CancellationToken);
 
-        if (CancellationToken.IsCancellationRequested) {
+        if (CancellationToken.IsCancellationRequested)
+        {
             launcherViewModel.SelectMenu();
             PauseImpl();
             return;
         }
 
-        if (filesDownload is not null && filesDownload.Any()) {
+        if (filesDownload is not null && filesDownload.Any())
+        {
             var countFiles = filesDownload.Count;
             var numberFile = 0;
             IsDownload = true;
-            foreach (var file in filesDownload) {
+            foreach (var file in filesDownload)
+            {
                 numberFile++;
                 StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files") +
                                  $": {numberFile} / {countFiles}";
                 DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, CancellationToken);
 
-                if (CancellationToken.IsCancellationRequested) {
+                if (CancellationToken.IsCancellationRequested)
+                {
                     PauseImpl();
                     launcherViewModel.SelectMenu();
                     return;

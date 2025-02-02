@@ -24,12 +24,14 @@ public class UserManager(ILogger<UserManager>? logger,
     public static void MigratorSettings()
     {
         // Проверяем существование текущих настроек
-        if (File.Exists(PathStorage.LauncherSetting)) {
+        if (File.Exists(PathStorage.LauncherSetting))
+        {
             return;
         }
 
         // Проверяем настройки версии 2.0 / 2.1
-        if (File.Exists(PathStorage.V2LauncherSetting)) {
+        if (File.Exists(PathStorage.V2LauncherSetting))
+        {
             File.Move(PathStorage.V2LauncherSetting, PathStorage.LauncherSetting);
             return;
         }
@@ -37,17 +39,20 @@ public class UserManager(ILogger<UserManager>? logger,
 
     public async Task LoadAsync(CancellationToken cancellationToken = default)
     {
-        if (!File.Exists(PathStorage.LauncherSetting)) {
+        if (!File.Exists(PathStorage.LauncherSetting))
+        {
             UserSettings = CreateDefaultUserSettings();
             return;
         }
 
-        try {
+        try
+        {
             using var json = File.OpenRead(PathStorage.LauncherSetting);
             var user = await JsonSerializer.DeserializeAsync(json, SourceGenerationContext.Default.UserSettings, cancellationToken);
             user ??= CreateDefaultUserSettings();
 
-            if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress)) {
+            if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress))
+            {
                 user.IpAddress = string.Empty;
             }
 
@@ -60,21 +65,26 @@ public class UserManager(ILogger<UserManager>? logger,
             UserSettings = isUsernameCorrect
                 ? user
                 : CreateDefaultUserSettings();
-        } catch {
+        }
+        catch
+        {
             UserSettings = CreateDefaultUserSettings();
         }
     }
 
     public void Save()
     {
-        if (UserSettings is null) {
+        if (UserSettings is null)
+        {
             throw new NullReferenceException(nameof(UserSettings));
         }
-        if (string.IsNullOrEmpty(UserSettings.Username)) {
+        if (string.IsNullOrEmpty(UserSettings.Username))
+        {
             throw new NullReferenceException("Username not specified");
         }
 
-        if (!Directory.Exists(DirectoryStorage.AppData)) {
+        if (!Directory.Exists(DirectoryStorage.AppData))
+        {
             Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
@@ -88,14 +98,17 @@ public class UserManager(ILogger<UserManager>? logger,
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
     {
-        if (UserSettings is null) {
+        if (UserSettings is null)
+        {
             throw new NullReferenceException(nameof(UserSettings));
         }
-        if (string.IsNullOrEmpty(UserSettings.Username)) {
+        if (string.IsNullOrEmpty(UserSettings.Username))
+        {
             throw new NullReferenceException("Username not specified");
         }
 
-        if (!Directory.Exists(DirectoryStorage.AppData)) {
+        if (!Directory.Exists(DirectoryStorage.AppData))
+        {
             Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
@@ -108,7 +121,8 @@ public class UserManager(ILogger<UserManager>? logger,
 
     private UserSettings CreateDefaultUserSettings()
     {
-        var userSettings = new UserSettings {
+        var userSettings = new UserSettings
+        {
             Locale = GetAutoLocale()
         };
         _logger?.LogInformation("Set locale: {locale}", userSettings.Locale.Title);
@@ -118,9 +132,12 @@ public class UserManager(ILogger<UserManager>? logger,
     private Locale GetAutoLocale()
     {
         var systemCulture = CultureInfo.CurrentCulture;
-        if (systemCulture.ThreeLetterISOLanguageName.Equals(_launcherStorage.Locales[0].Key)) {
+        if (systemCulture.ThreeLetterISOLanguageName.Equals(_launcherStorage.Locales[0].Key))
+        {
             return _launcherStorage.Locales[0];
-        } else {
+        }
+        else
+        {
             return _launcherStorage.Locales[1];
         }
     }

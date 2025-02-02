@@ -1,9 +1,9 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 
-using ImeSense.Launchers.Belarus.Helpers;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Helpers;
 
 using Serilog;
 
@@ -23,33 +23,44 @@ internal class Program
     {
         var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherLog);
         Log.Logger = LogManager.CreateLogger(pathLog);
+
         var isMutexCreated = false;
-        try {
+        try
+        {
             _mutex = new Mutex(initiallyOwned: false, _mutexName, out isMutexCreated);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
             Log.CloseAndFlush();
             _mutex?.Dispose();
             throw;
         }
-        if (!isMutexCreated) {
+        if (!isMutexCreated)
+        {
             return;
         }
 
-        try {
+        try
+        {
 #if DEBUG
             StartApp(args);
 #else
-            try {
+            try
+            {
                 StartApp(args);
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
                 Log.CloseAndFlush();
                 _mutex?.Dispose();
                 throw;
             }
 #endif
-        } finally {
+        }
+        finally
+        {
             Log.CloseAndFlush();
             _mutex?.Dispose();
         }

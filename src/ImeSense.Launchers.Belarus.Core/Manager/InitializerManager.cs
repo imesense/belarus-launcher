@@ -29,13 +29,16 @@ public class InitializerManager(
 
     public void InitializeLocale()
     {
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
-        if (_userManager.UserSettings.Locale is null) {
+        if (_userManager.UserSettings.Locale is null)
+        {
             _logger?.LogError("Locale was not set");
             _userManager.UserSettings.Locale = _launcherStorage.Locales[0];
         }
@@ -45,22 +48,27 @@ public class InitializerManager(
 
     public async Task InitializeAsync(ISplashScreenManager splashScreenManager)
     {
-        try {
+        try
+        {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            if (_userManager is null) {
+            if (_userManager is null)
+            {
                 throw new NullReferenceException("User manager object is null");
             }
-            if (_userManager.UserSettings is null) {
+            if (_userManager.UserSettings is null)
+            {
                 throw new NullReferenceException("User settings object is null");
             }
-            if (_userManager.UserSettings.Locale is null) {
+            if (_userManager.UserSettings.Locale is null)
+            {
                 _logger?.LogError("User settings locale object is null. Default locale will be selected");
                 _userManager.UserSettings.Locale = _launcherStorage.Locales[0];
             }
 
-            if (!Directory.Exists(DirectoryStorage.LauncherCache)) {
+            if (!Directory.Exists(DirectoryStorage.LauncherCache))
+            {
                 Directory.CreateDirectory(DirectoryStorage.LauncherCache);
             }
 
@@ -71,9 +79,12 @@ public class InitializerManager(
             _launcherStorage.IsCheckGitHubConnection = await IsCheckGitHubConnectionAsync(splashScreenManager.CancellationToken);
             _logger?.LogInformation("Check GitHub connection time: {Time}", stopwatch.ElapsedMilliseconds);
 
-            if (_launcherStorage.IsCheckGitHubConnection) {
+            if (_launcherStorage.IsCheckGitHubConnection)
+            {
                 await HandleOnlineInitializationAsync(splashScreenManager, stopwatch);
-            } else {
+            }
+            else
+            {
                 splashScreenManager.UpdateInformation(new InformationMessage(
                     _localeManager.GetStringByKey("LocalizedStrings.OffineLoading"),
                     _localeManager.GetStringByKey("LocalizedStrings.LoadLocalData")));
@@ -83,7 +94,9 @@ public class InitializerManager(
 
             stopwatch.Stop();
             _logger?.LogInformation("Parsing time: {Time}", stopwatch.ElapsedMilliseconds);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
@@ -92,10 +105,12 @@ public class InitializerManager(
 
     private async Task HandleOnlineInitializationAsync(ISplashScreenManager splashScreenManager, Stopwatch stopwatch)
     {
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
 
@@ -105,7 +120,8 @@ public class InitializerManager(
 
         var isLauncherReleaseCurrent = await IsLauncherReleaseCurrentAsync(splashScreenManager.CancellationToken);
         _logger?.LogInformation("Check launcher update time: {Time}", stopwatch.ElapsedMilliseconds);
-        if (!isLauncherReleaseCurrent) {
+        if (!isLauncherReleaseCurrent)
+        {
             var pathLauncherUpdaterZip = Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncherUpdaterZip);
             await _updaterService.UpdaterAsync(UriStorage.LauncherApiUri, pathLauncherUpdaterZip, splashScreenManager.CancellationToken);
 
@@ -125,13 +141,16 @@ public class InitializerManager(
         _launcherStorage.IsGameReleaseCurrent = await IsGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
         _launcherStorage.IsUserAuthorized = File.Exists(PathStorage.LauncherSetting);
 
-        if (_launcherStorage.IsGameReleaseCurrent) {
+        if (_launcherStorage.IsGameReleaseCurrent)
+        {
             splashScreenManager.UpdateInformation(new InformationMessage(
                 _localeManager.GetStringByKey("LocalizedStrings.Loading"),
                 _localeManager.GetStringByKey("LocalizedStrings.LoadLocalData")));
 
             await HandleGameReleaseCurrentAsync(splashScreenManager.CancellationToken);
-        } else {
+        }
+        else
+        {
 
             await LoadRemoteContent(_userManager.UserSettings.Locale, splashScreenManager.CancellationToken);
             await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: splashScreenManager.CancellationToken));
@@ -140,44 +159,57 @@ public class InitializerManager(
 
     private async Task HandleGameReleaseCurrentAsync(CancellationToken cancellationToken)
     {
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
 
         var contentNews = await LocaleLoadCacheAsync<LangNewsContent>(PathStorage.NewsCache, cancellationToken) ?? [];
-        var isContentNews = contentNews.Any(x => 
-                                            x.Locale is not null 
-                                            && _userManager.UserSettings.Locale is not null 
-                                            && x.Locale.Key.Equals(_userManager.UserSettings.Locale.Key));
-        if (isContentNews) {
+        var isContentNews = contentNews.Any(x =>
+            x.Locale is not null &&
+            _userManager.UserSettings.Locale is not null &&
+            x.Locale.Key.Equals(_userManager.UserSettings.Locale.Key));
+        if (isContentNews)
+        {
             _launcherStorage.NewsContents = new(contentNews);
-        } else {
+        }
+        else
+        {
             await LoadRemoteContent(_userManager.UserSettings.Locale, cancellationToken);
         }
 
         var contentRes = await LocaleLoadCacheAsync<WebResource>(PathStorage.WebResourcesCache, cancellationToken);
-        if (contentRes is not null && contentRes.Count != 0) {
+        if (contentRes is not null && contentRes.Count != 0)
+        {
             _launcherStorage.WebResources = new(contentRes);
-        } else {
+        }
+        else
+        {
             await Task.Factory.StartNew(() => RemoteLoadWebResourcesAsync(cancellationToken: cancellationToken));
         }
     }
 
     private async Task HandleOfflineInitializationAsync(CancellationToken cancellationToken = default)
     {
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
 
-        if (_launcherStorage.IsUserAuthorized) {
+        if (_launcherStorage.IsUserAuthorized)
+        {
             _launcherStorage.NewsContents = new(LoadErrorNews(_userManager.UserSettings.Locale) ?? []);
-        } else {
+        }
+        else
+        {
             _launcherStorage.NewsContents = new(LoadErrorNews() ?? []);
         }
 
@@ -186,22 +218,29 @@ public class InitializerManager(
 
     private async Task LoadRemoteContent(Locale? locale, CancellationToken cancellationToken = default)
     {
-        if (_launcherStorage.IsUserAuthorized) {
+        if (_launcherStorage.IsUserAuthorized)
+        {
             await Task.Factory.StartNew(() => RemoteLoadNewsAsync(locale, cancellationToken), cancellationToken);
-        } else {
+        }
+        else
+        {
             await Task.Factory.StartNew(() => RemoteLoadNewsAsync(cancellationToken: cancellationToken), cancellationToken);
         }
     }
 
     private async Task<List<T>?> LocaleLoadCacheAsync<T>(string cachePath, CancellationToken cancellationToken = default)
     {
-        try {
-            if (!File.Exists(cachePath)) {
+        try
+        {
+            if (!File.Exists(cachePath))
+            {
                 return null;
             }
 
             return await FileDataHelper.LoadDataAsync<List<T>>(cachePath, cancellationToken);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
@@ -214,12 +253,15 @@ public class InitializerManager(
         var allNews = new List<LangNewsContent>();
         locale ??= _launcherStorage.Locales[0];
 
-        try {
+        try
+        {
             allNews.Add(new LangNewsContent(locale, [new NewsContent(
                 _localeManager.GetStringByKey("LocalizedStrings.ErrorTitle"),
                 _localeManager.GetStringByKey("LocalizedStrings.ErrorInternetDescription")
             )]));
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
         }
@@ -227,24 +269,29 @@ public class InitializerManager(
         return allNews;
     }
 
-
     /// <summary>
     /// Checks the connection to github.com.
     /// </summary>
     /// <returns>True if the connection is established successfully, otherwise false.</returns>
     private async Task<bool> IsCheckGitHubConnectionAsync(CancellationToken cancellationToken = default)
     {
-        try {
+        try
+        {
             var response = await _httpClient.GetAsync("https://github.com", cancellationToken);
 
-            if (response.IsSuccessStatusCode) {
+            if (response.IsSuccessStatusCode)
+            {
                 _logger?.LogInformation("Connection to github.com established");
                 return true;
-            } else {
+            }
+            else
+            {
                 _logger?.LogInformation("Failed to establish connection to github.com. Response code: {StatusCode}", response.StatusCode);
                 return false;
             }
-        } catch (HttpRequestException ex) {
+        }
+        catch (HttpRequestException ex)
+        {
             _logger?.LogInformation("Failed to establish connection to github.com");
 
             _logger?.LogError("{Message}", ex.Message);
@@ -256,23 +303,27 @@ public class InitializerManager(
     private async Task<bool> IsLauncherReleaseCurrentAsync(CancellationToken cancellationToken = default)
     {
         var tags = await _gitStorageApiService.GetTagsAsync(UriStorage.LauncherApiUri, cancellationToken);
-        if (tags is null) {
+        if (tags is null)
+        {
             return true;
         }
 
         var currentVersion = $"{ApplicationHelper.GetAppVersion()}";
-        if (currentVersion[0] is not 'v') {
+        if (currentVersion[0] is not 'v')
+        {
             currentVersion = currentVersion.Insert(0, "v");
         }
 
         var countTag = tags.Count(x => x!.Name.Equals(currentVersion));
-        if (countTag == 0) {
+        if (countTag == 0)
+        {
             // If there is no such release, we return true so that there is no looping
             return true;
         }
 
         var firstTag = tags.FirstOrDefault();
-        if (firstTag is not null) {
+        if (firstTag is not null)
+        {
             return firstTag.Name.Equals(currentVersion);
         }
         return true;
@@ -282,17 +333,23 @@ public class InitializerManager(
     {
         var gitStorageRelease = _launcherStorage.GitHubRelease;
 
-        if (File.Exists(PathStorage.CurrentRelease)) {
+        if (File.Exists(PathStorage.CurrentRelease))
+        {
             var releaseComparer = gitStorageRelease is not null && await _releaseComparerService.IsComparerAsync(gitStorageRelease, cancellationToken);
-            if (!releaseComparer) {
+            if (!releaseComparer)
+            {
                 await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease, cancellationToken);
                 _logger?.LogInformation("The releases don't match. Update required!");
                 return false;
-            } else {
+            }
+            else
+            {
                 _logger?.LogInformation("The releases are the same. No update required.");
                 return true;
             }
-        } else {
+        }
+        else
+        {
             await FileSystemHelper.WriteReleaseAsync(gitStorageRelease, PathStorage.CurrentRelease, cancellationToken);
             _logger?.LogInformation("The release configuration has not been previously saved");
             return false;
@@ -301,14 +358,18 @@ public class InitializerManager(
 
     private async Task RemoteLoadWebResourcesAsync(CancellationToken cancellationToken = default)
     {
-        try {
+        try
+        {
             var contents = await _gitStorageApiService
                 .DownloadJsonAsync<IEnumerable<WebResource>>(FileNameStorage.WebResources, UriStorage.BelarusApiUri, cancellationToken);
-            if (contents is not null) {
+            if (contents is not null)
+            {
                 await FileSystemHelper.WriteReleaseAsync(contents, Path.Combine(DirectoryStorage.LauncherCache, FileNameStorage.WebResources), cancellationToken);
                 _launcherStorage.WebResources = new(contents);
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
             throw;
@@ -320,19 +381,26 @@ public class InitializerManager(
         // News in all languages
         var allNews = new List<LangNewsContent>();
 
-        try {
-            if (locale is null) {
-                foreach (var lang in _launcherStorage.Locales) {
+        try
+        {
+            if (locale is null)
+            {
+                foreach (var lang in _launcherStorage.Locales)
+                {
                     var news = await _gitStorageApiService
                         .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{lang.Key}.json", UriStorage.BelarusApiUri, cancellationToken);
                     AddNews(lang, allNews, news);
                 }
-            } else {
+            }
+            else
+            {
                 var news = await _gitStorageApiService
                     .DownloadJsonAsync<IEnumerable<NewsContent>>($"news_content_{locale.Key}.json", UriStorage.BelarusApiUri, cancellationToken);
                 AddNews(locale, allNews, news);
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger?.LogError("{Message}", ex.Message);
             _logger?.LogError("{StackTrace}", ex.StackTrace);
         }
@@ -343,14 +411,18 @@ public class InitializerManager(
 
     private void AddNews(Locale? locale, List<LangNewsContent> allNews, IEnumerable<NewsContent>? news)
     {
-        if (locale is null) {
+        if (locale is null)
+        {
             _logger?.LogError("Failure to load locale!");
             return;
         }
 
-        if (news is not null) {
+        if (news is not null)
+        {
             allNews.Add(new LangNewsContent(locale, news));
-        } else {
+        }
+        else
+        {
             _logger?.LogError("Failure to load news in {locale}", locale.Title);
         }
     }

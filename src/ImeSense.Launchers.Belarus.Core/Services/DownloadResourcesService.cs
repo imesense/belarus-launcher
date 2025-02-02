@@ -8,8 +8,6 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 
 using Microsoft.Extensions.Logging;
 
-using ReactiveUI;
-
 namespace ImeSense.Launchers.Belarus.Core.Services;
 
 public class DownloadResourcesService(ILogger<DownloadResourcesService> logger,
@@ -34,70 +32,88 @@ public class DownloadResourcesService(ILogger<DownloadResourcesService> logger,
             .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri, cancellationToken);
 
         var release = _launcherStorage.GitHubRelease;
-        if (release is null) {
+        if (release is null)
+        {
             return filesRes;
         }
 
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        if (_hashResources is null) {
+        if (_hashResources is null)
+        {
             throw new NullReferenceException("HashResources object is null");
         }
 
         var totalTasks = _hashResources.Count;
         var completedTasks = 0;
 
-        if (release.Assets is null) {
+        if (release.Assets is null)
+        {
             throw new NullReferenceException("Assets is null");
         }
 
         var gameResourceTasks = new List<Task>();
-        foreach (var asset in release.Assets) {
-            if (asset is null) {
+        foreach (var asset in release.Assets)
+        {
+            if (asset is null)
+            {
                 continue;
             }
-            if (asset.BrowserDownloadUrl is null) {
+            if (asset.BrowserDownloadUrl is null)
+            {
                 continue;
             }
 
             var assetFile = _hashResources.FirstOrDefault(x => x.Title.Equals(asset.Name, StringComparison.OrdinalIgnoreCase));
-            if (assetFile is null) {
+            if (assetFile is null)
+            {
                 continue;
             }
 
-        #if DEBUG
-            if (assetFile.Directory.Equals("resources")) {
+#if DEBUG
+            if (assetFile.Directory.Equals("resources"))
+            {
                 continue;
             }
-        #endif
+#endif
             var filePath = Path.Combine(DirectoryStorage.CurrentDirectory, assetFile.Directory, assetFile.Title);
 
-            if (!File.Exists(filePath)) {
+            if (!File.Exists(filePath))
+            {
                 filesRes.TryAdd(filePath, asset.BrowserDownloadUrl);
                 CalcProgress(ref completedTasks, progress, totalTasks);
-            } else {
-            #if DEBUG
-                if (assetFile.Directory.Equals("resources")) {
+            }
+            else
+            {
+#if DEBUG
+                if (assetFile.Directory.Equals("resources"))
+                {
                     continue;
                 }
-            #endif
+#endif
 
                 await using var fileStream = File.OpenRead(filePath);
-                if (fileStream.Length > 100000000) {
-                    gameResourceTasks.Add(Task.Run(async () => {
+                if (fileStream.Length > 100000000)
+                {
+                    gameResourceTasks.Add(Task.Run(async () =>
+                    {
                         _logger.LogInformation("File: {File}", assetFile.Title);
                         var verifyFile = await _hashChecker.VerifyFileHashAsync(filePath, assetFile.Hash, cancellationToken);
-                        if (!verifyFile) {
+                        if (!verifyFile)
+                        {
                             filesRes.TryAdd(fileStream.Name, asset.BrowserDownloadUrl);
                             _logger.LogWarning("The {FileName} is corrupted", assetFile.Title);
                         }
 
                         CalcProgress(ref completedTasks, progress, totalTasks);
                     }, cancellationToken));
-                } else {
+                }
+                else
+                {
                     var verifyFile = _hashChecker.VerifyFileHash(fileStream, assetFile.Hash);
-                    if (!verifyFile) {
+                    if (!verifyFile)
+                    {
                         filesRes.TryAdd(filePath, asset.BrowserDownloadUrl);
                     }
 
@@ -125,42 +141,58 @@ public class DownloadResourcesService(ILogger<DownloadResourcesService> logger,
 
     public async Task DownloadAsync(string path, Uri url, IProgress<int> progress, CancellationToken cancellationToken = default)
     {
-        try {
+        try
+        {
             var dirInfo = new DirectoryInfo(Path.GetDirectoryName(path)!);
-            if (!dirInfo.Exists) {
+            if (!dirInfo.Exists)
+            {
                 dirInfo.Create();
             }
             _hashResources ??= await _gitStorageApiService
                 .DownloadJsonAsync<IList<GameResource>>(FileNameStorage.HashResources, UriStorage.BelarusApiUri, cancellationToken);
             var verifyFile = false;
-            do {
-                try {
+            do
+            {
+                try
+                {
                     await _fileDownloadManager.DownloadAsync(url, path, progress, cancellationToken);
                     // Check the downloaded file for integrity
                     var assetName = Path.GetFileName(path);
                     var gameResource = _hashResources?.FirstOrDefault(x => x.Title.Equals(assetName, StringComparison.OrdinalIgnoreCase));
                     verifyFile = await _hashChecker.VerifyFileHashAsync(path, gameResource!.Hash, cancellationToken);
-                    if (!verifyFile) {
+                    if (!verifyFile)
+                    {
                         File.Delete(path);
                     }
-                } catch (HttpRequestException ex) when (ex.Message.Contains("416")) {
+                }
+                catch (HttpRequestException ex) when (ex.Message.Contains("416"))
+                {
                     _logger.LogInformation("Unsuccessful attempt to download the file! The file will be deleted and downloaded again");
                     File.Delete(path);
                 }
             } while (!verifyFile);
 
             progress.Report(0);
-        } catch (OperationCanceledException ex) {
+        }
+        catch (OperationCanceledException ex)
+        {
             _logger.LogInformation("{Message}", ex.Message);
-        } catch (HttpRequestException ex) {
+        }
+        catch (HttpRequestException ex)
+        {
             // 416 (Requested Range Not Satisfiable)
-            if (ex.Message.Contains("416")) {
+            if (ex.Message.Contains("416"))
+            {
                 _logger.LogInformation("The file has already been uploaded");
-            } else {
+            }
+            else
+            {
                 _logger.LogError("HttpRequestException - {Message}", ex.Message);
                 throw;
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             _logger.LogError("{Message}", exception.Message);
         }
     }

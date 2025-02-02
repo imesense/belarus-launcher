@@ -38,10 +38,13 @@ public class MenuViewModel : ViewModelBase
     private void SetupCommands()
     {
         var result = _downloadService.CheckFiles();
-        if (result) {
+        if (result)
+        {
             IsVisiblePlayGame = File.Exists(Directory.GetCurrentDirectory() + "binaries\\xrengine.exe");
             IsVisibleDownload = !IsVisiblePlayGame;
-        } else {
+        }
+        else
+        {
             IsVisibleDownload = false;
             IsVisiblePlayGame = true;
         }
@@ -60,8 +63,10 @@ public class MenuViewModel : ViewModelBase
         IsDownloadStart = false;
         IsDownloadCheak = true;
 
-        await Task.Run(() => {
-            if (_downloadService.CheckFiles()) {
+        await Task.Run(() =>
+        {
+            if (_downloadService.CheckFiles())
+            {
                 IsDownloadStart = true;
                 IsDownloadCheak = false;
 
@@ -78,21 +83,23 @@ public class MenuViewModel : ViewModelBase
     private void StartServerImpl()
     {
         var serverProcess = Core.Launcher.Launch(path: @"binaries\xrEngine.exe", arguments: [
-                "-dedicated",
-                "-i",
-                @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
-            ]);
+            "-dedicated",
+            "-i",
+            @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
+        ]);
         serverProcess?.Start();
         _isStartServer = true;
     }
 
     private void PlayGameImpl()
     {
-        if (_userSettings is null) {
+        if (_userSettings is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
 
-        if (_isStartServer) {
+        if (_isStartServer)
+        {
             var gameProcess = Core.Launcher.Launch(path: @"binaries\xrEngine.exe", arguments: [
                 @$"-start client(localhost/name={_userSettings.Username})"
             ]);

@@ -66,28 +66,34 @@ public class GameMenuViewModel : ReactiveObject
 
     private void PlayGameImpl(MainWindowViewModel mainWindowViewModel)
     {
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
 
         ProcessHelper.KillServers();
 
-        if (IsStartServer) {
+        if (IsStartServer)
+        {
             var launch = Core.Launcher.Launch(path: @"binaries\xrEngine.exe",
                 arguments: [
                     @$"-start client(localhost/name={_userManager.UserSettings.Username})"
                 ]);
 
-            if (launch == null) {
+            if (launch == null)
+            {
                 return;
             }
             launch.Start();
 
             _windowManager.Close();
-        } else {
+        }
+        else
+        {
             mainWindowViewModel.ShowStartGameImpl();
         }
     }
@@ -103,7 +109,8 @@ public class GameMenuViewModel : ReactiveObject
                 @"-start server(belarus_lobby/fmp/timelimit=60) client(localhost)",
             ]);
 
-        if (launch is null) {
+        if (launch is null)
+        {
             return;
         }
 

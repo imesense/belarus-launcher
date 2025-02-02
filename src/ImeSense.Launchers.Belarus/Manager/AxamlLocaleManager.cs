@@ -25,12 +25,16 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
 
     private void LoadLocalizedResources(string locale)
     {
-        try {
-            _resources = new ResourceInclude(new Uri("avares://ImeSense.Launchers.Belarus/Assets/Locales/")) {
+        try
+        {
+            _resources = new ResourceInclude(new Uri("avares://ImeSense.Launchers.Belarus/Assets/Locales/"))
+            {
                 Source = new Uri($"avares://ImeSense.Launchers.Belarus/Assets/Locales/{locale}.axaml")
             };
             App.Current?.Resources.MergedDictionaries.Add(_resources);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger.LogError(ex, "Failed to load localized resources for locale: {Locale}", locale);
             throw;
         }
@@ -38,15 +42,19 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
 
     public string GetStringByKey(string key)
     {
-        if (_resources is null) {
+        if (_resources is null)
+        {
             _logger.LogError("Resource include is not initialized");
             return string.Empty;
         }
 
         var resources = _resources.Loaded;
-        if (resources.TryGetValue(key, out var value)) {
+        if (resources.TryGetValue(key, out var value))
+        {
             return (string) value!;
-        } else {
+        }
+        else
+        {
             _logger.LogError("Resource with key '{Key}' not found for locale '{Locale}'", key, Locale);
             return string.Empty;
         }

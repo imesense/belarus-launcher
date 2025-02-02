@@ -13,7 +13,11 @@ using Serilog;
 
 Console.Title = "Belarus CryptoHasher";
 
-IEnumerable<string> GetDirectories() => [DirectoryStorage.Binaries, DirectoryStorage.Resources, DirectoryStorage.Patches];
+IEnumerable<string> GetDirectories() => [
+    DirectoryStorage.Binaries,
+    DirectoryStorage.Resources,
+    DirectoryStorage.Patches,
+];
 
 var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.CryptoHasherLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
@@ -22,18 +26,24 @@ logger.LogInformation("Start CryptoHasher application");
 
 var hashing = new Md5HashProvider(factory.CreateLogger<Md5HashProvider>());
 
-try {
+try
+{
     var gameResourceTasks = new List<Task<GameResource>>();
     var gameResources = new List<GameResource>();
 
     var stopwatch = new Stopwatch();
     stopwatch.Start();
-    foreach (var folderPath in GetDirectories()) {
+    foreach (var folderPath in GetDirectories())
+    {
         var dir = new DirectoryInfo(folderPath);
-        foreach (var file in dir.GetFiles()) {
-            if (file.Length > 100000000) {
+        foreach (var file in dir.GetFiles())
+        {
+            if (file.Length > 100000000)
+            {
                 gameResourceTasks.Add(AddGameResourceAsync(file));
-            } else {
+            }
+            else
+            {
                 gameResources.Add(AddGameResource(file));
             }
         }
@@ -48,12 +58,16 @@ try {
     fs.Close();
 
     logger.LogInformation("{json}", File.ReadAllText(FileNameStorage.HashResources));
-} catch (Exception ex) {
+}
+catch (Exception ex)
+{
     logger.LogInformation("{Message}", ex.Message);
     logger.LogInformation("{StackTrace}", ex.StackTrace);
 
     Console.ReadLine();
-} finally {
+}
+finally
+{
     Log.CloseAndFlush();
 }
 
@@ -68,7 +82,8 @@ async Task<GameResource> AddGameResourceAsync(FileInfo fileInfo)
         fileInfo.Name, stream.Length / 1000, stopwatch.ElapsedMilliseconds, hashFile);
     stopwatch.Stop();
 
-    return new GameResource {
+    return new GameResource
+    {
         Title = fileInfo.Name,
         Directory = fileInfo.Directory!.Name,
         Hash = hashFile
@@ -86,7 +101,8 @@ GameResource AddGameResource(FileInfo fileInfo)
         fileInfo.Name, stream.Length / 1000, stopwatch.ElapsedMilliseconds, hashFile);
     stopwatch.Stop();
 
-    return new GameResource {
+    return new GameResource
+    {
         Title = fileInfo.Name,
         Directory = fileInfo.Directory!.Name,
         Hash = hashFile

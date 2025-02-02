@@ -32,9 +32,11 @@ public static class InformationPrinter
         builder.AppendFormat("Application directory: {0}", AppDomain.CurrentDomain.BaseDirectory).AppendLine();
 
         var commandLineArgs = Environment.GetCommandLineArgs();
-        if (commandLineArgs.Length > 1) {
+        if (commandLineArgs.Length > 1)
+        {
             builder.AppendLine("Command line arguments:");
-            foreach (var arg in commandLineArgs) {
+            foreach (var arg in commandLineArgs)
+            {
                 builder.AppendLine(arg);
             }
         }

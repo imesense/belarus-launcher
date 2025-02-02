@@ -37,10 +37,12 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
         _userManager = userManager;
 
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
 
@@ -52,7 +54,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
         SetupCommands();
     }
-    
+
     private void SetupCommands()
     {
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());
@@ -64,7 +66,8 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
         this.WhenAnyValue(x => x._localeManager.Locale)
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(x => {
+            .Subscribe(x =>
+            {
                 _disposables?.Dispose();
                 SetupValidation();
             });
@@ -82,14 +85,17 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
     private void StartGameImpl()
     {
-        if (_userManager is null) {
+        if (_userManager is null)
+        {
             throw new NullReferenceException("User manager object is null");
         }
-        if (_userManager.UserSettings is null) {
+        if (_userManager.UserSettings is null)
+        {
             throw new NullReferenceException("User settings object is null");
         }
 
-        if (string.IsNullOrWhiteSpace(IpAddress)) {
+        if (string.IsNullOrWhiteSpace(IpAddress))
+        {
             throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered"));
         }
 
@@ -115,10 +121,12 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
     protected new virtual void Dispose(bool disposing)
     {
-        if (disposing) {
+        if (disposing)
+        {
             ValidationContext.Dispose();
 
-            if (_disposables is not null) {
+            if (_disposables is not null)
+            {
                 _disposables?.Dispose();
                 _disposables = null;
             }

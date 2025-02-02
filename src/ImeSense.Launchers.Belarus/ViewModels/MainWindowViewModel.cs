@@ -1,16 +1,16 @@
 using System.Diagnostics;
 
-using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.Core.Helpers;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
+using ImeSense.Launchers.Belarus.Models;
+using ImeSense.Launchers.Belarus.Services;
 
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using ImeSense.Launchers.Belarus.Models;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
@@ -52,22 +52,30 @@ public class MainWindowViewModel : ReactiveObject
         ProcessHelper.KillAllXrEngine();
 
         var isCurrentRelease = _launcherStorage.IsGameReleaseCurrent;
-        if (File.Exists(PathStorage.LauncherSetting)) {
-            try {
-                if (!isCurrentRelease) {
+        if (File.Exists(PathStorage.LauncherSetting))
+        {
+            try
+            {
+                if (!isCurrentRelease)
+                {
                     PageViewModel = _launcherViewModel;
                     await _launcherViewModel.SelectUpdateMenuAsync();
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 _logger?.LogError("{Message}", ex.Message);
                 _logger?.LogError("{StackTrace}", ex.StackTrace);
             }
         }
 
-        if (File.Exists(PathStorage.LauncherSetting)) {
+        if (File.Exists(PathStorage.LauncherSetting))
+        {
             _launcherViewModel.SelectMenu();
             ShowLauncherImpl();
-        } else {
+        }
+        else
+        {
             ShowAuthorizationImpl();
         }
 

@@ -18,7 +18,7 @@ public class SplashScreenViewModel : ReactiveObject
     public int MaxProgress { get; private set; }
 
     public ReactiveCommand<Unit, Unit> Cancel { get; set; }
-    
+
     public SplashScreenViewModel(IWindowManager windowManager, ISplashScreenManager splashScreen)
     {
         _windowManager = windowManager;
@@ -29,7 +29,8 @@ public class SplashScreenViewModel : ReactiveObject
         this.WhenAnyValue(
             x => x.SplashScreen.CurrentProgress,
             x => x.SplashScreen.SplashScreenMessage)
-            .Subscribe(u => {
+            .Subscribe(u =>
+            {
                 Progress = u.Item1;
                 InformationMessage = u.Item2;
             });

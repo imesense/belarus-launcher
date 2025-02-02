@@ -27,7 +27,8 @@ public partial class NewsSliderViewModel : ViewModelBase
 
     private void LoadNews()
     {
-        foreach (var content in _downloadService.GetNewsList()) {
+        foreach (var content in _downloadService.GetNewsList())
+        {
             News.Add(new NewsViewModel(content.Title, content.Description));
         }
     }

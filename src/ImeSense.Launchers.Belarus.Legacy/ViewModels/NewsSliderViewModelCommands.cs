@@ -33,14 +33,16 @@ public partial class NewsSliderViewModel
 
     private void GoNextImpl()
     {
-        if (NumPage < News.Count - 1) {
+        if (NumPage < News.Count - 1)
+        {
             NumPage++;
         }
     }
 
     private void GoBackImpl()
     {
-        if (NumPage > 0) {
+        if (NumPage > 0)
+        {
             NumPage--;
         }
     }

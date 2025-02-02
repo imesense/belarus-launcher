@@ -10,12 +10,15 @@ public class Md5HashProvider(ILogger<Md5HashProvider>? logger) : IHashProvider
 
     public async Task<string> CalculateHashAsync(Stream stream, CancellationToken cancellationToken = default)
     {
-        try {
+        try
+        {
             using var md5 = MD5.Create();
             var hashBytes = await md5.ComputeHashAsync(stream, cancellationToken);
 
             return BitConverter.ToString(hashBytes).Replace("-", "");
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             _logger?.LogError("{Message}", exception.Message);
 
             return string.Empty;
@@ -24,12 +27,15 @@ public class Md5HashProvider(ILogger<Md5HashProvider>? logger) : IHashProvider
 
     public string CalculateHash(Stream stream)
     {
-        try {
+        try
+        {
             using var md5 = MD5.Create();
             var hashBytes = md5.ComputeHash(stream);
 
             return BitConverter.ToString(hashBytes).Replace("-", "");
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             _logger?.LogError("{Message}", exception.Message);
 
             return string.Empty;

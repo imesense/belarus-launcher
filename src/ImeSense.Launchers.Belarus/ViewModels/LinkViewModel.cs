@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Reactive;
 using System.Reactive.Linq;
 
@@ -40,10 +39,13 @@ public class LinkViewModel : ReactiveObject
 
     private void Init()
     {
-        if (_launcherStorage.WebResources is not null) {
+        if (_launcherStorage.WebResources is not null)
+        {
             _logger?.LogInformation("Web resources are initialized");
             WebResources.AddRange(_launcherStorage.WebResources);
-        } else {
+        }
+        else
+        {
             _logger?.LogError("Web resources is null!");
         }
     }

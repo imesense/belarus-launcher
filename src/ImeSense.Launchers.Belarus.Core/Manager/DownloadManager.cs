@@ -12,17 +12,18 @@ namespace ImeSense.Launchers.Belarus.Core.Manager;
 
 public class DownloadManager : IDisposable
 {
-    private readonly string[] Folders = {
+    private readonly string[] _folders = {
         "binaries", "resources", "patches"
     };
 
-    private readonly JsonDocument? jsonDocument;
+    private readonly JsonDocument? _jsonDocument;
 
     public DownloadManager()
     {
         var response = "{}";
 
-        try {
+        try
+        {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
@@ -34,12 +35,14 @@ public class DownloadManager : IDisposable
             response = client.GetStringAsync(Url).Result;
 
             DebugOutput("Подключение к сети!");
-        } catch {
+        }
+        catch
+        {
             response = "{}";
             DebugOutput("Невозможно загрузить релиз!");
         }
 
-        jsonDocument = JsonDocument.Parse(response);
+        _jsonDocument = JsonDocument.Parse(response);
     }
 
     public static void DebugOutput(string log)
@@ -50,7 +53,7 @@ public class DownloadManager : IDisposable
     private string GetNewsFile()
     {
         using var client = new HttpClient();
-        var root = jsonDocument?.RootElement;
+        var root = _jsonDocument?.RootElement;
         var element = FindFileByName(FileNameStorage.LegacyNews);
 
         return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
@@ -61,14 +64,18 @@ public class DownloadManager : IDisposable
     {
         var newsList = new List<NewsContent>();
 
-        try {
+        try
+        {
             var newsFile = GetNewsFile();
             var news = JsonDocument.Parse(newsFile).RootElement;
 
-            foreach (var _news in news.EnumerateObject()) {
+            foreach (var _news in news.EnumerateObject())
+            {
                 newsList.Add(new NewsContent(_news.Name, _news.Value.ToString()));
             }
-        } catch {
+        }
+        catch
+        {
             newsList.Add(new NewsContent("Ошибка!",
                 "Ошибка загрузки новостей. Возможно интернет-соединение отсутствует."));
         }
@@ -79,11 +86,13 @@ public class DownloadManager : IDisposable
 
     private JsonElement FindFileByName(string name)
     {
-        var root = jsonDocument!.RootElement;
+        var root = _jsonDocument!.RootElement;
         var Assets = root.GetProperty("assets");
 
-        foreach (var Item in Assets.EnumerateArray()) {
-            if (Item.GetProperty("name").ToString().ToLower() == name.ToLower()) {
+        foreach (var Item in Assets.EnumerateArray())
+        {
+            if (Item.GetProperty("name").ToString().ToLower() == name.ToLower())
+            {
                 return Item;
             }
         }
@@ -92,14 +101,17 @@ public class DownloadManager : IDisposable
 
     private static void CalculateMD5(string[] filepath, Utf8JsonWriter writer)
     {
-        foreach (var folder in filepath) {
+        foreach (var folder in filepath)
+        {
             writer.WriteStartObject(folder);
 
-            try {
+            try
+            {
                 var Dir = Directory.GetCurrentDirectory() + "\\" + folder;
 
                 foreach (var file in Directory.EnumerateFiles(Dir, "*.*",
-                    SearchOption.TopDirectoryOnly)) {
+                    SearchOption.TopDirectoryOnly))
+                {
                     using var Compute = MD5.Create();
                     using var Stream = File.OpenRead(file);
                     var Hash = Compute.ComputeHash(Stream);
@@ -107,7 +119,9 @@ public class DownloadManager : IDisposable
                     writer.WriteString(Path.GetFileName(file).ToLower(), MD5Hash);
                     DebugOutput("Hash " + Path.GetFileName(file) + " - " + MD5Hash);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Debug.WriteLine(ex.Message);
             }
 
@@ -117,7 +131,8 @@ public class DownloadManager : IDisposable
 
     private void LoadFile(string FilePath, string FileName)
     {
-        try {
+        try
+        {
             DebugOutput("Load " + FilePath + FileName);
 
             var Adress = FindFileByName(FileName).GetProperty("browser_download_url").ToString();
@@ -126,29 +141,38 @@ public class DownloadManager : IDisposable
 #pragma warning restore
             var dirInfo = new DirectoryInfo(FilePath);
 
-            if (!dirInfo.Exists) {
+            if (!dirInfo.Exists)
+            {
                 dirInfo.Create();
             }
 
             Client.DownloadFile(Adress, FilePath + FileName);
             DebugOutput("Adress " + Adress);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             Debug.WriteLine(ex.Message);
         }
     }
 
     private void LoadMissedFiles(JsonElement local, JsonElement server)
     {
-        foreach (var folder in server.EnumerateObject()) {
-            foreach (var file in folder.Value.EnumerateObject()) {
+        foreach (var folder in server.EnumerateObject())
+        {
+            foreach (var file in folder.Value.EnumerateObject())
+            {
                 var Path = Directory.GetCurrentDirectory() + "\\" + folder.Name + "\\";
 
-                try {
+                try
+                {
                     if (file.Value.ToString() != local.GetProperty(folder.Name)
-                            .GetProperty(file.Name).ToString()) {
+                            .GetProperty(file.Name).ToString())
+                    {
                         LoadFile(Path, file.Name);
                     }
-                } catch {
+                }
+                catch
+                {
                     LoadFile(Path, file.Name);
                 }
             }
@@ -157,17 +181,25 @@ public class DownloadManager : IDisposable
 
     private static void DeleteExtraFiles(JsonElement local, JsonElement server)
     {
-        foreach (var folder in local.EnumerateObject()) {
-            foreach (var file in folder.Value.EnumerateObject()) {
+        foreach (var folder in local.EnumerateObject())
+        {
+            foreach (var file in folder.Value.EnumerateObject())
+            {
                 var Path = Directory.GetCurrentDirectory() + "\\" + folder.Name + "\\" +
                     file.Name;
-                try {
+                try
+                {
                     server.GetProperty(folder.Name).GetProperty(file.Name);
-                } catch {
-                    try {
+                }
+                catch
+                {
+                    try
+                    {
                         File.Delete(Path);
                         DebugOutput("Delete " + Path);
-                    } catch {
+                    }
+                    catch
+                    {
                         DebugOutput("Error Delete " + Path);
                     }
                 }
@@ -177,18 +209,23 @@ public class DownloadManager : IDisposable
 
     public string GetLocalHash()
     {
-        try {
-            var Options = new JsonWriterOptions {
+        try
+        {
+            var Options = new JsonWriterOptions
+            {
                 Indented = true
             };
             using var Stream = new MemoryStream();
-            using (var Writer = new Utf8JsonWriter(Stream, Options)) {
+            using (var Writer = new Utf8JsonWriter(Stream, Options))
+            {
                 Writer.WriteStartObject();
-                CalculateMD5(Folders, Writer);
+                CalculateMD5(_folders, Writer);
                 Writer.WriteEndObject();
             }
             return Encoding.UTF8.GetString(Stream.ToArray());
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             Debug.WriteLine(ex.Message);
         }
 
@@ -197,13 +234,16 @@ public class DownloadManager : IDisposable
 
     private string GetServerHash()
     {
-        try {
+        try
+        {
             using var client = new HttpClient();
-            var root = jsonDocument?.RootElement;
+            var root = _jsonDocument?.RootElement;
             var element = FindFileByName("hash.json");
             return client.GetStringAsync(element.GetProperty("browser_download_url").ToString())
                 .Result;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             Debug.WriteLine(ex.Message);
         }
         return "{}";
@@ -211,18 +251,21 @@ public class DownloadManager : IDisposable
 
     public bool CheckFiles(bool update = false)
     {
-        try {
+        try
+        {
             var ServerHash = GetServerHash();
             var LocalHash = GetLocalHash();
 
-            if (ServerHash != LocalHash) {
+            if (ServerHash != LocalHash)
+            {
                 DebugOutput(ServerHash);
                 DebugOutput(LocalHash);
 
                 var Server = JsonDocument.Parse(ServerHash).RootElement;
                 var Local = JsonDocument.Parse(LocalHash).RootElement;
 
-                if (update) {
+                if (update)
+                {
                     DeleteExtraFiles(Local, Server);
                     LoadMissedFiles(Local, Server);
                 }
@@ -231,7 +274,9 @@ public class DownloadManager : IDisposable
 
                 return true;
             }
-        } catch {
+        }
+        catch
+        {
             DebugOutput("Loading Error");
 
             return true;
@@ -242,6 +287,6 @@ public class DownloadManager : IDisposable
 
     public void Dispose()
     {
-        jsonDocument!.Dispose();
+        _jsonDocument!.Dispose();
     }
 }

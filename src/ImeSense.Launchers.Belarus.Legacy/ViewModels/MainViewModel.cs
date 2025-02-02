@@ -22,9 +22,12 @@ public class MainViewModel : ViewModelBase, IScreen
         _launcherViewModel.HostScreen = this;
 
         if (!File.Exists(PathStorage.LauncherSetting) ||
-            string.IsNullOrEmpty(userSettings.Username)) {
+            string.IsNullOrEmpty(userSettings.Username))
+        {
             ShowAuthorization();
-        } else {
+        }
+        else
+        {
             ShowLauncher();
         }
     }
