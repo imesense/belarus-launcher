@@ -11,7 +11,8 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-Console.Title = "Belarus CryptoHasher";
+var title = "Belarus CryptoHasher";
+Console.Title = title; // Only Windows system
 
 IEnumerable<string> GetDirectories() => [
     DirectoryStorage.Binaries,
@@ -22,7 +23,8 @@ IEnumerable<string> GetDirectories() => [
 var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.CryptoHasherLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
 var logger = factory.CreateLogger<Program>();
-logger.LogInformation("Start CryptoHasher application");
+logger.LogInformation("{Info}", InformationPrinter.GetStartupInfo(title));
+
 
 var hashing = new Md5HashProvider(factory.CreateLogger<Md5HashProvider>());
 

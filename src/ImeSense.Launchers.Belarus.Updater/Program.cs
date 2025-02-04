@@ -11,12 +11,13 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-Console.Title = "Belarus Launcher Updater";
+var title = "Belarus Launcher Updater";
+Console.Title = title; // Only Windows system
 
 var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherUpdaterLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
 var logger = factory.CreateLogger<Program>();
-logger.LogInformation("Start Belarus Launcher Updater");
+logger.LogInformation("{Info}", InformationPrinter.GetStartupInfo(title));
 
 try
 {

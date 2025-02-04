@@ -82,7 +82,7 @@ public class GameDirectoryValidator(ILogger<GameDirectoryValidator> logger, ILau
     {
         if (_launcherStorage.GitHubRelease is null)
         {
-            _logger.LogInformation("Server files are larger than local files");
+            _logger.LogError("Server files are larger than local files");
             return false;
         }
 

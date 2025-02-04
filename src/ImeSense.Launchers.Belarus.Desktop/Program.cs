@@ -3,7 +3,8 @@ using Avalonia.ReactiveUI;
 
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Storage;
-using ImeSense.Launchers.Belarus.Helpers;
+
+using Microsoft.Extensions.Logging;
 
 using Serilog;
 
@@ -12,8 +13,8 @@ namespace ImeSense.Launchers.Belarus.Desktop;
 internal class Program
 {
     private const string _mutexName = "Belarus.Launcher.Desktop";
-
     private static Mutex? _mutex;
+    private static Microsoft.Extensions.Logging.ILogger? _logger;
 
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -22,7 +23,8 @@ internal class Program
     public static void Main(string[] args)
     {
         var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherLog);
-        Log.Logger = LogManager.CreateLogger(pathLog);
+        var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
+        _logger = factory.CreateLogger<Program>();
 
         var isMutexCreated = false;
         try
@@ -31,7 +33,7 @@ internal class Program
         }
         catch (Exception exception)
         {
-            Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
+            _logger.LogError("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
             Log.CloseAndFlush();
             _mutex?.Dispose();
             throw;
@@ -52,7 +54,7 @@ internal class Program
             }
             catch (Exception exception)
             {
-                Log.Error("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
+                _logger.LogError("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
                 Log.CloseAndFlush();
                 _mutex?.Dispose();
                 throw;
@@ -68,18 +70,17 @@ internal class Program
 
     private static void StartApp(string[] args)
     {
-        Log.Information("Start SBLauncher");
-        Log.Information(InformationPrinter.GetOsInfo());
-        Log.Information(InformationPrinter.GetApplicationInfo());
-
+        _logger?.LogInformation("{Info}", InformationPrinter.GetStartupInfo("Belarus Launcher"));
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace()
-            .UseReactiveUI();
+    {
+        return AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .WithInterFont()
+                .LogToTrace()
+                .UseReactiveUI();
+    }
 }

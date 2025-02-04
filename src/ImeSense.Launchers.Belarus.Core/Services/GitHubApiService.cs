@@ -71,8 +71,17 @@ public class GitHubApiService(ILogger<GitHubApiService>? logger, HttpClient http
         var response = await _httpClient.GetAsync(new Uri(uriRepository, "releases/latest"), cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
-            _logger?.LogError("Failed to get last release from {UriRepository}. Status code: {StatusCode}", uriRepository,
-                response.StatusCode);
+            _logger?.LogError("Failed to get last release from {UriRepository}. Status code: {StatusCode}", uriRepository, response.StatusCode);
+
+            // Обработка специфических ошибок
+            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                _logger?.LogError("Access forbidden. Possible reasons: rate limit exceeded or missing authentication.");
+
+                var remainingRequests = response.Headers.GetValues("X-RateLimit-Remaining").FirstOrDefault();
+                _logger?.LogInformation("Remaining requests: {RemainingRequests}", remainingRequests);
+            }
+
             return null;
         }
 
