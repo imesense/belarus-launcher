@@ -1,13 +1,13 @@
 {
-    "version": 1,
-    "isRoot": true,
-    "tools": {
-        "xamlstyler.console": {
-            "version": "3.2404.2",
-            "commands": [
-                "xstyler"
-            ],
-            "rollForward": false
-        }
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "xamlstyler.console": {
+      "version": "3.2501.8",
+      "commands": [
+        "xstyler"
+      ],
+      "rollForward": false
     }
+  }
 }
