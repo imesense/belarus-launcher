@@ -60,10 +60,6 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());
         Back = ReactiveCommand.Create<MainWindowViewModel>(BackImpl);
 
-        StartGame.ThrownExceptions.Merge(Back.ThrownExceptions)
-            .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
-            .Subscribe(OnCommandException);
-
         this.WhenAnyValue(x => x._localeManager.Locale)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(x =>
@@ -115,9 +111,6 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     {
         mainWindowViewModel.ShowLauncherImpl();
     }
-
-    private void OnCommandException(Exception exception)
-        => _logger?.LogError("{Message}", exception.Message);
 
     protected new virtual void Dispose(bool disposing)
     {

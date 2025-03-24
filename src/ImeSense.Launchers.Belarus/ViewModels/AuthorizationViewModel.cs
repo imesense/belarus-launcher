@@ -147,10 +147,6 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 
         ShowLauncher = ReactiveCommand.Create<MainWindowViewModel>(ShowLauncherImpl, this.IsValid());
         Close = ReactiveCommand.Create(_windowManager.Close);
-
-        ShowLauncher.ThrownExceptions.Merge(Close.ThrownExceptions)
-            .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
-            .Subscribe(OnCommandException);
     }
 
     private void SetupValidation()
@@ -161,9 +157,6 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
             _authenticationViewModelValidator.EnsureUsernameCorrectCharacters(this),
         ];
     }
-
-    private void OnCommandException(Exception exception)
-        => _logger?.LogError("{Message}", exception.Message);
 
     protected new virtual void Dispose(bool disposing)
     {

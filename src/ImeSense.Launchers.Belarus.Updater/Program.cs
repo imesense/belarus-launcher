@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net.Http.Headers;
 
 using ImeSense.Launchers.Belarus.Core;
+using ImeSense.Launchers.Belarus.Core.Exceptions;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
@@ -17,6 +18,7 @@ Console.Title = title; // Only Windows system
 var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherUpdaterLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
 var logger = factory.CreateLogger<Program>();
+GlobalExceptionHandler.Initialize(logger);
 logger.LogInformation("{Info}", InformationPrinter.GetStartupInfo(title));
 
 try
@@ -26,7 +28,7 @@ try
         process.Kill();
     }
 
-    logger.LogInformation($"Start update");
+    logger.LogInformation("Start update");
     var fileSavePath = Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncherZip);
 
     using var httpClient = new HttpClient(new HttpClientHandler
@@ -45,7 +47,7 @@ try
         new FileDownloadManager(factory.CreateLogger<FileDownloadManager>(), httpClient));
     await updaterService.UpdaterAsync(UriStorage.LauncherApiUri, fileSavePath, cancellationToken.Token);
 
-    logger.LogInformation($"Finish!");
+    logger.LogInformation("Finish!");
     Launcher.Launch(Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncher))?.Start();
 }
 catch (Exception ex)

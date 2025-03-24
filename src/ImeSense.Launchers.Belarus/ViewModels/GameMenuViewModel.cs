@@ -53,10 +53,6 @@ public class GameMenuViewModel : ReactiveObject
         StartServer = ReactiveCommand.Create(StartServerImpl, canExecuteServer);
         CheckUpdates = ReactiveCommand.CreateFromTask<LauncherViewModel>(CheckUpdatesImplAsync, isGitHubConnection);
         Close = ReactiveCommand.Create(_windowManager.Close);
-
-        Observable.Merge(PlayGame.ThrownExceptions, StartServer.ThrownExceptions, Close.ThrownExceptions)
-            .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
-            .Subscribe(OnCommandException);
     }
 
     private async Task CheckUpdatesImplAsync(LauncherViewModel launcherViewModel)
@@ -124,7 +120,4 @@ public class GameMenuViewModel : ReactiveObject
     {
         IsStartServer = false;
     }
-
-    private void OnCommandException(Exception exception)
-        => _logger?.LogError("{Message}", exception.Message);
 }

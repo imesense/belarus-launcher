@@ -88,11 +88,6 @@ public class NewsSliderViewModel : ReactiveObject
         GoNext = ReactiveCommand.Create(GoNextImpl, canExecuteNext);
         GoBack = ReactiveCommand.Create(GoBackImpl, canExecuteBack);
 
-        GoNext.ThrownExceptions.Merge(GoBack.ThrownExceptions)
-            .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
-            .Subscribe(OnCommandException);
-
-
         var canLoadNews = this.WhenAnyValue(x => x._launcherStorage.NewsContents)
             .Any(news => news != null && news.Any());
 
@@ -159,7 +154,4 @@ public class NewsSliderViewModel : ReactiveObject
         NumPage = News.Count - 1;
         SelectedNewsViewModel = News[NumPage];
     }
-
-    private void OnCommandException(Exception exception)
-        => _logger?.LogError("{Message}", exception.Message);
 }

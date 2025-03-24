@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 
+using ImeSense.Launchers.Belarus.Core.Exceptions;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
@@ -26,52 +27,21 @@ internal class Program
         var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
         _logger = factory.CreateLogger<Program>();
 
-        var isMutexCreated = false;
-        try
-        {
-            _mutex = new Mutex(initiallyOwned: false, _mutexName, out isMutexCreated);
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
-            Log.CloseAndFlush();
-            _mutex?.Dispose();
-            throw;
-        }
+        GlobalExceptionHandler.Initialize(_logger);
+        _logger?.LogInformation("{Info}", InformationPrinter.GetStartupInfo("Belarus Launcher"));
+
+        _mutex = new Mutex(initiallyOwned: false, _mutexName, out bool isMutexCreated);
+
         if (!isMutexCreated)
         {
             return;
         }
 
-        try
-        {
-#if DEBUG
-            StartApp(args);
-#else
-            try
-            {
-                StartApp(args);
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("{Message} \n {StackTrace}", exception.Message, exception.StackTrace);
-                Log.CloseAndFlush();
-                _mutex?.Dispose();
-                throw;
-            }
-#endif
-        }
-        finally
-        {
-            Log.CloseAndFlush();
-            _mutex?.Dispose();
-        }
-    }
-
-    private static void StartApp(string[] args)
-    {
-        _logger?.LogInformation("{Info}", InformationPrinter.GetStartupInfo("Belarus Launcher"));
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+
+        Log.CloseAndFlush();
+        _mutex?.Dispose();
+        factory.Dispose();
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Text.Json;
 
 using ImeSense.Launchers.Belarus.Core;
+using ImeSense.Launchers.Belarus.Core.Exceptions;
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Models;
@@ -23,8 +24,8 @@ IEnumerable<string> GetDirectories() => [
 var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.CryptoHasherLog);
 using var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
 var logger = factory.CreateLogger<Program>();
+GlobalExceptionHandler.Initialize(logger);
 logger.LogInformation("{Info}", InformationPrinter.GetStartupInfo(title));
-
 
 var hashing = new Md5HashProvider(factory.CreateLogger<Md5HashProvider>());
 
