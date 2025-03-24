@@ -1,18 +1,19 @@
 using System.Diagnostics;
-using System.Net.Http.Headers;
 
 using ImeSense.Launchers.Belarus.Core;
 using ImeSense.Launchers.Belarus.Core.Exceptions;
+using ImeSense.Launchers.Belarus.Core.Http;
 using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-var title = "Belarus Launcher Updater";
+const string title = "Belarus Launcher Updater";
 Console.Title = title; // Only Windows system
 
 var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherUpdaterLog);
@@ -21,6 +22,12 @@ var logger = factory.CreateLogger<Program>();
 GlobalExceptionHandler.Initialize(logger);
 logger.LogInformation("{Info}", InformationPrinter.GetStartupInfo(title));
 
+var configuration = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .Build();
+
+var serviceApiToken = configuration["SecretsBelarus:GitHubToken"];
+var uri = UriStorage.LauncherApiUri;
 try
 {
     foreach (var process in Process.GetProcessesByName("SBLauncher"))
@@ -31,15 +38,8 @@ try
     logger.LogInformation("Start update");
     var fileSavePath = Path.Combine(DirectoryStorage.CurrentDirectory, FileNameStorage.SBLauncherZip);
 
-    using var httpClient = new HttpClient(new HttpClientHandler
-    {
-        SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-    });
-
-    httpClient.BaseAddress = UriStorage.LauncherApiUri;
-    httpClient.DefaultRequestHeaders.Accept.Clear();
-    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-    httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+    using var httpClient = new HttpClient(HttpClientConfiguration.CreateHttpHandler());
+    HttpClientConfiguration.Configure(httpClient, uri, serviceApiToken ?? throw new InvalidOperationException("Token is null"));
 
     var cancellationToken = new CancellationTokenSource();
     var updaterService = new UpdaterService(factory.CreateLogger<UpdaterService>(),

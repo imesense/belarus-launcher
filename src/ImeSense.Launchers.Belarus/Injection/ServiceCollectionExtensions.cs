@@ -1,5 +1,4 @@
-using System.Net.Http.Headers;
-
+using ImeSense.Launchers.Belarus.Core.Http;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Core.Services;
@@ -10,25 +9,41 @@ using ImeSense.Launchers.Belarus.ViewModels;
 using ImeSense.Launchers.Belarus.ViewModels.Validators;
 using ImeSense.Launchers.Belarus.Views;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ImeSense.Launchers.Belarus.Injection;
 
 internal static class ServiceCollectionExtensions
 {
+    private static readonly Action<IServiceProvider, HttpClient> _configureClient;
+
+    static ServiceCollectionExtensions()
+    {
+        _configureClient = (serviceProvider, httpClient) =>
+        {
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var serviceApiToken = configuration["SecretsBelarus:GitHubToken"];
+
+            if (string.IsNullOrEmpty(serviceApiToken))
+            {
+                throw new InvalidOperationException("Failed to get the GitHub token");
+            }
+
+            HttpClientConfiguration.Configure(httpClient, UriStorage.BelarusApiUri, serviceApiToken);
+        };
+    }
+
     public static IServiceCollection AddManagers(this IServiceCollection services)
     {
         services.AddSingleton<IWindowManager, WindowManager>();
         services.AddHttpClient<IFileDownloadManager, FileDownloadManager>()
-           .ConfigurePrimaryHttpMessageHandler(() =>
-           {
-               return new HttpClientHandler
-               {
-                   SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-               };
-           }).ConfigureHttpClient(ConfigureClient);
+           .ConfigurePrimaryHttpMessageHandler(HttpClientConfiguration.CreateHttpHandler)
+           .ConfigureHttpClient(_configureClient);
         services.AddSingleton<UserManager>();
-        services.AddSingleton<InitializerManager>();
+        services.AddHttpClient<InitializerManager>()
+           .ConfigurePrimaryHttpMessageHandler(HttpClientConfiguration.CreateHttpHandler)
+           .ConfigureHttpClient(_configureClient);
         services.AddSingleton<IApplicationLocaleManager, AxamlLocaleManager>();
         services.AddScoped<ISplashScreenManager, SplashScreenManager>();
 
@@ -38,14 +53,8 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddHttpClient<IGitStorageApiService, GitHubApiService>()
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                return new HttpClientHandler
-                {
-                    SslProtocols = System.Security.Authentication.SslProtocols.Tls12
-                };
-            })
-            .ConfigureHttpClient(ConfigureClient);
+            .ConfigurePrimaryHttpMessageHandler(HttpClientConfiguration.CreateHttpHandler)
+            .ConfigureHttpClient(_configureClient);
         services.AddTransient<IReleaseComparerService<GitHubRelease>, ReleaseComparerService>();
         services.AddTransient<IUpdaterService, UpdaterService>();
         services.AddTransient<IDownloadResourcesService, DownloadResourcesService>();
@@ -53,7 +62,7 @@ internal static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddPresetationServices(this IServiceCollection services)
+    public static IServiceCollection AddPresentationServices(this IServiceCollection services)
     {
         services.AddViewModels();
         services.AddViews();
@@ -98,15 +107,7 @@ internal static class ServiceCollectionExtensions
         services.AddTransient<StartGameViewModelValidator>();
         services.AddTransient<IAuthenticationValidator, AuthenticationValidator>();
         services.AddTransient<IStartGameValidator, StartGameValidator>();
+
         return services;
     }
-
-    private static void ConfigureClient(HttpClient httpClient)
-    {
-        httpClient.BaseAddress = UriStorage.BelarusApiUri;
-        httpClient.DefaultRequestHeaders.Accept.Clear();
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-        httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-    }
-
 }

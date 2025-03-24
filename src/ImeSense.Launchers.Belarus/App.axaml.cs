@@ -11,6 +11,7 @@ using ImeSense.Launchers.Belarus.Services;
 using ImeSense.Launchers.Belarus.ViewModels;
 using ImeSense.Launchers.Belarus.Views;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -20,13 +21,8 @@ namespace ImeSense.Launchers.Belarus;
 
 public partial class App : Application
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public App()
-    {
-        _serviceProvider = ConfigureServices()
-                .BuildServiceProvider();
-    }
+    private readonly IServiceProvider _serviceProvider = ConfigureServices()
+        .BuildServiceProvider();
 
     private static ServiceCollection ConfigureServices()
     {
@@ -34,8 +30,15 @@ public partial class App : Application
 
         services.AddLogging(loggingBuilder =>
             loggingBuilder.AddSerilog(dispose: true));
+        services.AddTransient<IConfiguration>(x =>
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddUserSecrets<App>()
+                .Build();
+            return configuration;
+        });
 
-        services.AddPresetationServices();
+        services.AddPresentationServices();
         services.AddValidators();
         services.AddManagers();
         services.AddServices();
