@@ -15,12 +15,12 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 public class DownloadMenuViewModel : ReactiveObject
 {
     private readonly ILogger<DownloadMenuViewModel>? _logger;
-    private readonly IApplicationLocaleManager _localeManager;
     private readonly IWindowManager _windowManager;
     private readonly IDownloadResourcesService _downloadResourcesService;
     private readonly ILauncherStorage _launcherStorage;
     private CancellationTokenSource _cts;
 
+    public IApplicationLocaleManager Localization { get; private set; }
     public CancellationToken CancellationToken { get; private set; }
     public ReactiveCommand<LauncherViewModel, Unit> StartDownload { get; private set; }
     public ReactiveCommand<Unit, Unit> Pause { get; private set; }
@@ -37,13 +37,13 @@ public class DownloadMenuViewModel : ReactiveObject
     [Reactive] public bool IsDownload { get; set; }
 
     public DownloadMenuViewModel(ILogger<DownloadMenuViewModel>? logger,
-        IApplicationLocaleManager localeManager,
+        IApplicationLocaleManager localization,
         IWindowManager windowManager,
         IDownloadResourcesService downloadResourcesService,
         ILauncherStorage launcherStorage)
     {
+        Localization = localization;
         _logger = logger;
-        _localeManager = localeManager;
         _windowManager = windowManager;
         _downloadResourcesService = downloadResourcesService;
         _launcherStorage = launcherStorage;
@@ -108,7 +108,7 @@ public class DownloadMenuViewModel : ReactiveObject
         });
 
         IsProgress = true;
-        StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.IntegrityChecking");
+        StatusProgress = Localization.GetStringByKey("LocalizedStrings.IntegrityChecking");
 
         var filesDownload = await _downloadResourcesService.GetFilesForDownloadAsync(progress, CancellationToken);
 
@@ -127,7 +127,7 @@ public class DownloadMenuViewModel : ReactiveObject
             foreach (var file in filesDownload)
             {
                 numberFile++;
-                StatusProgress = _localeManager.GetStringByKey("LocalizedStrings.Files") +
+                StatusProgress = Localization.GetStringByKey("LocalizedStrings.Files") +
                                  $": {numberFile} / {countFiles}";
                 DownloadFileName = Path.GetFileName(file.Key);
                 await _downloadResourcesService.DownloadAsync(file.Key, file.Value, progress, CancellationToken);

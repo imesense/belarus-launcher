@@ -19,6 +19,7 @@ public class GameMenuViewModel : ReactiveObject
     private readonly ILauncherStorage _launcherStorage;
     private readonly UserManager _userManager;
 
+    public IApplicationLocaleManager Localization { get; private set; }
     public ReactiveCommand<MainWindowViewModel, Unit> PlayGame { get; private set; }
     public ReactiveCommand<Unit, Unit> StartServer { get; private set; }
     public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; }
@@ -27,8 +28,9 @@ public class GameMenuViewModel : ReactiveObject
     [Reactive] public bool IsStartServer { get; set; } = false;
 
     public GameMenuViewModel(ILogger<GameMenuViewModel>? logger, IWindowManager windowManager,
-        UserManager userManager, ILauncherStorage launcherStorage)
+        UserManager userManager, ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager)
     {
+        Localization = localeManager;
         _logger = logger;
         _windowManager = windowManager;
         _userManager = userManager;
@@ -41,6 +43,7 @@ public class GameMenuViewModel : ReactiveObject
         CheckUpdates = CheckUpdates ?? throw new NullReferenceException(nameof(CheckUpdates));
         Close = Close ?? throw new NullReferenceException(nameof(Close));
     }
+
 
     private void SetupCommands()
     {

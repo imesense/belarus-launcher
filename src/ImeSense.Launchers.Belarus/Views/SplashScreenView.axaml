@@ -50,7 +50,7 @@
                 Maximum="{Binding MaxProgress}"
                 Minimum="0" />
             <Button
-                Content="{DynamicResource LocalizedStrings.Cancel}"
+                Content="{Binding Localization[LocalizedStrings.Cancel], FallbackValue=Cancel}"
                 Command="{Binding Cancel}"
                 Margin="10"
                 Padding="10"

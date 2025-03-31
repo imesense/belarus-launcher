@@ -23,7 +23,7 @@
             VerticalAlignment="Stretch"
             DockPanel.Dock="Bottom">
             <Button
-                Content="{DynamicResource LocalizedStrings.Exit}"
+                Content="{Binding Localization[LocalizedStrings.Exit], FallbackValue=Exit}"
                 Command="{Binding Close}"
                 Margin="10,35"
                 HorizontalAlignment="Right"
@@ -31,7 +31,7 @@
                 Classes="styled"
                 FontSize="38" />
             <Button
-                Content="{DynamicResource LocalizedStrings.CheckUpdates}"
+                Content="{Binding Localization[LocalizedStrings.CheckUpdates], FallbackValue=CheckUpdates}"
                 Command="{Binding CheckUpdates}"
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
                 Margin="10"
@@ -46,7 +46,7 @@
             Margin="45,0,15,0"
             VerticalAlignment="Center">
             <Button
-                Content="{DynamicResource LocalizedStrings.PlayGame}"
+                Content="{Binding Localization[LocalizedStrings.PlayGame], FallbackValue=PlayGame}"
                 Command="{Binding PlayGame}"
                 CommandParameter="{Binding $parent[Window].DataContext}"
                 Margin="5,15"
@@ -55,7 +55,7 @@
                 Classes="styled"
                 FontSize="38" />
             <Button
-                Content="{DynamicResource LocalizedStrings.LaunchServer}"
+                Content="{Binding Localization[LocalizedStrings.LaunchServer], FallbackValue=LaunchServer}"
                 Command="{Binding StartServer}"
                 Margin="5,15"
                 HorizontalAlignment="Right"

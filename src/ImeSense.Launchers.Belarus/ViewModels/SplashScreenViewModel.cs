@@ -11,18 +11,21 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 public class SplashScreenViewModel : ReactiveObject
 {
     private readonly IWindowManager _windowManager;
-    ISplashScreenManager SplashScreen { get; set; }
 
+    public IApplicationLocaleManager Localization { get; private set; }
+    public ISplashScreenManager SplashScreen { get; set; }
     [Reactive] public InformationMessage InformationMessage { get; set; }
     [Reactive] public int Progress { get; set; }
     public int MaxProgress { get; private set; }
 
     public ReactiveCommand<Unit, Unit> Cancel { get; set; }
 
-    public SplashScreenViewModel(IWindowManager windowManager, ISplashScreenManager splashScreen)
+    public SplashScreenViewModel(IWindowManager windowManager, ISplashScreenManager splashScreen,
+        IApplicationLocaleManager localization)
     {
         _windowManager = windowManager;
         SplashScreen = splashScreen;
+        Localization = localization;
         Progress = SplashScreen.CurrentProgress;
         MaxProgress = SplashScreen.MaxProgress;
 
@@ -37,6 +40,7 @@ public class SplashScreenViewModel : ReactiveObject
 
         Cancel = ReactiveCommand.Create(CancelImpl);
     }
+
 
     private void CancelImpl()
     {

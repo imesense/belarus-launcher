@@ -5,12 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:vm="using:ImeSense.Launchers.Belarus.ViewModels"
     xmlns:helpers="clr-namespace:ImeSense.Launchers.Belarus.Helpers"
+    xmlns:vm="using:ImeSense.Launchers.Belarus.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    
+
     <Design.DataContext>
         <helpers:DesignTimeViewModelResolver x:TypeArguments="vm:AuthorizationViewModel" />
     </Design.DataContext>
@@ -27,7 +27,7 @@
                 <TextBlock
                     Grid.Column="0"
                     Grid.Row="0"
-                    Text="{DynamicResource LocalizedStrings.Language}"
+                    Text="{Binding Localization[LocalizedStrings.Language], FallbackValue=Language}"
                     Margin="10,5"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
@@ -48,7 +48,7 @@
                 <TextBlock
                     Grid.Column="0"
                     Grid.Row="1"
-                    Text="{DynamicResource LocalizedStrings.Nickname}"
+                    Text="{Binding Localization[LocalizedStrings.Nickname], FallbackValue=Nickname}"
                     Margin="10,5"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
@@ -72,14 +72,14 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
-                    Content="{DynamicResource LocalizedStrings.Next}"
+                    Content="{Binding Localization[LocalizedStrings.Next], FallbackValue=Next}"
                     Command="{Binding ShowLauncher}"
                     CommandParameter="{Binding $parent[Window].DataContext}"
                     Margin="10,0"
                     Classes="styled"
                     FontSize="20" />
                 <Button
-                    Content="{DynamicResource LocalizedStrings.Close}"
+                    Content="{Binding Localization[LocalizedStrings.Close], FallbackValue=Close}"
                     Command="{Binding Close}"
                     Margin="10,0"
                     Classes="styled"

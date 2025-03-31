@@ -23,7 +23,7 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock
-                    Text="{DynamicResource LocalizedStrings.EnterIpAddress}"
+                    Text="{Binding Localization[LocalizedStrings.EnterIpAddress], FallbackValue=EnterIpAddress}"
                     Margin="10,5"
                     FontSize="16" />
                 <TextBox
@@ -38,13 +38,13 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
-                    Content="{DynamicResource LocalizedStrings.StartGame}"
+                    Content="{Binding Localization[LocalizedStrings.StartGame], FallbackValue=StartGame}"
                     Command="{Binding StartGame}"
                     Margin="10,0"
                     Classes="styled"
                     FontSize="18" />
                 <Button
-                    Content="{DynamicResource LocalizedStrings.Back}"
+                    Content="{Binding Localization[LocalizedStrings.Back], FallbackValue=Back}"
                     Command="{Binding Back}"
                     CommandParameter="{Binding $parent[Window].DataContext}"
                     Margin="10,0"

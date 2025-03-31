@@ -44,7 +44,7 @@ internal static class ServiceCollectionExtensions
         services.AddHttpClient<InitializerManager>()
            .ConfigurePrimaryHttpMessageHandler(HttpClientConfiguration.CreateHttpHandler)
            .ConfigureHttpClient(_configureClient);
-        services.AddSingleton<IApplicationLocaleManager, AxamlLocaleManager>();
+        services.AddSingleton<IApplicationLocaleManager, LocalizationManager>();
         services.AddScoped<ISplashScreenManager, SplashScreenManager>();
 
         return services;

@@ -11,7 +11,6 @@ namespace ImeSense.Launchers.Belarus.Manager;
 
 public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveObject, IApplicationLocaleManager
 {
-    private readonly ILogger<AxamlLocaleManager> _logger = logger;
     private ResourceInclude? _resources;
 
     [Reactive] public string Locale { get; private set; } = string.Empty;
@@ -35,7 +34,7 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load localized resources for locale: {Locale}", locale);
+            logger.LogError(ex, "Failed to load localized resources for locale: {Locale}", locale);
             throw;
         }
     }
@@ -44,7 +43,7 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
     {
         if (_resources is null)
         {
-            _logger.LogError("Resource include is not initialized");
+            logger.LogError("Resource include is not initialized");
             return string.Empty;
         }
 
@@ -55,7 +54,7 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
         }
         else
         {
-            _logger.LogError("Resource with key '{Key}' not found for locale '{Locale}'", key, Locale);
+            logger.LogError("Resource with key '{Key}' not found for locale '{Locale}'", key, Locale);
             return string.Empty;
         }
     }

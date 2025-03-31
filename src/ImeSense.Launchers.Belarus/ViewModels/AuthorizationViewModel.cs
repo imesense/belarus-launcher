@@ -24,7 +24,6 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 {
     private readonly ILogger<AuthorizationViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
-    private readonly IApplicationLocaleManager _localeManager;
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
     private readonly AuthenticationViewModelValidator _authenticationViewModelValidator;
@@ -32,6 +31,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 
     private CompositeDisposable? _disposables = null;
 
+    public IApplicationLocaleManager Localization { get; private set; }
     [Reactive] public ObservableCollection<Locale> Languages { get; set; } = new();
 
     [Reactive] public Locale SelectedLanguage { get; set; } = new();
@@ -43,14 +43,14 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
 
     public AuthorizationViewModel(ILogger<AuthorizationViewModel>? logger,
-        ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager,
+        ILauncherStorage launcherStorage, IApplicationLocaleManager localization,
         IWindowManager windowManager, UserManager userManager,
         AuthenticationViewModelValidator authenticationViewModelValidator,
         ViewModelLocator viewModelLocator)
     {
         _logger = logger;
         _launcherStorage = launcherStorage;
-        _localeManager = localeManager;
+        Localization = localization;
         _windowManager = windowManager;
         _userManager = userManager;
         _authenticationViewModelValidator = authenticationViewModelValidator;
@@ -64,7 +64,7 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
         var username = Username.Trim();
         if (string.IsNullOrWhiteSpace(username))
         {
-            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.UsernameNotEntered"));
+            throw new Exception(Localization.GetStringByKey("LocalizedStrings.UsernameNotEntered"));
         }
 
         if (_userManager is null)
@@ -134,8 +134,8 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 
         UpdateInterfaceCommand = ReactiveCommand.Create<string>(key =>
         {
-            _localeManager.SetLocale(key);
-            _userManager.UserSettings.Locale = SelectedLanguage ?? Languages[0];
+            Localization.SetLocale(key);
+            _userManager.UserSettings.Locale = SelectedLanguage;
             _disposables?.Dispose();
             SetupValidation();
         });

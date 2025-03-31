@@ -17,21 +17,22 @@ namespace ImeSense.Launchers.Belarus.ViewModels;
 public class StartGameViewModel : ReactiveValidationObject, IDisposable
 {
     private readonly ILogger<StartGameViewModel>? _logger;
-    private readonly IApplicationLocaleManager _localeManager;
     private readonly IWindowManager _windowManager;
     private readonly UserManager _userManager;
     private readonly StartGameViewModelValidator _startGameViewModelValidator;
     private CompositeDisposable? _disposables;
 
+    public IApplicationLocaleManager Localization { get; private set; }
     [Reactive] public string IpAddress { get; set; }
 
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;
 
     public StartGameViewModel(ILogger<StartGameViewModel>? logger, UserManager userManager,
-        IWindowManager windowManager, IApplicationLocaleManager localeManager,
+        IWindowManager windowManager, IApplicationLocaleManager localization,
         StartGameViewModelValidator startGameViewModelValidator)
     {
+        Localization = localization;
         _logger = logger;
         _logger?.LogInformation("StartGameViewModel ctor");
 
@@ -50,7 +51,6 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
         _windowManager = windowManager;
         _startGameViewModelValidator = startGameViewModelValidator;
-        _localeManager = localeManager;
 
         SetupCommands();
     }
@@ -60,7 +60,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
         StartGame = ReactiveCommand.Create(StartGameImpl, this.IsValid());
         Back = ReactiveCommand.Create<MainWindowViewModel>(BackImpl);
 
-        this.WhenAnyValue(x => x._localeManager.Locale)
+        this.WhenAnyValue(x => x.Localization.Locale)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(x =>
             {
@@ -92,7 +92,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
 
         if (string.IsNullOrWhiteSpace(IpAddress))
         {
-            throw new Exception(_localeManager.GetStringByKey("LocalizedStrings.NoIpAddressEntered"));
+            throw new Exception(Localization.GetStringByKey("LocalizedStrings.NoIpAddressEntered"));
         }
 
         _userManager.UserSettings.IpAddress = IpAddress;

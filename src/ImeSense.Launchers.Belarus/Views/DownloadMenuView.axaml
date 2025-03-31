@@ -21,7 +21,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
         <Button
-            Content="{DynamicResource LocalizedStrings.Exit}"
+            Content="{Binding Localization[LocalizedStrings.Exit], FallbackValue=Exit}"
             Command="{Binding Close}"
             Margin="10,45"
             HorizontalAlignment="Stretch"
@@ -36,7 +36,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center">
             <Button
-                Content="{DynamicResource LocalizedStrings.StartDownloading}"
+                Content="{Binding Localization[LocalizedStrings.StartDownloading], FallbackValue=StartDownloading}"
                 Command="{Binding StartDownload}"
                 CommandParameter="{Binding $parent[v:LauncherView].DataContext}"
                 HorizontalAlignment="Right"
@@ -77,7 +77,7 @@
                     Minimum="0" />
 
                 <Button
-                    Content="{DynamicResource LocalizedStrings.Pause}"
+                    Content="{Binding Localization[LocalizedStrings.Pause], FallbackValue=Pause}"
                     Command="{Binding Pause}"
                     Margin="20"
                     HorizontalAlignment="Center"
