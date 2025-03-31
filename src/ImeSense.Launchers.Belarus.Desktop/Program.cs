@@ -24,7 +24,7 @@ internal class Program
     public static void Main(string[] args)
     {
         var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherLog);
-        var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLoggerConsole(pathLog)));
+        var factory = LoggerFactory.Create(builder => builder.AddSerilog(LogManager.CreateLogger(pathLog)));
         _logger = factory.CreateLogger<Program>();
 
         GlobalExceptionHandler.Initialize(_logger);

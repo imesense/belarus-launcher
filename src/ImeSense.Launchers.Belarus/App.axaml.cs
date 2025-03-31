@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
 using ImeSense.Launchers.Belarus.Core.FileHashVerification;
+using ImeSense.Launchers.Belarus.Core.Logger;
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Services;
 using ImeSense.Launchers.Belarus.Core.Storage;
@@ -27,9 +28,8 @@ public partial class App : Application
     private static ServiceCollection ConfigureServices()
     {
         var services = new ServiceCollection();
-
-        services.AddLogging(loggingBuilder =>
-            loggingBuilder.AddSerilog(dispose: true));
+        var pathLog = Path.Combine(DirectoryStorage.LauncherLogs, FileNameStorage.LauncherLog);
+        services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(LogManager.CreateLogger(pathLog)));
         services.AddTransient<IConfiguration>(x =>
         {
             var configuration = new ConfigurationBuilder()
