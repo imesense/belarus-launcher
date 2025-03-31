@@ -86,7 +86,7 @@ public class InitializerManager(
             else
             {
                 splashScreenManager.UpdateInformation(new InformationMessage(
-                    _localeManager.GetStringByKey("LocalizedStrings.OffineLoading"),
+                    _localeManager.GetStringByKey("LocalizedStrings.OfflineLoading"),
                     _localeManager.GetStringByKey("LocalizedStrings.LoadLocalData")));
 
                 await HandleOfflineInitializationAsync(splashScreenManager.CancellationToken);

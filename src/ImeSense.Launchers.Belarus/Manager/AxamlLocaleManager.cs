@@ -59,4 +59,6 @@ public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveOb
             return string.Empty;
         }
     }
+
+    public string this[string key] => GetStringByKey(key);
 }
