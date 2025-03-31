@@ -14,11 +14,6 @@ public class UserManager(ILogger<UserManager>? logger,
     IStartGameValidator startGameValidator,
     ILauncherStorage launcherStorage)
 {
-    private readonly ILogger<UserManager>? _logger = logger;
-    private readonly IAuthenticationValidator _authenticationValidator = authenticationValidator;
-    private readonly IStartGameValidator _startGameValidator = startGameValidator;
-    private readonly ILauncherStorage _launcherStorage = launcherStorage;
-
     public UserSettings? UserSettings { get; private set; }
 
     public static void MigratorSettings()
@@ -33,7 +28,6 @@ public class UserManager(ILogger<UserManager>? logger,
         if (File.Exists(PathStorage.V2LauncherSetting))
         {
             File.Move(PathStorage.V2LauncherSetting, PathStorage.LauncherSetting);
-            return;
         }
     }
 
@@ -47,11 +41,11 @@ public class UserManager(ILogger<UserManager>? logger,
 
         try
         {
-            using var json = File.OpenRead(PathStorage.LauncherSetting);
+            await using var json = File.OpenRead(PathStorage.LauncherSetting);
             var user = await JsonSerializer.DeserializeAsync(json, SourceGenerationContext.Default.UserSettings, cancellationToken);
             user ??= CreateDefaultUserSettings();
 
-            if (!_startGameValidator.IsValidIpAddressOrUrl(user.IpAddress))
+            if (!startGameValidator.IsValidIpAddressOrUrl(user.IpAddress))
             {
                 user.IpAddress = string.Empty;
             }
@@ -59,9 +53,9 @@ public class UserManager(ILogger<UserManager>? logger,
             user.Locale ??= GetAutoLocale();
 
             var isUsernameCorrect =
-                _authenticationValidator.IsUsernameNotEmpty(user.Username) &&
-                _authenticationValidator.IsUsernameCorrectLength(user.Username) &&
-                _authenticationValidator.IsUsernameCorrectCharacters(user.Username);
+                authenticationValidator.IsUsernameNotEmpty(user.Username) &&
+                authenticationValidator.IsUsernameCorrectLength(user.Username) &&
+                authenticationValidator.IsUsernameCorrectCharacters(user.Username);
             UserSettings = isUsernameCorrect
                 ? user
                 : CreateDefaultUserSettings();
@@ -112,9 +106,9 @@ public class UserManager(ILogger<UserManager>? logger,
             Directory.CreateDirectory(DirectoryStorage.AppData);
         }
 
-        using var fileStream = new FileStream(PathStorage.LauncherSetting,
+        await using var fileStream = new FileStream(PathStorage.LauncherSetting,
             FileMode.Create);
-        using var writer = new StreamWriter(fileStream);
+        await using var writer = new StreamWriter(fileStream);
 
         await JsonSerializer.SerializeAsync(fileStream, UserSettings, typeof(UserSettings), SourceGenerationContext.Default, cancellationToken);
     }
@@ -125,20 +119,18 @@ public class UserManager(ILogger<UserManager>? logger,
         {
             Locale = GetAutoLocale()
         };
-        _logger?.LogInformation("Set locale: {locale}", userSettings.Locale.Title);
+        logger?.LogInformation("Set locale: {locale}", userSettings.Locale.Title);
         return userSettings;
     }
 
     private Locale GetAutoLocale()
     {
         var systemCulture = CultureInfo.CurrentCulture;
-        if (systemCulture.ThreeLetterISOLanguageName.Equals(_launcherStorage.Locales[0].Key))
+        if (systemCulture.ThreeLetterISOLanguageName.Equals(launcherStorage.Locales[0].Key))
         {
-            return _launcherStorage.Locales[0];
+            return launcherStorage.Locales[0];
         }
-        else
-        {
-            return _launcherStorage.Locales[1];
-        }
+
+        return launcherStorage.Locales[1];
     }
 }
