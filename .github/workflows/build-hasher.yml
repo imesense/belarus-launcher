@@ -44,6 +44,7 @@ jobs:
 
     env:
       HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+      SecretsBelarus__GitHubToken: ${{ secrets.SECRETS_BELARUS }}
 
     steps:
       - name: Checkout
@@ -103,6 +104,7 @@ jobs:
 
     env:
       HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+      SecretsBelarus__GitHubToken: ${{ secrets.SECRETS_BELARUS }}
 
     steps:
       - name: Checkout

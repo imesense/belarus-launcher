@@ -44,6 +44,7 @@ jobs:
 
     env:
       LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
+      SecretsBelarus__GitHubToken: ${{ secrets.SECRETS_BELARUS }}
 
     steps:
       - name: Checkout
@@ -99,6 +100,7 @@ jobs:
 
     env:
       UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
+      SecretsBelarus__GitHubToken: ${{ secrets.SECRETS_BELARUS }}
 
     steps:
       - name: Checkout
@@ -158,6 +160,7 @@ jobs:
 
     env:
       LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
+      SecretsBelarus__GitHubToken: ${{ secrets.SECRETS_BELARUS }}
 
     steps:
       - name: Checkout
@@ -219,6 +222,7 @@ jobs:
 
     env:
       UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
+      SecretsBelarus__GitHubToken: ${{ secrets.SECRETS_BELARUS }}
 
     steps:
       - name: Checkout
