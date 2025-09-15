@@ -19,7 +19,6 @@ public partial class NewsSliderViewModel : ReactiveObject
     private readonly ILogger<NewsSliderViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
     private readonly IApplicationLocaleManager _localeManager;
-    private readonly ViewModelLocator _viewModelLocator;
 
     [Reactive] public partial int NumPage { get; set; }
     [Reactive] public partial NewsViewModel? SelectedNewsViewModel { get; private set; }
@@ -36,7 +35,6 @@ public partial class NewsSliderViewModel : ReactiveObject
                             localeManager.GetStringByKey("LocalizedStrings.LoadNews"))];
 
         _logger = logger;
-        _viewModelLocator = viewModelLocator;
         _launcherStorage = launcherStorage;
         _localeManager = localeManager;
         LinkViewModel = viewModelLocator.LinkViewModel;
