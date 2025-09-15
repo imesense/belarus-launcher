@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.DotNet.ILCompiler" />
         <ProjectReference Include="..\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj" />
     </ItemGroup>
 </Project>
