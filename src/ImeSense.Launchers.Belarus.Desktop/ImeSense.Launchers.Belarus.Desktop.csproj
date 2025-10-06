@@ -26,6 +26,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Avalonia" VersionOverride="11.3.7" />
+      <PackageReference Include="Avalonia.Diagnostics" VersionOverride="11.3.7" />
+    <PackageReference Include="Avalonia.Fonts.Inter" VersionOverride="11.3.7" />
+    <PackageReference Include="Avalonia.ReactiveUI" VersionOverride="11.3.7" />
+    <PackageReference Include="Avalonia.Themes.Fluent" VersionOverride="11.3.7" />
+    <PackageReference Include="Microsoft.Extensions.Http" VersionOverride="9.0.9" />
+    <PackageReference Include="ReactiveUI.Validation" VersionOverride="5.0.1" />
         <ProjectReference Include="..\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj" />
     </ItemGroup>
 </Project>
