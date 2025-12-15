@@ -39,6 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Logging" />
         <ProjectReference Include="..\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj" />
         <ProjectReference Include="..\ImeSense.Launchers.Belarus.Themes.Avalonia\ImeSense.Launchers.Belarus.Themes.Avalonia.csproj" />
     </ItemGroup>
