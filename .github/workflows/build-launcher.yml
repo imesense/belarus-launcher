@@ -286,13 +286,13 @@ jobs:
           fetch-depth: 0
 
       - name: Get launcher
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: launcher-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
           path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
 
       - name: Get updater
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: updater-${{ matrix.framework }}-${{ matrix.runtime }}-${{ github.sha }}
           path: bin/${{ matrix.config }}/${{ matrix.runtime }}/publish/
