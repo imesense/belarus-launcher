@@ -1,5 +1,5 @@
 using Avalonia;
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 
 using ImeSense.Launchers.Belarus.Core.Exceptions;
 using ImeSense.Launchers.Belarus.Core.Logger;
