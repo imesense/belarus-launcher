@@ -14,13 +14,13 @@ using ImeSense.Launchers.Belarus.ViewModels.Validators;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
+public partial class AuthorizationViewModel : ReactiveValidationObject, IDisposable
 {
     private readonly ILogger<AuthorizationViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
@@ -32,11 +32,11 @@ public class AuthorizationViewModel : ReactiveValidationObject, IDisposable
     private CompositeDisposable? _disposables = null;
 
     public IApplicationLocaleManager Localization { get; private set; }
-    [Reactive] public ObservableCollection<Locale> Languages { get; set; } = new();
+    [Reactive] public partial ObservableCollection<Locale> Languages { get; set; } = new();
 
-    [Reactive] public Locale SelectedLanguage { get; set; } = new();
+    [Reactive] public partial Locale SelectedLanguage { get; set; } = new();
 
-    [Reactive] public string Username { get; set; } = string.Empty;
+    [Reactive] public partial string Username { get; set; } = string.Empty;
 
     public ReactiveCommand<string, Unit> UpdateInterfaceCommand { get; private set; } = null!;
     public ReactiveCommand<MainWindowViewModel, Unit> ShowLauncher { get; private set; } = null!;

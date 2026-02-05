@@ -8,11 +8,11 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class GameMenuViewModel : ReactiveObject
+public partial class GameMenuViewModel : ReactiveObject
 {
     private readonly ILogger<GameMenuViewModel>? _logger;
     private readonly IWindowManager _windowManager;
@@ -25,7 +25,7 @@ public class GameMenuViewModel : ReactiveObject
     public ReactiveCommand<LauncherViewModel, Unit> CheckUpdates { get; private set; }
     public ReactiveCommand<Unit, Unit> Close { get; private set; }
 
-    [Reactive] public bool IsStartServer { get; set; } = false;
+    [Reactive] public partial bool IsStartServer { get; set; } = false;
 
     public GameMenuViewModel(ILogger<GameMenuViewModel>? logger, IWindowManager windowManager,
         UserManager userManager, ILauncherStorage launcherStorage, IApplicationLocaleManager localeManager)

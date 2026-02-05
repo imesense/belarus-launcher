@@ -1,11 +1,11 @@
 using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class MenuViewModel : ViewModelBase
+public partial class MenuViewModel : ViewModelBase
 {
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
@@ -15,10 +15,10 @@ public class MenuViewModel : ViewModelBase
 
     private bool _isStartServer = false;
 
-    [Reactive] public bool IsVisibleDownload { get; set; } = true;
-    [Reactive] public bool IsVisiblePlayGame { get; set; } = false;
-    [Reactive] public bool IsDownloadStart { get; set; } = false;
-    [Reactive] public bool IsDownloadCheak { get; set; } = false;
+    [Reactive] public partial bool IsVisibleDownload { get; set; } = true;
+    [Reactive] public partial bool IsVisiblePlayGame { get; set; } = false;
+    [Reactive] public partial bool IsDownloadStart { get; set; } = false;
+    [Reactive] public partial bool IsDownloadCheak { get; set; } = false;
 
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> PlayGame { get; private set; } = null!;

@@ -1,17 +1,17 @@
 using ImeSense.Launchers.Belarus.Models;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.Core.Manager;
 
-public class SplashScreenManager : ReactiveObject, ISplashScreenManager
+public partial class SplashScreenManager : ReactiveObject, ISplashScreenManager
 {
     private readonly CancellationTokenSource _cts = new();
 
     public CancellationToken CancellationToken { get; }
-    [Reactive] public InformationMessage SplashScreenMessage { get; private set; }
-    [Reactive] public int CurrentProgress { get; set; } = 0;
+    [Reactive] public partial InformationMessage SplashScreenMessage { get; private set; }
+    [Reactive] public partial int CurrentProgress { get; set; } = 0;
     public int MaxProgress { get; set; }
 
     public SplashScreenManager()

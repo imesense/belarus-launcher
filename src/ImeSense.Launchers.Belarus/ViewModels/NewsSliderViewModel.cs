@@ -10,21 +10,21 @@ using ImeSense.Launchers.Belarus.Services;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class NewsSliderViewModel : ReactiveObject
+public partial class NewsSliderViewModel : ReactiveObject
 {
     private readonly ILogger<NewsSliderViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
     private readonly IApplicationLocaleManager _localeManager;
     private readonly ViewModelLocator _viewModelLocator;
 
-    [Reactive] public int NumPage { get; set; }
-    [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
-    [Reactive] public LinkViewModel LinkViewModel { get; set; }
-    [Reactive] public ObservableCollection<NewsViewModel>? News { get; set; }
+    [Reactive] public partial int NumPage { get; set; }
+    [Reactive] public partial NewsViewModel? SelectedNewsViewModel { get; private set; }
+    [Reactive] public partial LinkViewModel LinkViewModel { get; set; }
+    [Reactive] public partial ObservableCollection<NewsViewModel>? News { get; set; }
 
     public ReactiveCommand<Unit, Unit> GoNext { get; set; }
     public ReactiveCommand<Unit, Unit> GoBack { get; set; }

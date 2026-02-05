@@ -4,16 +4,16 @@ using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Legacy.Manager;
 
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class StartGameViewModel : ViewModelBase, IRoutableViewModel
+public partial class StartGameViewModel : ViewModelBase, IRoutableViewModel
 {
     private readonly IWindowManager _windowManager;
     private readonly UserSettings _userSettings;
 
-    [Reactive] public string IpAddress { get; set; } = string.Empty;
+    [Reactive] public partial string IpAddress { get; set; } = string.Empty;
 
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Back { get; private set; } = null!;

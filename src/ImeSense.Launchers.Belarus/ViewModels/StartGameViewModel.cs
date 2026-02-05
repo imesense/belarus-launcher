@@ -8,13 +8,13 @@ using ImeSense.Launchers.Belarus.ViewModels.Validators;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class StartGameViewModel : ReactiveValidationObject, IDisposable
+public partial class StartGameViewModel : ReactiveValidationObject, IDisposable
 {
     private readonly ILogger<StartGameViewModel>? _logger;
     private readonly IWindowManager _windowManager;
@@ -23,7 +23,7 @@ public class StartGameViewModel : ReactiveValidationObject, IDisposable
     private CompositeDisposable? _disposables;
 
     public IApplicationLocaleManager Localization { get; private set; }
-    [Reactive] public string IpAddress { get; set; }
+    [Reactive] public partial string IpAddress { get; set; }
 
     public ReactiveCommand<Unit, Unit> StartGame { get; private set; } = null!;
     public ReactiveCommand<MainWindowViewModel, Unit> Back { get; private set; } = null!;

@@ -9,11 +9,11 @@ using ImeSense.Launchers.Belarus.Services;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class LauncherViewModel : ReactiveObject
+public partial class LauncherViewModel : ReactiveObject
 {
     private readonly ILogger<LauncherViewModel>? _logger;
     private readonly IWebsiteLauncher _websiteLauncher;
@@ -24,8 +24,8 @@ public class LauncherViewModel : ReactiveObject
     public string AppVersion { get; set; }
     public string CompanyName { get; set; }
 
-    [Reactive] public ReactiveObject? PageMenuViewModel { get; set; }
-    [Reactive] public NewsSliderViewModel NewsSliderViewModel { get; set; }
+    [Reactive] public partial ReactiveObject? PageMenuViewModel { get; set; }
+    [Reactive] public partial NewsSliderViewModel NewsSliderViewModel { get; set; }
 
     public ReactiveCommand<Unit, Unit>? OpenMainRepositoryUriCommand { get; set; }
     public ReactiveCommand<Unit, Unit>? OpenOrganizationUriCommand { get; set; }

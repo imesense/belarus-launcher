@@ -7,16 +7,16 @@ using ImeSense.Launchers.Belarus.Core.Manager;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.Manager;
 
-public class LocalizationManager(ILogger<LocalizationManager>? logger) : ReactiveObject, IApplicationLocaleManager
+public partial class LocalizationManager(ILogger<LocalizationManager>? logger) : ReactiveObject, IApplicationLocaleManager
 {
     private readonly ResourceManager _resourceManager = Resources.ResourceManager;
 
     public string this[string key] => GetStringByKey(key);
-    [Reactive] public string Locale { get; private set; } = CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;
+    [Reactive] public partial string Locale { get; private set; }= CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;
 
     public void SetLocale(string cultureCode)
     {

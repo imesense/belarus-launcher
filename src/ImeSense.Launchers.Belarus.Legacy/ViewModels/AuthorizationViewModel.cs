@@ -4,17 +4,17 @@ using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Core.Models;
 using ImeSense.Launchers.Belarus.Legacy.Manager;
 
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
+public partial class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
 {
     private readonly IWindowManager _windowManager;
     private readonly LauncherViewModel _launcherViewModel;
     private readonly UserSettings _userSettings;
 
-    [Reactive] public string UserName { get; set; } = string.Empty;
+    [Reactive] public partial string UserName { get; set; } = string.Empty;
 
     public ReactiveCommand<Unit, Unit> Next { get; private set; } = null!;
     public ReactiveCommand<Unit, Unit> Close { get; private set; } = null!;

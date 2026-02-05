@@ -2,14 +2,14 @@ using System.Collections.ObjectModel;
 
 using ImeSense.Launchers.Belarus.Core.Manager;
 
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
 public partial class NewsSliderViewModel : ViewModelBase
 {
-    [Reactive] public NewsViewModel? SelectedNewsViewModel { get; private set; }
-    [Reactive] public int NumPage { get; private set; } = 0;
+    [Reactive] public partial NewsViewModel? SelectedNewsViewModel { get; private set; }
+    [Reactive] public partial int NumPage { get; private set; } = 0;
 
     private readonly DownloadManager _downloadService;
 

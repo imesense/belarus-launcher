@@ -8,11 +8,11 @@ using ImeSense.Launchers.Belarus.Core.Storage;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class DownloadMenuViewModel : ReactiveObject
+public partial class DownloadMenuViewModel : ReactiveObject
 {
     private readonly ILogger<DownloadMenuViewModel>? _logger;
     private readonly IWindowManager _windowManager;
@@ -26,15 +26,15 @@ public class DownloadMenuViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> Pause { get; private set; }
     public ReactiveCommand<Unit, Unit> Close { get; private set; }
 
-    [Reactive] public int DownloadProgress { get; set; } = 0;
-    [Reactive] public string StatusProgress { get; set; } = string.Empty;
-    [Reactive] public string DownloadFileName { get; set; } = string.Empty;
+    [Reactive] public partial int DownloadProgress { get; set; } = 0;
+    [Reactive] public partial string StatusProgress { get; set; } = string.Empty;
+    [Reactive] public partial string DownloadFileName { get; set; } = string.Empty;
 
     // Overall progress status
-    [Reactive] public bool IsProgress { get; set; }
+    [Reactive] public partial bool IsProgress { get; set; }
 
     //Download status
-    [Reactive] public bool IsDownload { get; set; }
+    [Reactive] public partial bool IsDownload { get; set; }
 
     public DownloadMenuViewModel(ILogger<DownloadMenuViewModel>? logger,
         IApplicationLocaleManager localization,

@@ -14,7 +14,7 @@ using ReactiveUI;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class LinkViewModel : ReactiveObject
+public partial class LinkViewModel : ReactiveObject
 {
     private readonly ILogger<LinkViewModel>? _logger;
     private readonly IWebsiteLauncher _websiteLauncher;

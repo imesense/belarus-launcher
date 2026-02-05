@@ -5,15 +5,15 @@ using ImeSense.Launchers.Belarus.Core.Manager;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.Manager;
 
-public class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveObject, IApplicationLocaleManager
+public partial class AxamlLocaleManager(ILogger<AxamlLocaleManager> logger) : ReactiveObject, IApplicationLocaleManager
 {
     private ResourceInclude? _resources;
 
-    [Reactive] public string Locale { get; private set; } = string.Empty;
+    [Reactive] public partial string Locale { get; private set; } = string.Empty;
 
     public void SetLocale(string locale)
     {

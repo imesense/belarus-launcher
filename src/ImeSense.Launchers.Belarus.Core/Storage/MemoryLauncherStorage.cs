@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using ImeSense.Launchers.Belarus.Core.Models;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.Core.Storage;
 
-public class MemoryLauncherStorage : ReactiveObject, ILauncherStorage
+public partial class MemoryLauncherStorage : ReactiveObject, ILauncherStorage
 {
     public GitHubRelease? GitHubRelease { get; set; }
 
@@ -18,11 +18,9 @@ public class MemoryLauncherStorage : ReactiveObject, ILauncherStorage
         new() { Key = "eng", Title = "English", },
     ];
 
-    [Reactive]
-    public ObservableCollection<LangNewsContent>? NewsContents { get; set; }
-    [Reactive]
-    public ObservableCollection<WebResource>? WebResources { get; set; }
-    [Reactive] public bool IsCheckGitHubConnection { get; set; }
-    [Reactive] public bool IsGameReleaseCurrent { get; set; } = true;
-    [Reactive] public bool IsUserAuthorized { get; set; }
+    [Reactive] public partial ObservableCollection<LangNewsContent>? NewsContents { get; set; }
+    [Reactive] public partial ObservableCollection<WebResource>? WebResources { get; set; }
+    [Reactive] public partial bool IsCheckGitHubConnection { get; set; }
+    [Reactive] public partial bool IsGameReleaseCurrent { get; set; } = true;
+    [Reactive] public partial bool IsUserAuthorized { get; set; }
 }

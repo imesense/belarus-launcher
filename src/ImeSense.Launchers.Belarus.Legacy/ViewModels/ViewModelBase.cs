@@ -1,5 +1,5 @@
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class ViewModelBase : ReactiveObject
+public partial class ViewModelBase : ReactiveObject
 {
 }

@@ -12,12 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="FodyWeavers.xsd">
-            <DependentUpon>FodyWeavers.xml</DependentUpon>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Avalonia" />
         <PackageReference Include="Avalonia.Diagnostics">
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
@@ -29,7 +23,10 @@
         <PackageReference Include="Microsoft.Extensions.Http" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
         <PackageReference Include="ReactiveUI.Avalonia" />
-        <PackageReference Include="ReactiveUI.Fody" />
+        <PackageReference Include="ReactiveUI.SourceGenerators">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="ReactiveUI.Validation" />
         <PackageReference Include="Serilog.Extensions.Logging" />
         <PackageReference Include="Serilog.Sinks.Debug" />

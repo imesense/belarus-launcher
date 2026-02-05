@@ -4,18 +4,18 @@ using ImeSense.Launchers.Belarus.Core.Manager;
 using ImeSense.Launchers.Belarus.Models;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class SplashScreenViewModel : ReactiveObject
+public partial class SplashScreenViewModel : ReactiveObject
 {
     private readonly IWindowManager _windowManager;
 
     public IApplicationLocaleManager Localization { get; private set; }
     public ISplashScreenManager SplashScreen { get; set; }
-    [Reactive] public InformationMessage InformationMessage { get; set; }
-    [Reactive] public int Progress { get; set; }
+    [Reactive] public partial InformationMessage InformationMessage { get; set; }
+    [Reactive] public partial int Progress { get; set; }
     public int MaxProgress { get; private set; }
 
     public ReactiveCommand<Unit, Unit> Cancel { get; set; }

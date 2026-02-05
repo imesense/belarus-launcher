@@ -1,14 +1,14 @@
 using ImeSense.Launchers.Belarus.Core.Models;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class NewsViewModel : ReactiveObject
+public partial class NewsViewModel : ReactiveObject
 {
-    [Reactive] public string Title { get; set; }
-    [Reactive] public string Description { get; set; }
+    [Reactive] public partial string Title { get; private set; }
+    [Reactive] public partial string Description { get; private set; }
 
     public NewsViewModel(string title, string description)
     {

@@ -10,11 +10,11 @@ using ImeSense.Launchers.Belarus.Services;
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace ImeSense.Launchers.Belarus.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject
+public partial class MainWindowViewModel : ReactiveObject
 {
     private readonly ILogger<MainWindowViewModel>? _logger;
     private readonly ILauncherStorage _launcherStorage;
@@ -25,7 +25,7 @@ public class MainWindowViewModel : ReactiveObject
     private readonly LauncherViewModel _launcherViewModel;
     private readonly SplashScreenViewModel _splashScreenViewModel;
 
-    [Reactive] public ReactiveObject PageViewModel { get; set; } = null!;
+    [Reactive] public partial ReactiveObject PageViewModel { get; set; } = null!;
 
     public MainWindowViewModel(ILogger<MainWindowViewModel>? logger, ILauncherStorage launcherStorage,
         IUpdaterService updaterService, ViewModelLocator viewModelLocator, IApplicationLocaleManager localeManager)
