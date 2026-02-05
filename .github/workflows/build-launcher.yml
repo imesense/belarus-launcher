@@ -38,7 +38,7 @@ jobs:
           - Debug
           - Release
         framework:
-          - net9.0
+          - net10.0
 
     runs-on: ${{ matrix.system }}
 
@@ -93,7 +93,7 @@ jobs:
           - Debug
           - Release
         framework:
-          - net9.0
+          - net10.0
 
     runs-on: ${{ matrix.system }}
 
@@ -152,7 +152,7 @@ jobs:
         runtime:
           - win-x64
         framework:
-          - net9.0
+          - net10.0
 
     runs-on: ${{ matrix.system }}
 
@@ -213,7 +213,7 @@ jobs:
         runtime:
           - win-x64
         framework:
-          - net9.0
+          - net10.0
 
     runs-on: ${{ matrix.system }}
 
@@ -275,7 +275,7 @@ jobs:
         runtime:
           - win-x64
         framework:
-          - net9.0
+          - net10.0
 
     runs-on: ${{ matrix.system }}
 
