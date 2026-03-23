@@ -17,7 +17,7 @@
     <PackageVersion Include="ReactiveUI" Version="11.3.8" />
     <PackageVersion Include="ReactiveUI.Avalonia" Version="11.3.8" />
     <PackageVersion Include="ReactiveUI.SourceGenerators" Version="2.6.1" />
-    <PackageVersion Include="ReactiveUI.Validation" Version="6.0.18" />
+    <PackageVersion Include="ReactiveUI.Validation" Version="7.0.5" />
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
