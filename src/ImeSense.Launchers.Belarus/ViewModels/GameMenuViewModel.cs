@@ -49,7 +49,7 @@ public partial class GameMenuViewModel : ReactiveObject
     {
         var canExecuteServer = this.WhenAnyValue(x => x.IsStartServer,
                 startServer => startServer == false)
-            .ObserveOn(RxApp.MainThreadScheduler);
+            .ObserveOn(RxSchedulers.MainThreadScheduler);
         var isGitHubConnection = this.WhenAnyValue(x => x._launcherStorage.IsCheckGitHubConnection);
 
         PlayGame = ReactiveCommand.Create<MainWindowViewModel>(PlayGameImpl);

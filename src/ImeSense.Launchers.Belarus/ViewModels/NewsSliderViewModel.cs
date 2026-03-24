@@ -80,10 +80,10 @@ public partial class NewsSliderViewModel : ReactiveObject
     {
         var canExecuteBack = this.WhenAnyValue(x => x.NumPage,
                 (numPage) => numPage != 0)
-            .ObserveOn(RxApp.MainThreadScheduler);
+            .ObserveOn(RxSchedulers.MainThreadScheduler);
         var canExecuteNext = this.WhenAnyValue(x => x.NumPage,
                 (numPage) => News != null && numPage != News.Count - 1 && News.Count != 0)
-            .ObserveOn(RxApp.MainThreadScheduler);
+            .ObserveOn(RxSchedulers.MainThreadScheduler);
 
         GoNext = ReactiveCommand.Create(GoNextImpl, canExecuteNext);
         GoBack = ReactiveCommand.Create(GoBackImpl, canExecuteBack);
@@ -103,7 +103,7 @@ public partial class NewsSliderViewModel : ReactiveObject
     private void SetupBinding()
     {
         this.WhenAnyValue(x => x.NumPage)
-            .ObserveOn(RxApp.MainThreadScheduler)
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
             .Where(x => News != null && x >= 0 && x < News.Count)
             .Subscribe(x =>
             {

@@ -28,7 +28,7 @@ internal class Program
         _logger = factory.CreateLogger<Program>();
 
         GlobalExceptionHandler.Initialize(_logger);
-        _logger?.LogInformation("{Info}", InformationPrinter.GetStartupInfo("Belarus Launcher"));
+        _logger.LogInformation("{Info}", InformationPrinter.GetStartupInfo("Belarus Launcher"));
 
         _mutex = new Mutex(initiallyOwned: false, _mutexName, out bool isMutexCreated);
 
@@ -51,6 +51,9 @@ internal class Program
                 .UsePlatformDetect()
                 .WithInterFont()
                 .LogToTrace()
-                .UseReactiveUI();
+                .UseReactiveUI(rxui =>
+                {
+                    rxui.WithExceptionHandler(GlobalExceptionHandler.GetObservable());
+                });
     }
 }

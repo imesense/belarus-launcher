@@ -71,7 +71,7 @@ public partial class DownloadMenuViewModel : ReactiveObject
         Close = ReactiveCommand.Create(CloseImpl);
 
         StartDownload.ThrownExceptions.Merge(Close.ThrownExceptions)
-            .Throttle(TimeSpan.FromMilliseconds(250), RxApp.MainThreadScheduler)
+            .Throttle(TimeSpan.FromMilliseconds(250), RxSchedulers.MainThreadScheduler)
             .Subscribe(OnCommandException);
     }
 

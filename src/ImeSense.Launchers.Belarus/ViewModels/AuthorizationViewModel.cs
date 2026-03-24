@@ -142,7 +142,7 @@ public partial class AuthorizationViewModel : ReactiveValidationObject, IDisposa
 
         this.WhenAnyValue(x => x.SelectedLanguage.Key)
             .Where(key => !string.IsNullOrEmpty(key))
-            .ObserveOn(RxApp.MainThreadScheduler)
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
             .InvokeCommand(UpdateInterfaceCommand);
 
         ShowLauncher = ReactiveCommand.Create<MainWindowViewModel>(ShowLauncherImpl, this.IsValid());

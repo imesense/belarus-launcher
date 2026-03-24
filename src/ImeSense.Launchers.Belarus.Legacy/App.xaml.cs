@@ -4,6 +4,8 @@ using ImeSense.Launchers.Belarus.Manager;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using ReactiveUI.Builder;
+
 using Splat;
 
 namespace ImeSense.Launchers.Belarus;
@@ -18,7 +20,15 @@ public partial class App : Application
     public App()
     {
         var userSettings = ConfigManager.LoadSettings();
-
+        var rxuiInstance = RxAppBuilder.CreateReactiveUIBuilder()
+        .WithWpf() // Register WPF platform services
+        .WithViewsFromAssembly(typeof(App).Assembly) // Register views and view models
+        .WithRegistration(locator =>
+        {
+            // Register IScreen as a singleton so all resolutions share the same Router
+            //locator.RegisterLazySingleton<IScreen>(static () => new AppBootstrapper());
+        })
+        .BuildApp();
         var services = new ServiceCollection();
         services.AddSingleton<DownloadManager>();
         services.AddSingleton(userSettings);
@@ -38,7 +48,7 @@ public partial class App : Application
 
         _serviceProvider = services.BuildServiceProvider();
 
-        Locator.CurrentMutable.InitializeReactiveUI();
+        //Locator.CurrentMutable.InitializeReactiveUI();
         Locator.CurrentMutable.InitializeSplat();
 
         RegisterPages();

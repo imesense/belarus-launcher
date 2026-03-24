@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 
 using ReactiveUI;
+using ReactiveUI.Builder;
+
 using System.Reactive;
 using System.Text;
 
@@ -15,7 +17,8 @@ public static class GlobalExceptionHandler
         _logger = logger;
 
         // ReactiveUI: обработка исключений
-        RxApp.DefaultExceptionHandler = Observer.Create<Exception>(LogException);
+        // Перенесено в Program.cs
+        // RxApp.DefaultExceptionHandler = Observer.Create<Exception>(LogException);
 
         // TaskScheduler: необработанные исключения из задач
         TaskScheduler.UnobservedTaskException += (sender, e) =>
@@ -33,6 +36,11 @@ public static class GlobalExceptionHandler
                 Environment.Exit(1);
             }
         };
+    }
+
+    public static IObserver<Exception> GetObservable()
+    {
+        return Observer.Create<Exception>(LogException);
     }
 
     private static void LogException(Exception ex)

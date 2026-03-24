@@ -41,7 +41,7 @@ public partial class AuthorizationViewModel : ViewModelBase, IRoutableViewModel
     {
         var canCreateUser = this.WhenAnyValue(x => x.UserName,
             (nickname) => !string.IsNullOrWhiteSpace(nickname) && nickname.Length <= 22)
-            .ObserveOn(RxApp.MainThreadScheduler)
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
             .DistinctUntilChanged();
 
         Next = ReactiveCommand.Create(NextImpl, canCreateUser);

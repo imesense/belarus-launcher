@@ -36,7 +36,7 @@ public partial class StartGameViewModel : ViewModelBase, IRoutableViewModel
     {
         var canStartGame = this.WhenAnyValue(x => x.IpAddress,
             (ip) => !string.IsNullOrWhiteSpace(ip))
-            .ObserveOn(RxApp.MainThreadScheduler)
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
             .DistinctUntilChanged();
 
         StartGame = ReactiveCommand.Create(StartGameImpl, canStartGame);
