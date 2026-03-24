@@ -43,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
+      LauncherProject: src\Belarus.Launcher.Legacy\Belarus.Launcher.Legacy.csproj
 
     steps:
       - name: Checkout
@@ -102,7 +102,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj
+      LauncherProject: src\Belarus.Launcher.Legacy\Belarus.Launcher.Legacy.csproj
 
     steps:
       - name: Checkout

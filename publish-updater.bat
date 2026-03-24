@@ -1,4 +1,4 @@
-dotnet publish src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj ^
+dotnet publish src\Belarus.Launcher.Updater\Belarus.Launcher.Updater.csproj ^
     --configuration Release ^
     --runtime win-x64 ^
     -p:PublishAot=true ^

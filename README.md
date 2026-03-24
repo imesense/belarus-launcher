@@ -5,21 +5,21 @@
     <a href="./LICENSE.md">
       <img src="https://img.shields.io/badge/License-Non--commercial-red.svg" alt="License" />
     </a>
-    <a href="https://github.com/imesense/belarus-launcher/releases/tag/v2.1">
-      <img src="https://img.shields.io/github/v/release/imesense/belarus-launcher?include_prereleases&label=Release" alt="Latest release" />
+    <a href="https://github.com/Drombeys/belarus-launcher/releases/tag/v2.1">
+      <img src="https://img.shields.io/github/v/release/drombeys/belarus-launcher?include_prereleases&label=Release" alt="Latest release" />
     </a>
-    <a href="https://github.com/imesense/belarus-launcher/releases">
-      <img src="https://img.shields.io/github/downloads/imesense/belarus-launcher/total?label=Downloads" alt="All downloads" />
+    <a href="https://github.com/Drombeys/belarus-launcher/releases">
+      <img src="https://img.shields.io/github/downloads/drombeys/belarus-launcher/total?label=Downloads" alt="All downloads" />
     </a>
     <br />
-    <a href="https://github.com/imesense/belarus-launcher/actions/workflows/build-launcher.yml">
-      <img src="https://github.com/imesense/belarus-launcher/actions/workflows/build-launcher.yml/badge.svg" alt="Build launcher" />
+    <a href="https://github.com/Drombeys/belarus-launcher/actions/workflows/build-launcher.yml">
+      <img src="https://github.com/Drombeys/belarus-launcher/actions/workflows/build-launcher.yml/badge.svg" alt="Build launcher" />
     </a>
-    <a href="https://github.com/imesense/belarus-launcher/actions/workflows/build-legacy.yml">
-      <img src="https://github.com/imesense/belarus-launcher/actions/workflows/build-legacy.yml/badge.svg" alt="Build legacy" />
+    <a href="https://github.com/Drombeys/belarus-launcher/actions/workflows/build-legacy.yml">
+      <img src="https://github.com/Drombeys/belarus-launcher/actions/workflows/build-legacy.yml/badge.svg" alt="Build legacy" />
     </a>
-    <a href="https://github.com/imesense/belarus-launcher/actions/workflows/build-hasher.yml">
-      <img src="https://github.com/imesense/belarus-launcher/actions/workflows/build-hasher.yml/badge.svg" alt="Build hasher" />
+    <a href="https://github.com/Drombeys/belarus-launcher/actions/workflows/build-hasher.yml">
+      <img src="https://github.com/Drombeys/belarus-launcher/actions/workflows/build-hasher.yml/badge.svg" alt="Build hasher" />
     </a>
   </p>
 </div>
@@ -32,7 +32,7 @@ Specialized launcher for Belarus modification for downloading and updating modif
 
 ## Quick Start
 
-You can get the latest release of the app [in the releases page](https://github.com/imesense/belarus-launcher/releases)
+You can get the latest release of the app [in the releases page](https://github.com/Drombeys/belarus-launcher/releases)
 
 ## Features
 
@@ -55,7 +55,7 @@ Launcher provides ease of use and easy access to the necessary functions so that
 - Download the repository:
 
   ```console
-  git clone https://github.com/imesense/belarus-launcher.git
+  git clone https://github.com/Drombeys/belarus-launcher.git
   ```
 
 - Build `BelarusLauncher.sln` using IDE or command:

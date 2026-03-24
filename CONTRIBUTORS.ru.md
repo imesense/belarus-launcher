@@ -6,9 +6,7 @@
 
 ## Участники
 
-- ImeSense
-  - Drombeys
-  - acidicMercury8
+- Drombeys
 - Belarus Team
   - Vozbuditel
   - Hozar_2002
@@ -16,3 +14,4 @@
 ## Помощники из сообщества
 
 - PSIget
+- acidicMercury8

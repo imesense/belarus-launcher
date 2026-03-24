@@ -21,22 +21,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Desktop", "src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj", "{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher.Desktop", "src\Belarus.Launcher.Desktop\Belarus.Launcher.Desktop.csproj", "{D04E3777-1DBA-423E-A2C8-5ABA80C29A88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus", "src\ImeSense.Launchers.Belarus\ImeSense.Launchers.Belarus.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher", "src\Belarus.Launcher\Belarus.Launcher.csproj", "{909E77E9-FE72-41F3-A631-D552185DF754}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5C302503-C8E0-442C-BD33-7B70930858F0} = {5C302503-C8E0-442C-BD33-7B70930858F0}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Core", "src\ImeSense.Launchers.Belarus.Core\ImeSense.Launchers.Belarus.Core.csproj", "{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher.Core", "src\Belarus.Launcher.Core\Belarus.Launcher.Core.csproj", "{9B628B77-B05A-435E-8D99-1D0DFB8BE20D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Legacy", "src\ImeSense.Launchers.Belarus.Legacy\ImeSense.Launchers.Belarus.Legacy.csproj", "{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher.Legacy", "src\Belarus.Launcher.Legacy\Belarus.Launcher.Legacy.csproj", "{0FD8494A-7CBD-428E-9B66-EC96F30FF9C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Themes.Avalonia", "src\ImeSense.Launchers.Belarus.Themes.Avalonia\ImeSense.Launchers.Belarus.Themes.Avalonia.csproj", "{09B9A304-1D08-493F-9B51-573B9301FF7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher.Themes.Avalonia", "src\Belarus.Launcher.Themes.Avalonia\Belarus.Launcher.Themes.Avalonia.csproj", "{09B9A304-1D08-493F-9B51-573B9301FF7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.CryptoHasher", "src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj", "{C74DB453-DB02-4324-BAD0-1E24290E3B98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher.CryptoHasher", "src\Belarus.Launcher.CryptoHasher\Belarus.Launcher.CryptoHasher.csproj", "{C74DB453-DB02-4324-BAD0-1E24290E3B98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImeSense.Launchers.Belarus.Updater", "src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj", "{5C302503-C8E0-442C-BD33-7B70930858F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Belarus.Launcher.Updater", "src\Belarus.Launcher.Updater\Belarus.Launcher.Updater.csproj", "{5C302503-C8E0-442C-BD33-7B70930858F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

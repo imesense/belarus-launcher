@@ -43,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+      HasherProject: src\Belarus.Launcher.CryptoHasher\Belarus.Launcher.CryptoHasher.csproj
 
     steps:
       - name: Checkout
@@ -102,7 +102,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      HasherProject: src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj
+      HasherProject: src\Belarus.Launcher.CryptoHasher\Belarus.Launcher.CryptoHasher.csproj
 
     steps:
       - name: Checkout

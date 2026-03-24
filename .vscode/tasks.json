@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.Desktop/ImeSense.Launchers.Belarus.Desktop.csproj",
+                "${workspaceFolder}/src/Belarus.Launcher.Desktop/Belarus.Launcher.Desktop.csproj",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],
@@ -31,7 +31,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.CryptoHasher/ImeSense.Launchers.Belarus.CryptoHasher.csproj",
+                "${workspaceFolder}/src/Belarus.Launcher.CryptoHasher/Belarus.Launcher.CryptoHasher.csproj",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],
@@ -43,7 +43,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/ImeSense.Launchers.Belarus.Updater/ImeSense.Launchers.Belarus.Updater.csproj",
+                "${workspaceFolder}/src/Belarus.Launcher.Updater/Belarus.Launcher.Updater.csproj",
                 "-p:GenerateFullPaths=true",
                 "--consoleloggerparameters:NoSummary"
             ],

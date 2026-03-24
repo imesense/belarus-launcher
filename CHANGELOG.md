@@ -36,7 +36,7 @@ Full changelog of _Belarus Launcher_ project
 - Added locale if it's undefined in user settings (@Drombeys)
 - Implemented caching of web resources and news (@Drombeys)
 - Saved logs and current release to separate folder (@Drombeys)
-- Decomposed `ImeSense.Launchers.Belarus` project (@Drombeys)
+- Decomposed `Belarus.Launcher` project (@Drombeys)
 - Added SSL protocol settings (@Drombeys)
 - Fixed pressed colors in `ComboBox` control (@Drombeys)
 - Fixed excessive memory allocation in `AxamlLocaleManager` class (@Drombeys)

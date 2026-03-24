@@ -1,0 +1,11 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Belarus.Launcher.Themes.Avalonia/Styles/Border.axaml" />
+        <ResourceInclude Source="avares://Belarus.Launcher.Themes.Avalonia/Styles/Button.axaml" />
+        <ResourceInclude Source="avares://Belarus.Launcher.Themes.Avalonia/Styles/ComboBoxItem.axaml" />
+        <ResourceInclude Source="avares://Belarus.Launcher.Themes.Avalonia/Styles/TextBlock.axaml" />
+        <ResourceInclude Source="avares://Belarus.Launcher.Themes.Avalonia/Styles/TextBox.axaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

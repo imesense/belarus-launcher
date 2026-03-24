@@ -43,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
+      LauncherProject: src\Belarus.Launcher.Desktop\Belarus.Launcher.Desktop.csproj
 
     steps:
       - name: Checkout
@@ -98,7 +98,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
+      UpdaterProject: src\Belarus.Launcher.Updater\Belarus.Launcher.Updater.csproj
 
     steps:
       - name: Checkout
@@ -157,7 +157,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      LauncherProject: src\ImeSense.Launchers.Belarus.Desktop\ImeSense.Launchers.Belarus.Desktop.csproj
+      LauncherProject: src\Belarus.Launcher.Desktop\Belarus.Launcher.Desktop.csproj
 
     steps:
       - name: Checkout
@@ -218,7 +218,7 @@ jobs:
     runs-on: ${{ matrix.system }}
 
     env:
-      UpdaterProject: src\ImeSense.Launchers.Belarus.Updater\ImeSense.Launchers.Belarus.Updater.csproj
+      UpdaterProject: src\Belarus.Launcher.Updater\Belarus.Launcher.Updater.csproj
 
     steps:
       - name: Checkout
@@ -300,7 +300,7 @@ jobs:
       - name: Publish installer
         shell: cmd
         run: |
-          "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\ImeSense.Launchers.Belarus.Setup\Setup.iss
+          "%ProgramFiles(x86)%\Inno Setup 6\iscc.exe" src\Belarus.Launcher.Setup\Setup.iss
 
       - name: Upload installer
         uses: actions/upload-artifact@v7

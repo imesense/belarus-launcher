@@ -1,0 +1,15 @@
+<Application
+    x:Class="Belarus.Launcher.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="using:Belarus.Launcher.Services"
+    RequestedThemeVariant="Dark">
+    <Application.DataTemplates>
+        <l:DataTemplateLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Belarus.Launcher.Themes.Avalonia/Index.axaml" />
+    </Application.Styles>
+</Application>

@@ -1,4 +1,4 @@
-dotnet publish src\ImeSense.Launchers.Belarus.CryptoHasher\ImeSense.Launchers.Belarus.CryptoHasher.csproj ^
+dotnet publish src\Belarus.Launcher.CryptoHasher\Belarus.Launcher.CryptoHasher.csproj ^
     --configuration Release ^
     --runtime win-x64 ^
     -p:PublishAot=true ^

@@ -1,0 +1,52 @@
+<UserControl
+    x:Class="Belarus.Launcher.Views.StartGameView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="clr-namespace:Belarus.Launcher.Views"
+    mc:Ignorable="d">
+    <Border
+        Padding="10,30,20,0"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        BorderBrush="Gray"
+        BorderThickness="1">
+        <Border.Background>
+            <SolidColorBrush
+                Color="Black"
+                Opacity=".75" />
+        </Border.Background>
+
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Text="Введите IP-адрес:"
+                    Margin="10,5"
+                    FontSize="16"
+                    Foreground="White" />
+                <TextBox
+                    x:Name="IpAddress"
+                    Width="200"
+                    VerticalContentAlignment="Center"
+                    FontSize="16" />
+            </StackPanel>
+
+            <StackPanel
+                Margin="20"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="BtnStartGame"
+                    Content="Начать игру"
+                    Margin="10,0"
+                    FontSize="18" />
+                <Button
+                    x:Name="BtnBack"
+                    Content="Назад"
+                    Margin="10,0"
+                    FontSize="18" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

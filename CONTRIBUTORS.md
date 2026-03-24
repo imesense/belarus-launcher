@@ -6,9 +6,7 @@ Detail list of all contributors to Belarus Launcher
 
 ## Contributors
 
-- ImeSense
-  - Drombeys
-  - acidicMercury8
+- Drombeys
 - Belarus Team
   - Vozbuditel
   - Hozar_2002
@@ -16,3 +14,4 @@ Detail list of all contributors to Belarus Launcher
 ## Community helpers
 
 - PSIget
+- acidicMercury8
