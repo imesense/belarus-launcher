@@ -13,7 +13,7 @@
     CanResize="False"
     ExtendClientAreaToDecorationsHint="True"
     Icon="/Assets/Icons/stalker_cs.ico"
-    SystemDecorations="None"
+    WindowDecorations="None"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Background>

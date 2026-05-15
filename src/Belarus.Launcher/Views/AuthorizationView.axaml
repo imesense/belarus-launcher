@@ -64,7 +64,7 @@
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
                     FontSize="16"
-                    Watermark="Vasyan" />
+                    PlaceholderText="Vasyan" />
             </Grid>
 
             <StackPanel
